@@ -1,0 +1,1 @@
+The files in this folder are templates to be used as starting point when make new repositories or packages.
