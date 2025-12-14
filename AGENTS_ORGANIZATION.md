@@ -15,8 +15,8 @@ Multiple levels of guidance exist to help agents navigate the various aspects of
 
 - AGENTS_ORGANIZATION: Organization-level guidance (this file)
 - AGENTS_STACK_{stackname}: Tech stack-specific guidance (found in [`stacks`](./stacks/) folder of this repo)
-- AGENTS_REPO: Repo-level guidance (`AGENTS_REPO.md`, found in the target project's repo root). When initializing a new repo, use [`./templates/AGENTS_REPO.md`](./templates/AGENTS_REPO.md) as starting place.
-- AGENTS: Package-level guidance (`AGENTS.md`, found in the target package's root). When creating a new package, use [`./templates/AGENTS.md`](./templates/AGENTS.md) as starting place.
+- AGENTS_REPO: Repo-level guidance (`AGENTS_REPO.md`, found in the target project's repo root). When initializing a new repo, use [`./templates/TEMPLATE_AGENTS_REPO.md`](./templates/TEMPLATE_AGENTS_REPO.md) as starting place.
+- AGENTS: Package-level guidance (`AGENTS.md`, found in the target package's root). When creating a new package, use [`./templates/TEMPLATE_AGENTS.md`](./templates/TEMPLATE_AGENTS.md) as starting place.
 
 Every repository or package should reference each of these four levels.
 
