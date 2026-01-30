@@ -20,6 +20,10 @@ Multiple levels of guidance exist to help agents navigate the various aspects of
 
 Every repository or package should reference each of these four levels.
 
+## Specifications
+
+See [Specification Details](./spec/README.md) for detailed specifications both at repo and package levels. New features should not be implemented until specifications are updated and approved by human.
+
 ## Audience & quick start
 
 - Audience: automated agents, maintainers, and contributors who work across repositories in the `mtngtools` organization.
