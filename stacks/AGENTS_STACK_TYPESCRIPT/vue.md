@@ -4,4 +4,5 @@
 - Typical files: Vue single-file components, and `package.json` scripts.
 - Agent checks: `pnpm run build` (Vue build), verify component rendering if publishing UI bundles.
 - Notes: E2E tests for Vue should run in separate CI job and be optional for PRs (unless small and fast).
+- Always use Vue composition api (never options api).
 

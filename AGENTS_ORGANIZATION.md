@@ -22,7 +22,7 @@ Every repository or package should reference each of these four levels.
 
 ## Specifications
 
-See [Specification Details](./spec/README.md) for detailed specifications both at repo and package levels. New features should not be implemented until specifications are updated and approved by human.
+Look for [Specification Details] `spec/README.md` for detailed specifications both at root of repositories and packages. New features should not be implemented until specifications are updated and approved by human. Packages that were developed prior to the adoption of this specification should be updated to include specifications.
 
 ## Audience & quick start
 
@@ -37,6 +37,18 @@ See [Specification Details](./spec/README.md) for detailed specifications both a
 - Commit & PR gating: do not commit or push code changes until BOTH of the following are true:
   1. The local prepublish pipeline has succeeded (either run the repository's `prepublishOnly` script, or run the equivalent sequence: typecheck → lint → build → unit tests).
   2. A human maintainer has explicitly approved committing/pushing (for example: a comment like "go ahead and commit/push" or an approved PR review). If a maintainer says "don't commit", do not commit. Keep changes in the working tree or as staged diffs only.
+- Any release or tag creation should be coordinated and follow the organization's release checklist; prefer creating PRs that include release notes rather than creating tags directly from agents.
+- Chat agent communication: When chat agents reference GitHub issues or pull requests in their output, they must format them as clickable markdown links. For example:
+  - Use `[Issue #123](https://github.com/org/repo/issues/123)` instead of plain URLs
+  - Use `[PR #45](https://github.com/org/repo/pull/45)` instead of plain URLs
+  - This improves readability and user experience in chat interfaces.
+- Do not start work on features or bug fixes if:
+  - you are on the `main` branch or another protected branch
+  - there is no GitHub issue or task tracking the work
+
+## Git and GitHub
+- Use command-line `git` for all git operations when possible.
+- For GitHub specific operations (e.g. creating PRs, issues, projects, etc.), use the GitHub CLI: `gh`. 
 - Commit message policy: 
   - Following conventional commit guidelines: `https://www.conventionalcommits.org/en/v1.0.0/#summary`
   - Unless an exception is human-approved, always include a reference to the affected issue on the first line (so it appears in GitHub commit lists), for example:  
@@ -55,14 +67,8 @@ See [Specification Details](./spec/README.md) for detailed specifications both a
     - Use BREAKING CHANGE to indicate breaking changes.
     - When multiple issues are impacted, list each reference comma-separated on the first line, and list each on its own line with details at the bottom of the commit message.
 - Feature branches are allowed locally for isolation, but do not push them or open PRs until the above gating conditions are met, unless a maintainer explicitly asks for a draft PR for review.
-- Any release or tag creation should be coordinated and follow the organization's release checklist; prefer creating PRs that include release notes rather than creating tags directly from agents.
-- Chat agent communication: When chat agents reference GitHub issues or pull requests in their output, they must format them as clickable markdown links. For example:
-  - Use `[Issue #123](https://github.com/org/repo/issues/123)` instead of plain URLs
-  - Use `[PR #45](https://github.com/org/repo/pull/45)` instead of plain URLs
-  - This improves readability and user experience in chat interfaces.
-- Do not start work on features or bug fixes if:
-  - you are on the `main` branch or another protected branch
-  - there is no GitHub issue or task tracking the work
+
+### Repository Organization
 
 ## Tool calling & network-usage policies (organization)
 
