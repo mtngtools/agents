@@ -18,13 +18,13 @@ This document contains TypeScript-specific tooling choices and minimal verificat
 |------|------|-------|-------------------|-----------|
 | [TypeScript (tsc)](typescript.md) | language | Static typing and API guarantees | 5.7+ | [typescriptlang.org](https://www.typescriptlang.org) |
 | [Vue](vue.md) | framework | Progressive JavaScript framework | 3.5+ | [vuejs.org](https://vuejs.org) |
-| [Nuxt](nuxt.md) | framework | Full-stack Vue framework | 3.14+ | [nuxt.com](https://nuxt.com) |
+| [Nuxt](nuxt.md) | framework | Full-stack Vue framework | 4+3.14+ | [nuxt.com](https://nuxt.com) |
 | [Nitro](nitro.md) | framework | Server-side framework | 2.10+ | [nitro.unjs.io](https://nitro.unjs.io) |
 | [Tailwind CSS](tailwind.md) | framework | Utility-first CSS framework | 4.1+ | [tailwindcss.com](https://tailwindcss.com) |
 | [pnpm](pnpm.md) | tooling | Package manager | 9+ | [pnpm.io](https://pnpm.io) |
-| [Vite](vite.md) | tooling | Fast dev server and build tooling | 6+ | [vitejs.dev](https://vitejs.dev) |
+| [Vite](vite.md) | tooling | Fast dev server and build tooling | 8+ | [vitejs.dev](https://vitejs.dev) |
 | [oxlint (plugin)](oxlint.md) | tooling | Style enforcement and bug detection | 0.6+ | [oxc-project.github.io](https://oxc-project.github.io) |
-| [Vitest](vitest.md) | tooling | Lightweight unit test runner | 2+ | [vitest.dev](https://vitest.dev) |
+| [Vitest](vitest.md) | tooling | Lightweight unit test runner | latest | [vitest.dev](https://vitest.dev) |
 | [Unjs](unjs.md) | tooling | Universal JavaScript tools | N/A | [unjs.io](https://unjs.io) |
 | [Turbo](turbo.md) | tooling | Build system and task runner for monorepos | 2+ | [turbo.build](https://turbo.build) |
 | [Changesets](changesets.md) | tooling | Version management for monorepos | 2.27+ | [github.com/changesets](https://github.com/changesets/changesets) |
