@@ -1,7 +1,9 @@
 ---
 name: create-develop-branch
 description: Create timestamped develop branch.
-type: command
+metadata:
+  type: command
+  applies-to: [branching, git]
 ---
 
 # create-develop-branch

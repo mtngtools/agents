@@ -1,7 +1,9 @@
 ---
 name: commit-with-issue
 description: Commit using specified issue number.
-type: command
+metadata:
+  type: command
+  applies-to: [commits, git, issues]
 ---
 
 # commit-with-issue

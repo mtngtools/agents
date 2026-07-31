@@ -1,7 +1,9 @@
 ---
 name: concise-copy
 description: Refine copy or documentation to ensure the text is direct and efficient.
-type: command
+metadata:
+  type: command
+  applies-to: [writing, documentation, content]
 ---
 
 # Concise Copy Command

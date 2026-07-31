@@ -1,7 +1,9 @@
 ---
 name: create-pr-for-branch
 description: Create a pull request for the current branch.
-type: command
+metadata:
+  type: command
+  applies-to: [prs, github, github-api]
 ---
 
 # create-pr-for-branch

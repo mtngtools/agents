@@ -1,7 +1,9 @@
 ---
 name: create-issue-commit
 description: Create GitHub issue for uncommited changes and commit.
-type: command
+metadata:
+  type: command
+  applies-to: [issues, commits, git, github]
 ---
 
 # create-issue-commit

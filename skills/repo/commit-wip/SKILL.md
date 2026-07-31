@@ -1,7 +1,9 @@
 ---
 name: commit-wip
 description: Commit current changes as a WIP commit.
-type: command
+metadata:
+  type: command
+  applies-to: [commits, git, wip]
 ---
 
 # commit-wip

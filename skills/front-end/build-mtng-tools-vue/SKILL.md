@@ -1,7 +1,9 @@
 ---
 name: build-mtng-tools-vue
 description: Use mtng-tools-vue skill to start building
-type: skill
+metadata:
+  type: skill
+  applies-to: [building, vue, frontend, specs]
 ---
 
 Use `mtng-tools-vue` skill (as well as the skills it references) to begin building (or changing) Vue component or composable as specified in `./spec/README.md` for a Vue component or composable. 
