@@ -1,30 +1,38 @@
-# Installation & Discovery
+# Installation
 
-How to install and use rules and skills from `mtngtools/agents`.
+How to install and use skills and rules from `mtngtools/agents`.
 
-## Skills
+## Install with skills.sh
 
-Skills in `skills/` follow [skills.sh](https://www.skills.sh/) format with YAML frontmatter (`name`, `description`, `metadata`).
+All skills are discoverable via [skills.sh](https://www.skills.sh/).
 
-### Install in Claude Code
-
-Reference in `AGENTS_REPO.md` with a link to the skill:
-```markdown
-See [`/commit-with-issue`](https://github.com/mtngtools/agents/blob/main/skills/repo/commit-with-issue/SKILL.md) skill.
+```bash
+npx skills add mtngtools/agents
 ```
 
-Claude reads the skill's instructions and applies them.
+This installs all skills from the repository. Skills are then available by name in your agent.
 
-### Install in other agents
+### Available skills
 
-If your agent supports skills.sh or similar discovery:
-- Look in `skills/` directory structure
-- Parse YAML frontmatter for `name`, `description`, `metadata.applies-to`
-- Invoke skills by name or tag
+- **repo/** — git, branching, commits, PRs (10 skills)
+- **general/** — content refinement (1 skill)
+- **front-end/** — Vue building (2 skills)
 
-## Rules
+See [skills/INDEX.md](../skills/INDEX.md) for descriptions and tags.
 
-Rules in `rules/` are reference guidance documents, not procedural skills. They're indexed in `rules/INDEX.md`.
+### Use a skill
+
+```bash
+/commit-with-issue
+/create-pr-for-branch
+/commit-without-issue
+```
+
+Skills have YAML frontmatter with `name`, `description`, `metadata.type`, and `metadata.applies-to` tags for discovery.
+
+## Rules (not via skills.sh)
+
+Rules in `rules/` are reference guidance documents, not executable skills. Skills.sh doesn't discover them—agents load them by reading `AGENTS_REPO.md` or context. Rules are indexed in `rules/INDEX.md`.
 
 ### Auto-discoverable rules
 
@@ -80,11 +88,12 @@ Follow [AGENTS_ORGANIZATION.md](https://github.com/mtngtools/agents/blob/main/AG
 
 3. If a skill or rule is not installed locally, pull from `mtngtools/agents`.
 
-## For Antigravity agents
+## For other systems
 
-If using Antigravity's agent system, rules can be wrapped as directives and skills as commands. The `metadata.type` field maps:
-- `rule` → directive or guidance doc
-- `command` → Antigravity command (parse SKILL.md for steps)
-- `skill` → Antigravity skill/composite command
+**Claude Code:** Reference skills in `AGENTS_REPO.md`. Claude will read and apply the skill instructions.
 
-Document the mapping in your Antigravity configuration.
+**Antigravity:** Map `metadata.type` fields:
+- `command` → Antigravity command
+- `skill` → Antigravity skill/composite
+
+**Custom:** Parse YAML frontmatter for name, description, and metadata.
