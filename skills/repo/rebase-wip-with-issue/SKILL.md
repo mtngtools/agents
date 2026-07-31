@@ -1,7 +1,9 @@
 ---
 name: rebase-wip-with-issue
 description: Rebase all WIP commits using GitHub issue.
-type: command
+metadata:
+  type: command
+  applies-to: [git, rebase, issues, wip]
 ---
 
 # rebase-wip-with-issue

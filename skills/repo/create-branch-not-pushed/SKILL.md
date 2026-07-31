@@ -1,7 +1,9 @@
 ---
 name: create-branch-not-pushed
 description: Create branch for recent commits that have not been pushed.
-type: command
+metadata:
+  type: command
+  applies-to: [branching, git, commits]
 ---
 
 # create-branch-not-pushed

@@ -1,7 +1,9 @@
 ---
 name: create-issue-to-rebase-wip
 description: Create GitHub issue for prior WIP commit, rebase with issue number referenced.
-type: command
+metadata:
+  type: command
+  applies-to: [issues, git, rebase, wip]
 ---
 
 # create-issue-to-rebase-wip
