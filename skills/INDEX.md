@@ -20,6 +20,19 @@ Git, branching, commits, and PR workflows. All human-initiated.
 | [pull-back-from-main](./repo/pull-back-from-main/SKILL.md) | Pull back from main, delete branch | branching, git |
 | [rebase-wip-with-issue](./repo/rebase-wip-with-issue/SKILL.md) | Rebase WIP commits with issue | git, rebase, issues, wip |
 
+## Planning skills
+
+The wayfinder pipeline — decisions become specs, specs become tickets — plus the survey that says which map to enter. All human-initiated.
+
+| Name | Description | Applies to |
+|------|-------------|-----------|
+| [check-wayfinder-maps](./plan/check-wayfinder-maps/SKILL.md) | Survey all wayfinder maps; report what's ready to build | planning, wayfinder, github, survey |
+| [decisions-to-specs](./plan/decisions-to-specs/SKILL.md) | Settle a map's decisions into repo spec files and ADRs | planning, wayfinder, specs, adrs |
+| [specs-to-tickets](./plan/specs-to-tickets/SKILL.md) | Slice a map's settled specs into implementation tickets | planning, wayfinder, specs, tickets |
+| [plan-mtng-tools-vue](./plan/plan-mtng-tools-vue/SKILL.md) | Plan Vue component/composable spec | planning, vue, frontend, specs |
+
+**Pipeline order:** `/wayfinder` → `/decisions-to-specs` → `/specs-to-tickets` → `/implement`. Each operates on one map; `/check-wayfinder-maps` reads across all of them and tells you which one to enter, and by which door.
+
 ## General skills
 
 Cross-cutting operations. All human-initiated.
@@ -27,6 +40,12 @@ Cross-cutting operations. All human-initiated.
 | Name | Description | Applies to |
 |------|-------------|-----------|
 | [concise-copy](./general/concise-copy/SKILL.md) | Refine copy and documentation | writing, documentation, content |
+| [75-concise](./general/75-concise/SKILL.md) | Cut text to ~75% — a light trim | writing, documentation, reduction |
+| [50-concise](./general/50-concise/SKILL.md) | Cut text to ~50% | writing, documentation, reduction |
+| [25-concise](./general/25-concise/SKILL.md) | Cut text to ~25% | writing, documentation, reduction |
+| [10-concise](./general/10-concise/SKILL.md) | Cut text to ~10% — bites hardest | writing, documentation, reduction |
+
+The numbered variants share one [reduction method](./general/concise-copy/reduce.md); the percentage is a ceiling, never a floor on meaning.
 
 ## Frontend skills
 
@@ -35,10 +54,11 @@ Vue component and composable workflows. All human-initiated.
 | Name | Description | Applies to |
 |------|-------------|-----------|
 | [build-mtng-tools-vue](./front-end/build-mtng-tools-vue/SKILL.md) | Build Vue component/composable | building, vue, frontend, specs |
-| [plan-mtng-tools-vue](./plan/plan-mtng-tools-vue/SKILL.md) | Plan Vue component/composable spec | planning, vue, frontend, specs |
+
+Its planning counterpart, [plan-mtng-tools-vue](./plan/plan-mtng-tools-vue/SKILL.md), is listed under Planning.
 
 ## Loading
 
 Reference skills in output as `/skill-name` (e.g., `/commit-with-issue`). If not installed in your system, pull from [`mtngtools/agents`](https://github.com/mtngtools/agents) `skills/` folder.
 
-All current skills are human-initiated (discoverable: false) — humans must request them.
+All current skills are human-initiated — humans must request them. Older skills declare this as `metadata.discoverable: false`; newer ones as `disable-model-invocation: true`.
