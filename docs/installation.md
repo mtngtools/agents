@@ -7,7 +7,7 @@ How to install and use skills and rules from `mtngtools/agents`.
 All skills are discoverable via [skills.sh](https://www.skills.sh/).
 
 ```bash
-npx skills add mtngtools/agents
+pnpx skills add mtngtools/agents
 ```
 
 This installs all skills from the repository. Skills are then available by name in your agent.
