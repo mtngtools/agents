@@ -1,0 +1,8 @@
+description = "Pull back from main branch."
+prompt = """
+This skill is human-only. Run it only because a human just asked for it by name. If you reached it any other way, stop and ask for explicit confirmation before running any step.
+
+Read and follow the skill at `skills/repo/pull-back-from-main/SKILL.md` in the mtngtools/agents repo (installed locally under `~/.agents/skills/pull-back-from-main/SKILL.md`). Follow its instructions exactly.
+
+Arguments, if any: {{args}}
+"""

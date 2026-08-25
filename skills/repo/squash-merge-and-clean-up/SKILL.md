@@ -1,12 +1,16 @@
 ---
 name: squash-merge-and-clean-up
 description: Squash-merge this session's PR, then remove the branches and worktree it created.
+disable-model-invocation: true
 metadata:
   type: command
+  invocation: human-only
   applies-to: [prs, github, branching, git, worktrees]
 ---
 
 # squash-merge-and-clean-up
+
+> **human-only.** Start this only when a human asks for it by name. If you arrived here from another skill, stop and get explicit confirmation before running any step.
 
 Land the PR this session opened and clear what this session created: leave the worktree, squash-merge, delete both branches, remove the worktree.
 

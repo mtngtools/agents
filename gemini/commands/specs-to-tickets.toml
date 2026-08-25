@@ -1,0 +1,8 @@
+description = "Turn the specs settled from a wayfinder map into implementation tickets — read the map's Specs-settled notes, then run Matt's /to-tickets against each spec."
+prompt = """
+This skill is human-only. Run it only because a human just asked for it by name. If you reached it any other way, stop and ask for explicit confirmation before running any step.
+
+Read and follow the skill at `skills/plan/specs-to-tickets/SKILL.md` in the mtngtools/agents repo (installed locally under `~/.agents/skills/specs-to-tickets/SKILL.md`). Follow its instructions exactly.
+
+Arguments, if any: {{args}}
+"""

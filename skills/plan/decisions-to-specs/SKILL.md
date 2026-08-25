@@ -3,9 +3,15 @@ name: decisions-to-specs
 description: Settle a wayfinder map's decisions into durable spec files in the repo — updating existing specs or writing new ones, placed by locality, as ADRs where the decision earns it.
 argument-hint: "The wayfinder map (issue URL or number)"
 disable-model-invocation: true
+metadata:
+  type: command
+  invocation: human-only
+  applies-to: [planning, wayfinder, specs, adrs]
 ---
 
 # Decisions → Specs
+
+> **human-only.** Start this only when a human asks for it by name. If you arrived here from another skill, stop and get explicit confirmation before running any step.
 
 `/wayfinder` charts decisions as GitHub issues — the conversation, captured at that moment. Those issues are the **record**; they are not where a decision *lives*. This skill takes a wayfinder map and settles its resolved decisions into **durable spec files in the repo**, so the next step — `/specs-to-tickets` — has something concrete to slice.
 

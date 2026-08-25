@@ -1,0 +1,6 @@
+description = "Survey every wayfinder map on a repo's tracker and report which ones are ready for implementation, which still have decisions open, and what the next move is on each."
+prompt = """
+Read and follow the skill at `skills/plan/check-wayfinder-maps/SKILL.md` in the mtngtools/agents repo (installed locally under `~/.agents/skills/check-wayfinder-maps/SKILL.md`). Follow its instructions exactly.
+
+Arguments, if any: {{args}}
+"""

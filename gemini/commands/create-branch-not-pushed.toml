@@ -1,0 +1,6 @@
+description = "Create branch for recent commits that have not been pushed."
+prompt = """
+Read and follow the skill at `skills/repo/create-branch-not-pushed/SKILL.md` in the mtngtools/agents repo (installed locally under `~/.agents/skills/create-branch-not-pushed/SKILL.md`). Follow its instructions exactly.
+
+Arguments, if any: {{args}}
+"""

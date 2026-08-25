@@ -1,8 +1,10 @@
 ---
 name: draft-commit-message
 description: Draft a commit message following the organization's git and commit message guidelines.
+disable-model-invocation: true
 metadata:
   type: command
+  invocation: skill-callable
   applies-to: [commits, git, messages]
 ---
 

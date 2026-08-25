@@ -3,6 +3,10 @@ name: check-wayfinder-maps
 description: Survey every wayfinder map on a repo's tracker and report which ones are ready for implementation, which still have decisions open, and what the next move is on each.
 argument-hint: "The repo (owner/name), if not the current one"
 disable-model-invocation: true
+metadata:
+  type: command
+  invocation: skill-callable
+  applies-to: [planning, wayfinder, github, survey]
 ---
 
 # Check Wayfinder Maps

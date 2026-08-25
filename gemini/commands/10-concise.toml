@@ -1,0 +1,6 @@
+description = "Cut text to about 10% of its length, keeping all meaning."
+prompt = """
+Read and follow the skill at `skills/general/10-concise/SKILL.md` in the mtngtools/agents repo (installed locally under `~/.agents/skills/10-concise/SKILL.md`). Follow its instructions exactly.
+
+Arguments, if any: {{args}}
+"""

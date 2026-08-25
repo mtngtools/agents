@@ -3,6 +3,10 @@ name: 10-concise
 description: Cut text to about 10% of its length, keeping all meaning.
 argument-hint: "text or file to reduce"
 disable-model-invocation: true
+metadata:
+  type: command
+  invocation: skill-callable
+  applies-to: [writing, documentation, reduction]
 ---
 
 # 10-concise

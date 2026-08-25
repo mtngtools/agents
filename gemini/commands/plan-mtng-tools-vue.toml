@@ -1,0 +1,6 @@
+description = "Use mtng-tools-vue skill to start planning"
+prompt = """
+Read and follow the skill at `skills/plan/plan-mtng-tools-vue/SKILL.md` in the mtngtools/agents repo (installed locally under `~/.agents/skills/plan-mtng-tools-vue/SKILL.md`). Follow its instructions exactly.
+
+Arguments, if any: {{args}}
+"""

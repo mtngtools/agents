@@ -1,0 +1,6 @@
+description = "Create timestamped develop branch."
+prompt = """
+Read and follow the skill at `skills/repo/create-develop-branch/SKILL.md` in the mtngtools/agents repo (installed locally under `~/.agents/skills/create-develop-branch/SKILL.md`). Follow its instructions exactly.
+
+Arguments, if any: {{args}}
+"""

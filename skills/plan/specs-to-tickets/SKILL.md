@@ -3,9 +3,15 @@ name: specs-to-tickets
 description: Turn the specs settled from a wayfinder map into implementation tickets — read the map's Specs-settled notes, then run Matt's /to-tickets against each spec.
 argument-hint: "The wayfinder map (issue URL or number)"
 disable-model-invocation: true
+metadata:
+  type: command
+  invocation: human-only
+  applies-to: [planning, wayfinder, specs, tickets]
 ---
 
 # Specs → Tickets
+
+> **human-only.** Start this only when a human asks for it by name. If you arrived here from another skill, stop and get explicit confirmation before running any step.
 
 Downstream of `/decisions-to-specs`. That skill settled a wayfinder map's decisions into repo spec files and recorded them on the map under `## Specs settled`. This skill reads those notes and produces the **implementation tickets** — by handing each spec to Matt's `/to-tickets`.
 

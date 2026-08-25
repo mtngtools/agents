@@ -1,8 +1,10 @@
 ---
 name: commit-without-issue
 description: Commit changes without an issue reference.
+disable-model-invocation: true
 metadata:
   type: command
+  invocation: skill-callable
   applies-to: [commits, git, no-issue-tracker]
 ---
 

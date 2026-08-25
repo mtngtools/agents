@@ -17,12 +17,18 @@ Templates: [`./templates/TEMPLATE_AGENTS_REPO.md`](./templates/TEMPLATE_AGENTS_R
 
 ## Discovery model
 
-Rules and skills have frontmatter declaring `discoverable: true | false`:
+**Rules** declare `discoverable: true | false` in frontmatter:
 
 - **Auto-discoverable** (load at session start) — behavioral constraints and safety rules
-- **Human-initiated** (load when requested) — operational skills and policies
+- **Human-initiated** (load when requested) — operational policies
 
-See [`rules/INDEX.md`](./rules/INDEX.md) and [`skills/INDEX.md`](./skills/INDEX.md) for discovery status and `applies-to` tags.
+**Skills** declare `metadata.type` — `command` for a discrete operation, `skill` for one that composes others, which is what Gemini and Antigravity map onto their own surfaces — and `metadata.invocation`, which says who may start them:
+
+- **`human-only`** — only a human, by name. A skill chaining into one must stop and confirm.
+- **`skill-callable`** — a human by name, or another skill chaining in silently. Never model-initiated.
+- **`model-discoverable`** — the model may reach for it unprompted.
+
+See [`rules/INDEX.md`](./rules/INDEX.md) and [`skills/INDEX.md`](./skills/INDEX.md) for status and `applies-to` tags, and [`docs/installation.md`](./docs/installation.md#invocation-categories) for how each category is enforced per harness.
 
 ## Quick start
 

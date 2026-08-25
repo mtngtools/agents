@@ -1,8 +1,10 @@
 ---
 name: commit-wip
 description: Commit current changes as a WIP commit.
+disable-model-invocation: true
 metadata:
   type: command
+  invocation: skill-callable
   applies-to: [commits, git, wip]
 ---
 
@@ -10,5 +12,5 @@ metadata:
 
 Commit current changes as a WIP commit.
 
-Follow [draft-commit-message](../draft-commit-message/SKILL.md) skill, but as a WIP issue numbers not mandatory. 
+Invoke the `draft-commit-message` skill, but as a WIP issue numbers not mandatory. 
 

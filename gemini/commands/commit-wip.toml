@@ -1,0 +1,6 @@
+description = "Commit current changes as a WIP commit."
+prompt = """
+Read and follow the skill at `skills/repo/commit-wip/SKILL.md` in the mtngtools/agents repo (installed locally under `~/.agents/skills/commit-wip/SKILL.md`). Follow its instructions exactly.
+
+Arguments, if any: {{args}}
+"""

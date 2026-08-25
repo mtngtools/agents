@@ -1,8 +1,10 @@
 ---
 name: concise-copy
 description: Refine copy or documentation to ensure the text is direct and efficient.
+disable-model-invocation: true
 metadata:
   type: command
+  invocation: skill-callable
   applies-to: [writing, documentation, content]
 ---
 

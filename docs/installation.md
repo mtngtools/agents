@@ -14,11 +14,12 @@ This installs all skills from the repository. Skills are then available by name 
 
 ### Available skills
 
-- **repo/** — git, branching, commits, PRs (11 skills)
-- **general/** — content refinement (1 skill)
-- **front-end/** — Vue building (2 skills)
+- **repo/** — git, branching, commits, PRs (12 skills)
+- **plan/** — the wayfinder pipeline (4 skills)
+- **general/** — content refinement and reduction (5 skills)
+- **front-end/** — Vue building (1 skill)
 
-See [skills/INDEX.md](../skills/INDEX.md) for descriptions and tags.
+See [skills/INDEX.md](../skills/INDEX.md) for descriptions, tags, and each skill's invocation category.
 
 ### Use a skill
 
@@ -28,7 +29,7 @@ See [skills/INDEX.md](../skills/INDEX.md) for descriptions and tags.
 /commit-without-issue
 ```
 
-Skills have YAML frontmatter with `name`, `description`, `metadata.type`, and `metadata.applies-to` tags for discovery.
+Skills have YAML frontmatter with `name`, `description`, `metadata.type`, `metadata.invocation`, and `metadata.applies-to` tags for discovery.
 
 ## Rules (not via skills.sh)
 
@@ -55,17 +56,52 @@ Document in `AGENTS_REPO.md` which rules apply to your repo:
   — before commits, PRs, releases
 ```
 
-## Metadata
+## The two metadata axes
 
-Each rule and skill has `metadata` with:
-- **`type`** — `rule`, `command`, or `skill`
-- **`applies-to`** — tags for discovery and filtering (e.g., `[commits, git, github]`)
-- **`discoverable`** (rules only) — `true` (auto-load) or `false` (human-initiated)
+Every skill declares two independent things:
 
-Use these tags to:
-- Filter what agents should load ("I'm doing git work, load all `applies-to: [git]` rules")
-- Display available skills/rules ("show me all rules tagged `security`")
-- Organize documentation and discovery indexes
+- **`metadata.type`** — *what kind of thing this is*: `command` for a discrete
+  operation, `skill` for one that composes other skills. Gemini and Antigravity
+  map this onto their own surfaces, and `rules/` uses the same vocabulary.
+- **`metadata.invocation`** — *who may start it*. See below.
+
+They answer different questions for different consumers, so both are required
+on every skill.
+
+## Invocation categories
+
+Every skill declares `metadata.invocation`, which says who may start it.
+
+| Category | Who may start it | Frontmatter |
+|---|---|---|
+| `human-only` | Only a human, by name. A skill that chains into it must stop and confirm. | `disable-model-invocation: true` |
+| `skill-callable` | A human by name, or another skill chaining in silently. Not offered to the model. | `disable-model-invocation: true` |
+| `model-discoverable` | The model may reach for it unprompted. | *(flag omitted)* |
+
+`disable-model-invocation` keeps a skill out of the model's listing, and Claude
+Code honours it natively — so neither `human-only` nor `skill-callable` is ever
+offered to the model. The harness cannot separate those two: to it they look
+identical.
+
+What separates them is the category itself, plus the gate paragraph every
+`human-only` skill carries at the top of its body:
+
+> **human-only.** Start this only when a human asks for it by name. If you
+> arrived here from another skill, stop and get explicit confirmation before
+> running any step.
+
+An agent that reaches a `human-only` skill from anywhere other than a human
+naming it is told, in the skill itself, to stop and confirm. This is a
+convention agents follow, not something a harness enforces.
+
+### Tags
+
+`metadata.applies-to` carries tags for discovery and filtering (e.g.
+`[commits, git, github]`). Use them to filter what agents load ("I'm doing git
+work, load everything tagged `git`") and to organise discovery indexes.
+
+Rules in `rules/` keep their own `metadata.type` and `metadata.discoverable`
+fields; those are a separate vocabulary and are unaffected by the above.
 
 ## Example: Setting up a repo
 
@@ -90,10 +126,29 @@ Follow [AGENTS_ORGANIZATION.md](https://github.com/mtngtools/agents/blob/main/AG
 
 ## For other systems
 
-**Claude Code:** Reference skills in `AGENTS_REPO.md`. Claude will read and apply the skill instructions.
+**Claude Code:** honours `disable-model-invocation` natively, which withholds
+`human-only` and `skill-callable` skills from the model. The split between those
+two rests on the gate paragraph described above.
 
-**Antigravity:** Map `metadata.type` fields:
+**Gemini CLI / Antigravity:** map `metadata.type`:
+
 - `command` → Antigravity command
 - `skill` → Antigravity skill/composite
 
-**Custom:** Parse YAML frontmatter for name, description, and metadata.
+This is what makes the skills work there, so `metadata.type` is not optional.
+
+Gemini CLI also discovers `~/.agents/skills/` and `.agents/skills/` natively, so
+the install path already works and `model-discoverable` skills need nothing
+further. Gemini has no `disable-model-invocation` equivalent; `human-only` and
+`skill-callable` skills are reached there as custom commands — a
+`gemini/commands/<name>.toml` per skill, whose `prompt` points at the skill and
+whose `description` names it in `/help`. Those live in
+[`gemini/commands/`](../gemini/commands/).
+
+`human-only` rests on the same gate paragraph there, carried in both the skill
+body and the command prompt, with Gemini's own `activate_skill` consent prompt
+underneath it — Gemini already asks before any model-initiated activation, so
+its floor is stricter than Claude's.
+
+**Custom:** parse the YAML frontmatter for `name`, `description`,
+`metadata.type`, `metadata.invocation`, and `metadata.applies-to`.

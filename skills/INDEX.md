@@ -1,60 +1,77 @@
 # Skills Index
 
-Definitive skills for `mtngtools` organization. Each skill has frontmatter indicating discovery mode and applicable tags.
+Definitive skills for `mtngtools` organization. Every skill declares two things in its frontmatter:
+
+- **`metadata.type`** — what kind of thing it is: `command` for a discrete operation, `skill` for one that composes other skills. Gemini and Antigravity map this onto their own surfaces; `rules/` uses the same vocabulary.
+- **`metadata.invocation`** — who is allowed to start it.
+
+## Invocation categories
+
+| Category | Who may start it | Frontmatter |
+|---|---|---|
+| `human-only` | Only a human, by name. Another skill that reaches for it must stop and get explicit confirmation first. | `disable-model-invocation: true` |
+| `skill-callable` | A human by name, or another skill chaining into it without asking. Never loaded into context on the model's own initiative. | `disable-model-invocation: true` |
+| `model-discoverable` | The model may reach for it unprompted when the description matches the task. | *(flag omitted)* |
+
+`disable-model-invocation` is what keeps the first two out of the model's skill listing — Claude Code honours it natively, so neither is offered to the model. It cannot tell those two apart: to a harness they look identical.
+
+What separates them is `metadata.invocation` plus the gate paragraph each `human-only` skill carries in its body. An agent that reaches a `human-only` skill by any route other than a human naming it is instructed, in the skill itself, to stop and confirm first. That is a convention agents follow, not something the harness enforces.
 
 ## Repository skills
 
-Git, branching, commits, and PR workflows. All human-initiated.
+Git, branching, commits, and PR workflows.
 
-| Name | Description | Applies to |
-|------|-------------|-----------|
-| [commit-wip](./repo/commit-wip/SKILL.md) | Commit current changes as WIP | commits, git, wip |
-| [commit-with-issue](./repo/commit-with-issue/SKILL.md) | Commit with issue reference | commits, git, issues |
-| [commit-without-issue](./repo/commit-without-issue/SKILL.md) | Commit without issue reference | commits, git, no-issue-tracker |
-| [create-branch-not-pushed](./repo/create-branch-not-pushed/SKILL.md) | Create branch for unpushed commits | branching, git, commits |
-| [create-develop-branch](./repo/create-develop-branch/SKILL.md) | Create timestamped develop branch | branching, git |
-| [create-issue-commit](./repo/create-issue-commit/SKILL.md) | Create issue and commit changes | issues, commits, git, github |
-| [create-issue-to-rebase-wip](./repo/create-issue-to-rebase-wip/SKILL.md) | Create issue for WIP, rebase with it | issues, git, rebase, wip |
-| [create-pr-for-branch](./repo/create-pr-for-branch/SKILL.md) | Create PR for current branch | prs, github, github-api |
-| [draft-commit-message](./repo/draft-commit-message/SKILL.md) | Draft conventional commit message | commits, git, messages |
-| [pull-back-from-main](./repo/pull-back-from-main/SKILL.md) | Pull back from main, delete branch | branching, git |
-| [rebase-wip-with-issue](./repo/rebase-wip-with-issue/SKILL.md) | Rebase WIP commits with issue | git, rebase, issues, wip |
-| [squash-merge-and-clean-up](./repo/squash-merge-and-clean-up/SKILL.md) | Squash-merge the session's PR, remove its branches and worktree | prs, github, branching, git, worktrees |
+| Name | Description | Invocation | Applies to |
+|------|-------------|-----------|-----------|
+| [commit-wip](./repo/commit-wip/SKILL.md) | Commit current changes as WIP | `skill-callable` | commits, git, wip |
+| [commit-with-issue](./repo/commit-with-issue/SKILL.md) | Commit with issue reference | `skill-callable` | commits, git, issues |
+| [commit-without-issue](./repo/commit-without-issue/SKILL.md) | Commit without issue reference | `skill-callable` | commits, git, no-issue-tracker |
+| [create-branch-not-pushed](./repo/create-branch-not-pushed/SKILL.md) | Create branch for unpushed commits | `skill-callable` | branching, git, commits |
+| [create-develop-branch](./repo/create-develop-branch/SKILL.md) | Create timestamped develop branch | `skill-callable` | branching, git |
+| [draft-commit-message](./repo/draft-commit-message/SKILL.md) | Draft conventional commit message | `skill-callable` | commits, git, messages |
+| [create-issue-commit](./repo/create-issue-commit/SKILL.md) | Create issue and commit changes | `human-only` | issues, commits, git, github |
+| [create-issue-to-rebase-wip](./repo/create-issue-to-rebase-wip/SKILL.md) | Create issue for WIP, rebase with it | `human-only` | issues, git, rebase, wip |
+| [create-pr-for-branch](./repo/create-pr-for-branch/SKILL.md) | Create PR for current branch | `human-only` | prs, github, github-api |
+| [pull-back-from-main](./repo/pull-back-from-main/SKILL.md) | Pull back from main, delete branch | `human-only` | branching, git |
+| [rebase-wip-with-issue](./repo/rebase-wip-with-issue/SKILL.md) | Rebase WIP commits with issue | `human-only` | git, rebase, issues, wip |
+| [squash-merge-and-clean-up](./repo/squash-merge-and-clean-up/SKILL.md) | Squash-merge the session's PR, remove its branches and worktree | `human-only` | prs, github, branching, git, worktrees |
+
+The split is ownership of state. Local, reversible work — staging a commit, cutting a branch, drafting a message — is `skill-callable`, so a commit flow can chain through `draft-commit-message` without stopping to ask. Anything that rewrites history or touches GitHub is `human-only`.
 
 ## Planning skills
 
-The wayfinder pipeline — decisions become specs, specs become tickets — plus the survey that says which map to enter. All human-initiated.
+The wayfinder pipeline — decisions become specs, specs become tickets — plus the survey that says which map to enter.
 
-| Name | Description | Applies to |
-|------|-------------|-----------|
-| [check-wayfinder-maps](./plan/check-wayfinder-maps/SKILL.md) | Survey all wayfinder maps; report what's ready to build | planning, wayfinder, github, survey |
-| [decisions-to-specs](./plan/decisions-to-specs/SKILL.md) | Settle a map's decisions into repo spec files and ADRs | planning, wayfinder, specs, adrs |
-| [specs-to-tickets](./plan/specs-to-tickets/SKILL.md) | Slice a map's settled specs into implementation tickets | planning, wayfinder, specs, tickets |
-| [plan-mtng-tools-vue](./plan/plan-mtng-tools-vue/SKILL.md) | Plan Vue component/composable spec | planning, vue, frontend, specs |
+| Name | Description | Invocation | Applies to |
+|------|-------------|-----------|-----------|
+| [check-wayfinder-maps](./plan/check-wayfinder-maps/SKILL.md) | Survey all wayfinder maps; report what's ready to build | `skill-callable` | planning, wayfinder, github, survey |
+| [plan-mtng-tools-vue](./plan/plan-mtng-tools-vue/SKILL.md) | Plan Vue component/composable spec | `skill-callable` | planning, vue, frontend, specs |
+| [decisions-to-specs](./plan/decisions-to-specs/SKILL.md) | Settle a map's decisions into repo spec files and ADRs | `human-only` | planning, wayfinder, specs, adrs |
+| [specs-to-tickets](./plan/specs-to-tickets/SKILL.md) | Slice a map's settled specs into implementation tickets | `human-only` | planning, wayfinder, specs, tickets |
 
-**Pipeline order:** `/wayfinder` → `/decisions-to-specs` → `/specs-to-tickets` → `/implement`. Each operates on one map; `/check-wayfinder-maps` reads across all of them and tells you which one to enter, and by which door.
+**Pipeline order:** `/wayfinder` → `/decisions-to-specs` → `/specs-to-tickets` → `/implement`. Each operates on one map; `/check-wayfinder-maps` reads across all of them and tells you which one to enter, and by which door. The two middle steps write to the repo and the tracker, so each is a door you open yourself; the survey only reads, so anything may call it.
 
 ## General skills
 
-Cross-cutting operations. All human-initiated.
+Cross-cutting operations.
 
-| Name | Description | Applies to |
-|------|-------------|-----------|
-| [concise-copy](./general/concise-copy/SKILL.md) | Refine copy and documentation | writing, documentation, content |
-| [75-concise](./general/75-concise/SKILL.md) | Cut text to ~75% — a light trim | writing, documentation, reduction |
-| [50-concise](./general/50-concise/SKILL.md) | Cut text to ~50% | writing, documentation, reduction |
-| [25-concise](./general/25-concise/SKILL.md) | Cut text to ~25% | writing, documentation, reduction |
-| [10-concise](./general/10-concise/SKILL.md) | Cut text to ~10% — bites hardest | writing, documentation, reduction |
+| Name | Description | Invocation | Applies to |
+|------|-------------|-----------|-----------|
+| [concise-copy](./general/concise-copy/SKILL.md) | Refine copy and documentation | `skill-callable` | writing, documentation, content |
+| [75-concise](./general/75-concise/SKILL.md) | Cut text to ~75% — a light trim | `skill-callable` | writing, documentation, reduction |
+| [50-concise](./general/50-concise/SKILL.md) | Cut text to ~50% | `skill-callable` | writing, documentation, reduction |
+| [25-concise](./general/25-concise/SKILL.md) | Cut text to ~25% | `skill-callable` | writing, documentation, reduction |
+| [10-concise](./general/10-concise/SKILL.md) | Cut text to ~10% — bites hardest | `skill-callable` | writing, documentation, reduction |
 
 The numbered variants share one [reduction method](./general/concise-copy/reduce.md); the percentage is a ceiling, never a floor on meaning.
 
 ## Frontend skills
 
-Vue component and composable workflows. All human-initiated.
+Vue component and composable workflows.
 
-| Name | Description | Applies to |
-|------|-------------|-----------|
-| [build-mtng-tools-vue](./front-end/build-mtng-tools-vue/SKILL.md) | Build Vue component/composable | building, vue, frontend, specs |
+| Name | Description | Invocation | Applies to |
+|------|-------------|-----------|-----------|
+| [build-mtng-tools-vue](./front-end/build-mtng-tools-vue/SKILL.md) | Build Vue component/composable | `skill-callable` | building, vue, frontend, specs |
 
 Its planning counterpart, [plan-mtng-tools-vue](./plan/plan-mtng-tools-vue/SKILL.md), is listed under Planning.
 
@@ -62,4 +79,6 @@ Its planning counterpart, [plan-mtng-tools-vue](./plan/plan-mtng-tools-vue/SKILL
 
 Reference skills in output as `/skill-name` (e.g., `/commit-with-issue`). If not installed in your system, pull from [`mtngtools/agents`](https://github.com/mtngtools/agents) `skills/` folder.
 
-All current skills are human-initiated — humans must request them. Older skills declare this as `metadata.discoverable: false`; newer ones as `disable-model-invocation: true`.
+No skill here is `model-discoverable` yet — every one of them is something a human asks for. The category exists for convention skills that a model *should* pick up on its own when it recognises the work, the way `mtng-tools-vue` applies whenever a Vue SFC is being written.
+
+**Referencing another skill:** name it — "invoke the `draft-commit-message` skill" — rather than linking to its `SKILL.md`. A link invites an agent to read the file straight through, past the category it declares; naming the skill makes the reference an invocation, which the category governs. Linking to a non-skill reference file, like [reduce.md](./general/concise-copy/reduce.md), is fine.

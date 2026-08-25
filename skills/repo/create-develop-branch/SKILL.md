@@ -1,8 +1,10 @@
 ---
 name: create-develop-branch
 description: Create timestamped develop branch.
+disable-model-invocation: true
 metadata:
   type: command
+  invocation: skill-callable
   applies-to: [branching, git]
 ---
 

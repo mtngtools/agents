@@ -1,0 +1,6 @@
+description = "Commit using specified issue number."
+prompt = """
+Read and follow the skill at `skills/repo/commit-with-issue/SKILL.md` in the mtngtools/agents repo (installed locally under `~/.agents/skills/commit-with-issue/SKILL.md`). Follow its instructions exactly.
+
+Arguments, if any: {{args}}
+"""

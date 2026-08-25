@@ -1,0 +1,6 @@
+description = "Draft a commit message following the organization's git and commit message guidelines."
+prompt = """
+Read and follow the skill at `skills/repo/draft-commit-message/SKILL.md` in the mtngtools/agents repo (installed locally under `~/.agents/skills/draft-commit-message/SKILL.md`). Follow its instructions exactly.
+
+Arguments, if any: {{args}}
+"""
