@@ -19,6 +19,7 @@ Git, branching, commits, and PR workflows. All human-initiated.
 | [draft-commit-message](./repo/draft-commit-message/SKILL.md) | Draft conventional commit message | commits, git, messages |
 | [pull-back-from-main](./repo/pull-back-from-main/SKILL.md) | Pull back from main, delete branch | branching, git |
 | [rebase-wip-with-issue](./repo/rebase-wip-with-issue/SKILL.md) | Rebase WIP commits with issue | git, rebase, issues, wip |
+| [squash-merge-and-clean-up](./repo/squash-merge-and-clean-up/SKILL.md) | Squash-merge the session's PR, remove its branches and worktree | prs, github, branching, git, worktrees |
 
 ## Planning skills
 

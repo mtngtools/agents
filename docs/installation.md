@@ -14,7 +14,7 @@ This installs all skills from the repository. Skills are then available by name 
 
 ### Available skills
 
-- **repo/** — git, branching, commits, PRs (10 skills)
+- **repo/** — git, branching, commits, PRs (11 skills)
 - **general/** — content refinement (1 skill)
 - **front-end/** — Vue building (2 skills)
 
