@@ -1,0 +1,8 @@
+description = "Review a pull request in a throwaway worktree — read what it actually committed, run the tests, check it against the ticket and specs that are its true plan, and report every form of drift."
+prompt = """
+This skill is human-only. Run it only because a human just asked for it by name. If you reached it any other way, stop and ask for explicit confirmation before running any step.
+
+Read and follow the skill at `skills/repo/review-pr-in-worktree/SKILL.md` in the mtngtools/agents repo (installed locally under `~/.agents/skills/review-pr-in-worktree/SKILL.md`). Follow its instructions exactly.
+
+Arguments, if any: {{args}}
+"""
