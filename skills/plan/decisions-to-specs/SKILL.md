@@ -6,7 +6,7 @@ disable-model-invocation: true
 metadata:
   type: command
   invocation: human-only
-  applies-to: [planning, wayfinder, specs, adrs]
+  applies-to: [planning, wayfinder, specs, adrs, worktrees]
 ---
 
 # Decisions → Specs
@@ -17,7 +17,9 @@ metadata:
 
 Read GitHub for the decisions; write the repo for the specs. The two surfaces stay split on purpose (see [Split surfaces](#split-surfaces)). This skill is the bridge, and only the bridge — it never creates issues, never moves specs onto the tracker.
 
-**Settling a decision supersedes its ticket.** The issue is a snapshot of one conversation; from there the decision lives in the spec — and only the spec moves as later decisions, review, and implementation refine it. A decision ticket read months later is therefore likely stale, so step 6 stamps each one with a **superseded** banner pointing at its spec. The issues stay closed as the rationale trail; the specs are what `/specs-to-tickets` slices into implementation tickets.
+**Write the repo from a worktree of its own.** Other sessions share the primary checkout, and this skill edits specs all across the tree. Working in the shared checkout drops half-written specs into someone else's build, or swaps the branch out from under them. Every repo write below happens in a worktree this skill creates, on a branch of its own — see [step 4](#4-branch-into-a-worktree-before-writing). Steps 1–3 read GitHub and the tree, and are safe anywhere.
+
+**Settling a decision supersedes its ticket.** The issue is a snapshot of one conversation; from there the decision lives in the spec — and only the spec moves as later decisions, review, and implementation refine it. A decision ticket read months later is therefore likely stale, so step 8 stamps each one with a **superseded** banner pointing at its spec. The issues stay closed as the rationale trail; the specs are what `/specs-to-tickets` slices into implementation tickets.
 
 ## Process
 
@@ -45,7 +47,24 @@ Apply the [Placement rules](#placement-rules-locality-ladder) to give each decis
 
 **Done when:** the user has approved a target for every decision.
 
-### 4. Write and update
+### 4. Branch into a worktree before writing
+
+Everything from here that touches the repo happens in a **worktree of this skill's own**, cut fresh from the remote — never in the primary checkout, never straight onto `main`:
+
+```
+git fetch origin
+git worktree add <path> -b docs/specs-<map-number> origin/main
+```
+
+Then enter it — `EnterWorktree` with `path` where available, which requires the worktree to already appear in `git worktree list`, hence the order above.
+
+Follow whatever the repo already names its branches and worktrees; name both for the map so it is obvious whose they are, and put the worktree somewhere clearly disposable. If the fetch moved the base past what you read in step 2, re-read the spec landscape here — the worktree, not the primary checkout, is what you are writing into.
+
+Some harnesses restrict shell redirection inside a worktree. If a heredoc or `>` is refused, use file-writing tools and plain single-purpose commands instead of fighting it.
+
+**Done when:** the session is in a clean worktree on a new branch, and every write from here lands there.
+
+### 5. Write and update
 
 - **Update an existing spec:** weave the decision into the relevant section. Don't restate the conversation — the issue holds that; the spec holds the settled decision.
 - **New spec:** use the [New-spec shape](#new-spec-shape) so `/to-tickets` consumes it the same way.
@@ -53,13 +72,29 @@ Apply the [Placement rules](#placement-rules-locality-ladder) to give each decis
 
 Every decision links back to its source GitHub issue — the spec is the *what*, the issue is the *why it was decided*.
 
-**Done when:** every routed decision from step 3 is reflected in a file on disk.
+**Done when:** every routed decision from step 3 is reflected in a file in the worktree.
 
-### 5. Tighten with `/concise-copy`
+### 6. Tighten with `/concise-copy`
 
 Run `/concise-copy` over every file you touched. Specs are read repeatedly — earn their length.
 
-### 6. Stamp each decision ticket as superseded
+### 7. Commit the specs and open the PR
+
+The specs are not settled while they sit in a worktree only this session can see. Draft the message with **`/draft-commit-message`**, which owns the commit conventions — follow whatever it says, and don't restate its format here.
+
+Give it what it can't work out for itself: the issues in play and what each is to this commit.
+
+- The **map** is the ticket this work belongs to.
+- The **decision issues** that fed the files are its detail.
+- **None of them close.** `/wayfinder` closed the decision issues when their conversations ended, and the map stays open until `/specs-to-tickets` has sliced these specs.
+
+Then commit in the worktree, push the branch, and open the PR against `main`.
+
+**This skill never merges.** `/squash-merge-and-clean-up` lands the PR and removes the branch and the worktree; leave both in place until it runs.
+
+**Done when:** every file written in step 5 is committed on this skill's branch and the PR is open.
+
+### 8. Stamp each decision ticket as superseded
 
 Go back to every decision issue that fed a spec and prepend this banner to its **body** — replacing an existing one if you're re-running:
 
@@ -72,13 +107,13 @@ Name every spec the decision fed. A decision dropped in step 1 gets no banner �
 
 **Done when:** every decision issue routed in step 3 carries the banner, naming its spec file(s).
 
-### 7. Update the map, then report
+### 9. Update the map, then report
 
 Write an overview of what you did back onto the **map body**, under a `## Specs settled` heading (see [contract](#the-maps-specs-settled-section)). This is the durable guide the next step — `/specs-to-tickets` — reads; the map stays the single place that shows where the effort is.
 
-Then report to the user: what landed where, which decision issues were stamped, and that `/specs-to-tickets <map>` is the next step.
+Then report to the user: what landed where, the PR the specs are waiting in, which decision issues were stamped, and that `/specs-to-tickets <map>` is the next step once the PR merges.
 
-**Done when:** the map has a `## Specs settled` section listing every file written in step 4.
+**Done when:** the map has a `## Specs settled` section listing every file written in step 5.
 
 ## The map's Specs-settled section
 
@@ -125,6 +160,6 @@ GitHub holds the conversation (wayfinder maps + decision issues) and, later, the
 
 ## Where this sits in the flow
 
-`/wayfinder` → GitHub **decision** issues (closed, rationale, stamped superseded) → **`/decisions-to-specs`** → repo **spec files** (+ `## Specs settled` on the map) → `/specs-to-tickets` → `/to-tickets` → GitHub **implementation** tickets (fresh, distinct from the decision issues) → `/implement`.
+`/wayfinder` → GitHub **decision** issues (closed, rationale, stamped superseded) → **`/decisions-to-specs`** → repo **spec files** on a worktree branch, opened as a PR (+ `## Specs settled` on the map) → `/squash-merge-and-clean-up` → `/specs-to-tickets` → `/to-tickets` → GitHub **implementation** tickets (fresh, distinct from the decision issues) → `/implement`.
 
 Optional: wire the terminal step into a wayfinder map's `## Notes` — *"when the route is clear, run `/decisions-to-specs`"* — or run it by hand whenever decisions have piled up enough to settle.

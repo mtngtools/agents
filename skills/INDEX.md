@@ -47,7 +47,7 @@ The wayfinder pipeline — decisions become specs, specs become tickets — plus
 |------|-------------|-----------|-----------|
 | [check-wayfinder-maps](./plan/check-wayfinder-maps/SKILL.md) | Survey all wayfinder maps; report what's ready to build | `skill-callable` | planning, wayfinder, github, survey |
 | [plan-mtng-tools-vue](./plan/plan-mtng-tools-vue/SKILL.md) | Plan Vue component/composable spec | `skill-callable` | planning, vue, frontend, specs |
-| [decisions-to-specs](./plan/decisions-to-specs/SKILL.md) | Settle a map's decisions into repo spec files and ADRs | `human-only` | planning, wayfinder, specs, adrs |
+| [decisions-to-specs](./plan/decisions-to-specs/SKILL.md) | Settle a map's decisions into repo spec files and ADRs, written in a worktree of its own | `human-only` | planning, wayfinder, specs, adrs, worktrees |
 | [specs-to-tickets](./plan/specs-to-tickets/SKILL.md) | Slice a map's settled specs into implementation tickets | `human-only` | planning, wayfinder, specs, tickets |
 
 **Pipeline order:** `/wayfinder` → `/decisions-to-specs` → `/specs-to-tickets` → `/implement`. Each operates on one map; `/check-wayfinder-maps` reads across all of them and tells you which one to enter, and by which door. The two middle steps write to the repo and the tracker, so each is a door you open yourself; the survey only reads, so anything may call it.
