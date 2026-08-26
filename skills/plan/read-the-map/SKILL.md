@@ -2,7 +2,6 @@
 name: read-the-map
 description: Read one wayfinder map — its body, its children, its frontier — and say where the effort stands and which door to enter next.
 argument-hint: "The map (number or URL), if the session doesn't make it obvious"
-disable-model-invocation: true
 metadata:
   type: command
   invocation: skill-callable

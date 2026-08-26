@@ -2,7 +2,6 @@
 name: are-decisions-from-this-session-saved
 description: Ask what would be lost from the plan if this session ended now — decisions about the system made in conversation and never written down — drive each to a home or an approved forget, then answer honestly whether anything would have to be decided again.
 argument-hint: "Optional: the map or ticket this session was working, if the session doesn't make it obvious"
-disable-model-invocation: true
 metadata:
   type: command
   invocation: skill-callable

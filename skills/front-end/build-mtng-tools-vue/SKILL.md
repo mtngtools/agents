@@ -1,7 +1,6 @@
 ---
 name: build-mtng-tools-vue
 description: Use mtng-tools-vue skill to start building
-disable-model-invocation: true
 metadata:
   type: skill
   invocation: skill-callable

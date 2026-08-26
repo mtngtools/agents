@@ -1,7 +1,6 @@
 ---
 name: commit-wip
 description: Commit current changes as a WIP commit.
-disable-model-invocation: true
 metadata:
   type: command
   invocation: skill-callable

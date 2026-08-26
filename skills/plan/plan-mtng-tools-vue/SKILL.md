@@ -1,7 +1,6 @@
 ---
 name: plan-mtng-tools-vue
 description: Use mtng-tools-vue skill to start planning
-disable-model-invocation: true
 metadata:
   type: skill
   invocation: skill-callable

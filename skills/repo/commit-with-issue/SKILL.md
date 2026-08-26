@@ -2,7 +2,6 @@
 name: commit-with-issue
 description: Commit using specified issue number.
 argument-hint: "The issue number to reference"
-disable-model-invocation: true
 metadata:
   type: command
   invocation: skill-callable

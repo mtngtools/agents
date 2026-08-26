@@ -10,12 +10,14 @@ Definitive skills for `mtngtools` organization. Every skill declares two things 
 | Category | Who may start it | Frontmatter |
 |---|---|---|
 | `human-only` | Only a human, by name. Another skill that reaches for it must stop and get explicit confirmation first. | `disable-model-invocation: true` |
-| `skill-callable` | A human by name, or another skill chaining into it without asking. Never loaded into context on the model's own initiative. | `disable-model-invocation: true` |
+| `skill-callable` | A human by name, or another skill chaining into it without asking. | *(flag omitted)* |
 | `model-discoverable` | The model may reach for it unprompted when the description matches the task. | *(flag omitted)* |
 
-`disable-model-invocation` is what keeps the first two out of the model's skill listing — Claude Code honours it natively, so neither is offered to the model. It cannot tell those two apart: to a harness they look identical.
+**The harness has two states, not three.** `disable-model-invocation: true` keeps a skill out of the model's skill listing, and a skill that is not in the listing cannot be invoked by the model **at all** — including when another skill tells it to. There is no caller identity to check: one skill "calling" another is Claude calling the Skill tool, the same mechanism as Claude reaching for it unprompted. So `skill-callable` and `model-discoverable` share one frontmatter, and only their descriptions separate them.
 
-What separates them is `metadata.invocation` plus the gate paragraph each `human-only` skill carries in its body. An agent that reaches a `human-only` skill by any route other than a human naming it is instructed, in the skill itself, to stop and confirm first. That is a convention agents follow, not something the harness enforces.
+**Being in the listing costs one line.** Just the name and the description load; the body loads when the skill is invoked, not before. The listing is capped at 1% of the context window, and on overflow Claude Code strips descriptions starting with the skills invoked least — a stripped description keeps the name and loses the words a caller matches on. Keep `skill-callable` descriptions short.
+
+**Holding a line the harness won't hold.** A `skill-callable` skill that starts getting reached for unprompted is fixed in its `description`: name who calls it, and say it is not to be invoked on the model's own initiative. That is a convention agents follow, not something enforced — the same footing as the gate paragraph every `human-only` skill carries in its body, which tells an agent arriving by any route other than a human naming it to stop and confirm first.
 
 ## Repository skills
 
@@ -45,7 +47,7 @@ The wayfinder pipeline — decisions become specs, specs become tickets — plus
 
 | Name | Description | Invocation | Applies to |
 |------|-------------|-----------|-----------|
-| [check-wayfinder-maps](./plan/check-wayfinder-maps/SKILL.md) | Survey all wayfinder maps; report what's ready to build | `skill-callable` | planning, wayfinder, github, survey |
+| [check-wayfinder-maps](./plan/check-wayfinder-maps/SKILL.md) | Survey all wayfinder maps; report what's ready to build | `human-only` | planning, wayfinder, github, survey |
 | [read-the-map](./plan/read-the-map/SKILL.md) | Read one map — verdict and next door; owns the checklist the survey follows | `skill-callable` | planning, wayfinder, github, maps |
 | [are-decisions-from-this-session-saved](./plan/are-decisions-from-this-session-saved/SKILL.md) | Ask what planning would be lost if the session ended; record each system decision or forget it with approval | `skill-callable` | planning, wayfinder, specs, tickets, sessions |
 | [whats-next](./plan/whats-next/SKILL.md) | Hand back a short, copyable prompt for the next session on the current map | `skill-callable` | planning, wayfinder, sessions, prompts |
@@ -53,7 +55,7 @@ The wayfinder pipeline — decisions become specs, specs become tickets — plus
 | [decisions-to-specs](./plan/decisions-to-specs/SKILL.md) | Settle a map's decisions into repo spec files and ADRs, written in a worktree of its own | `human-only` | planning, wayfinder, specs, adrs, worktrees |
 | [specs-to-tickets](./plan/specs-to-tickets/SKILL.md) | Slice a map's settled specs into implementation tickets | `human-only` | planning, wayfinder, specs, tickets |
 
-**Pipeline order:** `/wayfinder` → `/decisions-to-specs` → `/specs-to-tickets` → `/implement`. Each operates on one map; `/check-wayfinder-maps` reads across all of them and tells you which one to enter, and by which door. `/are-decisions-from-this-session-saved` sits at the other end of a session, checking that what it decided about the system — not about how it was worked — reached a surface at all. `/whats-next` closes the same seam from the other side, handing over the prompt that starts the following session on the same map, off a `/read-the-map` reading. `/read-the-map` defines what reading a map means; `/check-wayfinder-maps` runs that same checklist across every map, in bulk. The two middle steps write to the repo and the tracker, so each is a door you open yourself; the survey only reads, so anything may call it.
+**Pipeline order:** `/wayfinder` → `/decisions-to-specs` → `/specs-to-tickets` → `/implement`. Each operates on one map; `/check-wayfinder-maps` reads across all of them and tells you which one to enter, and by which door. `/are-decisions-from-this-session-saved` sits at the other end of a session, checking that what it decided about the system — not about how it was worked — reached a surface at all. `/whats-next` closes the same seam from the other side, handing over the prompt that starts the following session on the same map, off a `/read-the-map` reading. `/read-the-map` defines what reading a map means; `/check-wayfinder-maps` runs that same checklist across every map, in bulk. The two middle steps write to the repo and the tracker, so each is a door you open yourself. So is the survey — it writes nothing, but a sweep of every map on a repo is asked for, not volunteered. `/read-the-map` is the callable read: one map, and what `/whats-next` chains through.
 
 ## General skills
 

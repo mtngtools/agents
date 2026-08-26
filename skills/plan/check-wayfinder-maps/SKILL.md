@@ -5,11 +5,13 @@ argument-hint: "The repo (owner/name), if not the current one"
 disable-model-invocation: true
 metadata:
   type: command
-  invocation: skill-callable
+  invocation: human-only
   applies-to: [planning, wayfinder, github, survey]
 ---
 
 # Check Wayfinder Maps
+
+> **human-only.** Start this only when a human asks for it by name. If you arrived here from another skill, stop and get explicit confirmation before running any step. Reading a single map needs no permission — that is `/read-the-map`, and it is callable.
 
 A read-only survey across **all** wayfinder maps on one repo. `/wayfinder` works one map at a time and never steps back to ask *"where is the whole effort?"* — this skill answers that in one table — what's decided, what's ready to build, what's still fog, what's blocking what — and hands back a copyable prompt per map to act on it.
 

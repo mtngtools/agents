@@ -2,7 +2,6 @@
 name: whats-next
 description: Work out the next move on the current wayfinder map and hand back a short, copy-pasteable prompt for the session that does it.
 argument-hint: "Optional: the map (number or URL), if the session doesn't make it obvious"
-disable-model-invocation: true
 metadata:
   type: command
   invocation: skill-callable
