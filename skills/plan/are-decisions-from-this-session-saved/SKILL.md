@@ -1,6 +1,6 @@
 ---
 name: are-decisions-from-this-session-saved
-description: Ask what would be lost from the plan if this session ended now — decisions about the system that were made in conversation and never written down — and drive each to a home: map, ticket, or spec, or an explicit human-approved forget.
+description: Ask what would be lost from the plan if this session ended now — decisions about the system made in conversation and never written down — drive each to a home or an approved forget, then answer honestly whether anything would have to be decided again.
 argument-hint: "Optional: the map or ticket this session was working, if the session doesn't make it obvious"
 disable-model-invocation: true
 metadata:
@@ -11,7 +11,7 @@ metadata:
 
 # Are Decisions From This Session Saved?
 
-One question, asked at the end of a session: **is there anything in the planning of this system that would be lost if we stopped here?** Whatever the session settled about the thing being built exists only in the transcript until someone writes it on a surface, and the next session doesn't read transcripts. This skill finds those, checks each against the surface it belongs on, and closes the gap — recorded, or dropped with the human saying so out loud.
+One question, asked at the end of a session: **is there anything in the planning of this system that would be lost if we stopped here?** Whatever the session settled about the thing being built exists only in the transcript until someone writes it on a surface, and the next session doesn't read transcripts. This skill finds those, checks each against the surface it belongs on, and closes the gap — recorded, or dropped with the human saying so out loud. It ends by answering the question straight: **no, nothing about the design would have to be decided again; you can close the session** — or, if that isn't true yet, exactly what would.
 
 **The subject is the system, not the session.** How the work got done here — which skill was called, how the human asked you to proceed, what you were corrected on mid-task — is not planning and is not in scope. See [What is not in scope](#what-is-not-in-scope); raising that material buries the two decisions that actually matter under ten that don't.
 
@@ -91,6 +91,32 @@ If you run out of room before the list runs out, say so plainly and list what is
 ### 6. Report
 
 One line per decision — what it was, where it landed, and the link — with forgotten ones grouped at the end. Close with what the pipeline still owes: decisions waiting on `/decisions-to-specs`, specs waiting on `/specs-to-tickets`, questions the human may want ticketed.
+
+**Done when:** every entry from the inventory appears in the report.
+
+### 7. Answer the question
+
+The skill exists for this line. Answer it out loud, in the human's words:
+
+> **If I closed this session now, would I have to decide anything over again about the design of the system?**
+
+The answer is **no** only when every entry is either verified on a surface — you have the link and you looked at it — or forgotten with their approval. Then say it plainly and without hedging:
+
+> **No. Nothing about the design would have to be decided again. You can close the session.**
+
+If it isn't yet no, say what would be re-decided, by name, and go back to step 3 — an unanswered gap makes the answer *yes*, however small the gap is.
+
+**Done when:** the human has a straight yes or no — and if yes, the named list of what they would be deciding twice.
+
+## The answer has to be earned
+
+The pull is to end on a clean note, and this is the one line where being agreeable does real damage: a false "you're clear" is worse than no sweep, because the human stops looking.
+
+- **"Recorded" means you looked at the surface** and it says the decision — not that you posted a comment and assume it landed.
+- **Forgotten entries don't count against a no.** They were dropped on purpose; that is a decision surviving, not a decision lost.
+- **Working style never makes it a yes.** It was never in scope, so it cannot be lost — see [What is not in scope](#what-is-not-in-scope).
+- **Don't hedge a genuine no.** "No, though you might want to…" reads as a maybe and sends them looking for a problem that isn't there. Trailing suggestions belong in the step 6 report, above the answer.
+- **Don't soften a yes either.** One decision unrecorded is a yes; say which one.
 
 ## Where a decision lives
 
