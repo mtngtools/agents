@@ -27,13 +27,26 @@ Gather, and hold for the plan:
 - `git worktree list` — note which entries this session created; `locked` marks another session's
 - `git branch -vv` — the `+` prefix marks a branch checked out in some worktree
 
-## 2. Gate one: plan the merge and the removal, then ask
+## 2. Gate one: print the plan, then ask
 
-Write the plan for steps 3 to 5 as a short numbered list naming the actual PR number, branch name and worktree path. Put it to the human with `AskUserQuestion` as a **yes/no** question:
+**The plan goes in the message; the question only points at it.** `AskUserQuestion` renders its question as one plain text field with no list formatting, so a multi-step plan inlined there arrives as an unreadable paragraph — exactly when the human most needs to read it carefully. Print the plan as ordinary output first, where bullets render, then keep the question to a single line.
 
-> Should I {plan}?
+Output the plan for steps 3 to 5 as a numbered list under a `PLAN:` heading, naming the **actual** PR number, branch name, and worktree path — never a placeholder:
 
-Options are **Yes, run it** and **No, stop here**. One question, plan inlined, no sub-choices. Proceed only on yes.
+```markdown
+PLAN:
+1. Exit the worktree at `<path>`, returning to the primary checkout
+2. Squash-merge <PR title> (#<n>) into `<base>` as `<commit subject>`
+3. Confirm from the API that it merged, and that the branch's content landed
+4. Remove the worktree at `<path>`
+5. Delete `<branch>` locally and on origin
+```
+
+Then ask with `AskUserQuestion`, one question, this wording:
+
+> Execute the squash merge plan just listed?
+
+Options are **Yes, run it** and **No, stop here**. No sub-choices, and **nothing from the plan restated inside the question or its options** — the list above is the thing being confirmed, and a second, shorter copy of it in the question is what makes the two disagree. Proceed only on yes.
 
 ## 3. Leave the worktree first
 
@@ -72,9 +85,17 @@ Explicit, in order, each with its precondition:
 
 Everything above touched only this session's own state. This step moves the checkout **every concurrent session shares**, so it is asked separately even after a yes at gate one.
 
-Report the checkout's state first — whether it is clean, and how far behind — then ask with `AskUserQuestion`:
+Same shape as gate one: state first, in the message, then a one-line question. Print what the checkout looks like right now — the branch it is on, whether it is clean, how far behind `origin/<base>`, and anything uncommitted that a fast-forward would have to move around:
 
-> Fast-forward the primary checkout from {current} to {origin/base}?
+```markdown
+PLAN:
+- Primary checkout is on `<branch>`, <clean | N uncommitted files>, <N> behind `origin/<base>`
+- Fast-forward it to `origin/<base>` (`<sha>`) with `git merge --ff-only`
+```
+
+Then ask, one question:
+
+> Fast-forward the primary checkout as just described?
 
 Options are **Yes, fast-forward** and **No, leave it**. On yes, `git merge --ff-only origin/<base>`, and only when the checkout is clean and `0` ahead. A **no** is a clean finish, not a failure.
 
