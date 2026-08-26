@@ -74,6 +74,7 @@ git log --oneline <merge-base>..<head-sha>
 Three dots, not two: two-dot would fold in whatever the base branch has done since, and blame the author for it.
 
 - **Read the changed files whole**, not only the hunks, wherever the change is more than cosmetic. A diff shows what moved; it hides what the file now says.
+- **Read the comments as claims about the code as it now stands** — every doc comment, inline note, `TODO`, and example snippet in a changed file asserts something. A comment this diff falsified is a finding: it outlives the rename, the extracted method, the removed branch, and the next reader believes it long after the code stopped matching. Include `TODO`s the PR itself completed and examples that would no longer compile.
 - **Read the commits as well as the diff** — messages against the repo's convention (`type(scope): subject (#issue)`), no merge commits where the repo squashes, no commit that undoes an earlier one in the same PR without saying why.
 - **Anything untracked in this worktree is a finding** — the checkout was clean, so a file that appears is build output that wants ignoring, or a scratch file that should never have been in the tree.
 - **Look for what should have changed and didn't** — a renamed concept the call sites still use by its old name, a new branch of behaviour with no error path, a config key added in one environment file and not its siblings.
@@ -100,7 +101,7 @@ The PR description is the author's account of the work. It is not the plan. The 
 | **Spec / ADR** in the repo | The rule. Highest authority; the code implements it, never the reverse |
 | **The ticket** the PR closes | This slice of it — scope and acceptance criteria |
 | **The PR description** | Intent only — evidence of what the author meant, not of what was agreed |
-| **Doc comments in the code** | A claim about that file, made by the same change under review. Never treat one as a repo rule; check the spec |
+| **Doc comments in the code** | A claim about that file, made by the same change under review — check it for truth, never treat it as a repo rule; the spec settles rules |
 
 Fetch the closing issue (`gh issue view <n>`, plus its parent map or epic if the tracker links one) and open the spec files the ticket names. Then walk the ticket's acceptance criteria one at a time and mark each **delivered**, **missing**, or **not verifiable from the diff** — one line each, pointing at the file that satisfies it.
 
@@ -119,11 +120,13 @@ Drift is the gap between what was agreed and what landed. Walk these deliberatel
 | **Backfilled spec** | Was the spec moved to match the code? | Spec edits in a build PR |
 | **Plan drift** | Different approach than the one that was settled, undeclared | An ADR chose X; the code does Y and says nothing |
 | **Test drift** | Were tests bent to fit the code? | Weakened assertions, skips, deletions, renames |
-| **Doc drift** | Does prose now assert something untrue? | README, AGENTS files, doc comments left behind by a rename |
+| **Doc drift** | Does prose now assert something untrue? | README and AGENTS files; comments in the changed files, and comments elsewhere this change quietly falsified |
 | **Vocabulary drift** | Do new names match the domain language? | A new term for a concept the glossary already names |
 | **Placement drift** | Does a file sit where the repo's own taxonomy says it belongs? | A dependency pointing the wrong way across a layer |
 | **Base drift** | Is the review aimed at a moved target? | Merge base far behind `origin/<base>`; conflicts pending |
 | **Residue** | What was left behind? | Commented-out code, debug logging, stray TODOs, dead additions |
+
+**Stale comments hide in the files the PR never opened.** A rename, a changed default, a removed branch or an inverted flag falsifies prose the diff cannot show you. Grep the old name and the old behaviour's vocabulary across the tree, and check what the comments at the call sites still promise. Cite such a finding to the line in the diff that made it false, not to the untouched file's age — the comment was true until this PR, and it is this PR's to fix.
 
 **Every finding cites its authority.** Name the spec, ticket, ADR, or repo standard the code contradicts, and quote the line. Anything you cannot anchor that way is a **preference**, not a finding: it belongs under **Additional Consideration**, never under **Drift**. A review that mixes the two teaches the human to discount all of it.
 
