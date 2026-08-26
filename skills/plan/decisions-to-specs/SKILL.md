@@ -53,12 +53,16 @@ Everything from here that touches the repo happens in a **worktree of this skill
 
 ```
 git fetch origin
-git worktree add <path> -b docs/specs-<map-number> origin/main
+git worktree add <worktree-path> -b docs/specs-<map-number> origin/main
 ```
 
-Then enter it — `EnterWorktree` with `path` where available, which requires the worktree to already appear in `git worktree list`, hence the order above.
+**Put it inside the repo, not beside it, and name it for the map.** Moving a session into a directory outside the project is a thing most harnesses ask the human to approve separately from any tool permission — a prompt that has nothing to do with the work. A path inside the working directory avoids it entirely. Follow whatever the repo already names its branches and worktrees, and name both for the map so it is obvious whose they are.
 
-Follow whatever the repo already names its branches and worktrees; name both for the map so it is obvious whose they are, and put the worktree somewhere clearly disposable. If the fetch moved the base past what you read in step 2, re-read the spec landscape here — the worktree, not the primary checkout, is what you are writing into.
+**If you are Claude Code** — use `.claude/worktrees/specs-<map-number>`, the harness's own worktree home, so nothing new has to be trusted. Enter it with `EnterWorktree` and its `path` argument, which requires the worktree to already appear in `git worktree list`, hence the order above.
+
+**Any other agent** — use a repo-local directory your tooling already ignores; `.worktrees/specs-<map-number>` is a safe default, and `.git/info/exclude` will hide it without touching the tracked `.gitignore`. Then make that directory your working directory for every write below, by whatever mechanism your harness provides. If it has no way to move, pass the path explicitly (`git -C <worktree-path> …`) rather than writing into the primary checkout by accident.
+
+If the fetch moved the base past what you read in step 2, re-read the spec landscape here — the worktree, not the primary checkout, is what you are writing into.
 
 Some harnesses restrict shell redirection inside a worktree. If a heredoc or `>` is refused, use file-writing tools and plain single-purpose commands instead of fighting it.
 

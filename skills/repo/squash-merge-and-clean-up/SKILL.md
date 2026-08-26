@@ -54,7 +54,7 @@ Exit the worktree **before** merging, and return the session to the primary chec
 
 **This ordering is the whole point of the step.** `gh pr merge` run from inside a worktree merges server-side and *then* fails locally with `fatal: '<base>' is already used by worktree at …`, because its local step tries to check out the base branch that the primary checkout holds. It exits non-zero on a merge that succeeded, and `--delete-branch` never runs. Retrying reads as the obvious fix and is wrong — the PR is already merged.
 
-Use `ExitWorktree` with `action: "keep"` where available; the worktree is removed in step 5, once its content is confirmed landed.
+Leave by moving your working directory back to the primary checkout — by whatever mechanism your harness provides — and **keep the worktree on disk**: it is removed in step 5, once its content is confirmed landed, and not a moment before. If your harness has no way to move, run the merge with an explicit path (`git -C <primary-checkout> …`, and `gh -R <owner/name>`) rather than from inside the worktree. **If you are Claude Code**, that is `ExitWorktree` with `action: "keep"`.
 
 ## 4. Squash-merge, then verify
 
