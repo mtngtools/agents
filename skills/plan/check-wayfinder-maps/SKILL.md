@@ -11,7 +11,7 @@ metadata:
 
 # Check Wayfinder Maps
 
-A read-only survey across **all** wayfinder maps on one repo. `/wayfinder` works one map at a time and never steps back to ask *"where is the whole effort?"* — this skill answers that, in a single table: what's decided, what's ready to build, what's still fog, and what's blocking what.
+A read-only survey across **all** wayfinder maps on one repo. `/wayfinder` works one map at a time and never steps back to ask *"where is the whole effort?"* — this skill answers that in one table — what's decided, what's ready to build, what's still fog, what's blocking what — and hands back a copyable prompt per map to act on it.
 
 **Reading a map is `/read-the-map`'s job; this skill reads many.** Every map here goes through that skill's checklist and comes out with its verdict — the definitions live there, not here. What this skill owns is everything the plural makes possible: ordering by readiness, the bottleneck, the gap nobody noticed.
 
@@ -49,26 +49,48 @@ The one item that stays per-map is the map body: read each one whole. That is th
 
 **Done when:** every open map carries a verdict and a one-line next move, and none was reached by inference from its ticket counts.
 
-### 4. Report the table, then what it adds up to
+### 4. Report: the table, then a prompt per map, then what it adds up to
 
-Output the table below, then a short prose section. Refer to every map and ticket **by name**, linked — never a bare `#42`.
+Three parts, in that order. Refer to every map and ticket **by name**, linked — never a bare `#42`.
+
+#### The table
+
+**Map number first.** It is the column that identifies the row, and it is what every prompt below repeats — a reader matching a block to its row should not have to read across a title to do it.
 
 ```markdown
-| Map | Open decision tickets | Ready for implementation | Next move |
-|---|---|---|---|
-| [<map title> (#n)](url) | <count + named open tickets, or "0 — all closed"> | **<verdict>** | <one line> |
+| # | Map | Open decision tickets | Ready for implementation | Next move |
+|---|---|---|---|---|
+| [157](url) | <map title> | <count + named open tickets, or "0 — all closed"> | **<verdict>** | <one line> |
 ```
 
 Order the table by readiness — buildable maps first, deferred stubs last — so the top of the table is the takeable work.
 
-Follow it with **What that adds up to**: three or four short paragraphs, no bullets-for-their-own-sake, calling out
+#### One prompt per map, below the table
+
+The `Next move` column says what to do; these are what to **type** to do it. One block per row, in the table's order, each under a one-line label naming the map — the blocks are bare prompts and otherwise indistinguishable once stacked:
+
+**157 — Presentation timing**
+```
+/wayfinder 157 /decisions-to-specs in repo mtngtools/mtng-dotnet-mono
+Work in a worktree.
+```
+
+`/whats-next` owns the prompt shape — the `/wayfinder <map#> <next thing> in repo <owner/name>` line, which moves carry the worktree reminder, and how labels read. Follow it; do not invent a second format here.
+
+- **One block per map, never two.** Weighing doors on a single map is `/whats-next`'s job. This skill's answer for a map is the one move its verdict already named.
+- **Separately copyable.** Its own fenced block, the prompt and nothing else inside it, no prose fused onto the end. A reader clicks copy once and pastes into a fresh session unchanged.
+- **A map with nowhere to go gets no block** — `Done`, blocked, or deliberately deferred. Say that on the label line rather than handing over a prompt that should not be run.
+
+#### What that adds up to
+
+Three or four short paragraphs, no bullets-for-their-own-sake, calling out
 
 - how many maps are through their decisions, and which offer the cheapest work
 - every genuinely open decision ticket across all maps (usually a very short list) and whether any two are the same underlying question
 - **the bottleneck** — the map the most other maps wait on
 - **the quiet gap** — a map spun out of another map's charting and then never followed up. These hide well: zero open tickets, so they look finished, but their body is one line
 
-**Done when:** the user can pick their next session off the table without opening a single issue.
+**Done when:** the user can pick their next session off the table without opening a single issue, and start it by copying one block.
 
 ## Cost
 
