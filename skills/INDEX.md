@@ -46,12 +46,14 @@ The wayfinder pipeline — decisions become specs, specs become tickets — plus
 | Name | Description | Invocation | Applies to |
 |------|-------------|-----------|-----------|
 | [check-wayfinder-maps](./plan/check-wayfinder-maps/SKILL.md) | Survey all wayfinder maps; report what's ready to build | `skill-callable` | planning, wayfinder, github, survey |
+| [read-the-map](./plan/read-the-map/SKILL.md) | Read one map — verdict and next door; owns the checklist the survey follows | `skill-callable` | planning, wayfinder, github, maps |
 | [are-decisions-from-this-session-saved](./plan/are-decisions-from-this-session-saved/SKILL.md) | Ask what planning would be lost if the session ended; record each system decision or forget it with approval | `skill-callable` | planning, wayfinder, specs, tickets, sessions |
+| [whats-next](./plan/whats-next/SKILL.md) | Hand back a short, copyable prompt for the next session on the current map | `skill-callable` | planning, wayfinder, sessions, prompts |
 | [plan-mtng-tools-vue](./plan/plan-mtng-tools-vue/SKILL.md) | Plan Vue component/composable spec | `skill-callable` | planning, vue, frontend, specs |
 | [decisions-to-specs](./plan/decisions-to-specs/SKILL.md) | Settle a map's decisions into repo spec files and ADRs, written in a worktree of its own | `human-only` | planning, wayfinder, specs, adrs, worktrees |
 | [specs-to-tickets](./plan/specs-to-tickets/SKILL.md) | Slice a map's settled specs into implementation tickets | `human-only` | planning, wayfinder, specs, tickets |
 
-**Pipeline order:** `/wayfinder` → `/decisions-to-specs` → `/specs-to-tickets` → `/implement`. Each operates on one map; `/check-wayfinder-maps` reads across all of them and tells you which one to enter, and by which door. `/are-decisions-from-this-session-saved` sits at the other end of a session, checking that what it decided about the system — not about how it was worked — reached a surface at all. The two middle steps write to the repo and the tracker, so each is a door you open yourself; the survey only reads, so anything may call it.
+**Pipeline order:** `/wayfinder` → `/decisions-to-specs` → `/specs-to-tickets` → `/implement`. Each operates on one map; `/check-wayfinder-maps` reads across all of them and tells you which one to enter, and by which door. `/are-decisions-from-this-session-saved` sits at the other end of a session, checking that what it decided about the system — not about how it was worked — reached a surface at all. `/whats-next` closes the same seam from the other side, handing over the prompt that starts the following session on the same map, off a `/read-the-map` reading. `/read-the-map` defines what reading a map means; `/check-wayfinder-maps` runs that same checklist across every map, in bulk. The two middle steps write to the repo and the tracker, so each is a door you open yourself; the survey only reads, so anything may call it.
 
 ## General skills
 

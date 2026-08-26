@@ -13,6 +13,8 @@ metadata:
 
 A read-only survey across **all** wayfinder maps on one repo. `/wayfinder` works one map at a time and never steps back to ask *"where is the whole effort?"* — this skill answers that, in a single table: what's decided, what's ready to build, what's still fog, and what's blocking what.
 
+**Reading a map is `/read-the-map`'s job; this skill reads many.** Every map here goes through that skill's checklist and comes out with its verdict — the definitions live there, not here. What this skill owns is everything the plural makes possible: ordering by readiness, the bottleneck, the gap nobody noticed.
+
 **This skill never writes.** No claims, no comments, no closes, no map edits. It reads the tracker and reports. If the survey surfaces work worth doing, hand it to `/wayfinder`, `/decisions-to-specs`, or `/specs-to-tickets` — don't do it here.
 
 ## Process
@@ -33,52 +35,21 @@ The line is between *knowing* and *hunting*. Context already in hand is free and
 
 ### 2. Learn how this tracker expresses wayfinding
 
-Read the repo's issue-tracker doc (`docs/agents/issue-tracker.md`) — specifically its **Wayfinding operations** section — for how *this* repo expresses maps, child tickets, and blocking. Defaults, where the doc is silent:
-
-- **Map** — an issue labelled `wayfinder:map`
-- **Child ticket** — a GitHub sub-issue of the map, labelled `wayfinder:<type>`
-- **Blocking** — GitHub native issue dependencies; fall back to a `Blocked by: #n` line in the body
-- **Claimed** — the ticket has an assignee
+Follow `/read-the-map`'s **Tracker conventions**. It is a per-repo lookup, so do it once here, not once per map.
 
 **Done when:** you know how to list a map's children and read their blocking state.
 
-### 3. Pull the maps and their children
+### 3. Run `/read-the-map`'s checklist against every open map — in bulk
 
-List every **open** map, then for each, list its children with state, assignee, and labels. Also list the repo's open non-wayfinder issues — the implementation tickets from `/specs-to-tickets` — since a map's readiness depends on whether its specs have been sliced yet.
+List every **open** map, then cover **every item on that checklist for every one of them**: the map body whole, its children's state and blocking, the build backlog, the frontier, a verdict, a next move.
 
-**Done when:** you have every open map, every child ticket's state, and the open build backlog.
+**Satisfy the items however is cheapest.** One query for all maps' children beats a pass per map; one query for the repo's open non-wayfinder issues covers every map's backlog at once. Bulk is an efficiency, not a shortcut — a map whose body you skipped because a batch query didn't return it has not been read.
 
-### 4. Read each map body
+The one item that stays per-map is the map body: read each one whole. That is the bulk of the work here and it is the necessary cost — readiness isn't visible from titles or ticket counts.
 
-Read each map's full body. The readiness signal lives there, not in the ticket list — a map with zero open children can still be unstarted fog. Look for:
+**Done when:** every open map carries a verdict and a one-line next move, and none was reached by inference from its ticket counts.
 
-- **Destination** — what "done" means for this map
-- **Notes** — `Ready for tickets`, `Stub map`, `Blocked by #n`, deferral pegs, execution overrides
-- **Decisions so far** — what's settled
-- **Specs settled** — written by `/decisions-to-specs`; its presence means the map is past deciding
-- **Ready for `/specs-to-tickets`** — an explicit slice-me marker, and any *don't re-slice / needs revision* caveats
-- **Not yet specified** — the fog. Weigh it: a few additive deferrals is not the same as an uncharted contract surface.
-
-**Done when:** you can state, for every map, whether anything remains to *decide* and whether its specs have been *sliced*.
-
-### 5. Judge readiness
-
-Assign each map exactly one verdict. The two questions, in order: **are the decisions done?** then **are the specs sliced into build tickets?**
-
-| Verdict | When |
-|---|---|
-| **Yes — already sliced** | No open decisions, specs settled, implementation tickets exist on the tracker |
-| **Yes — not yet sliced** | No open decisions, specs settled, no build tickets yet → `/specs-to-tickets` |
-| **Yes, with caveats** | Sliced, but existing tickets carry revision notes or a later decision invalidated them |
-| **No — needs charting** | Stub map, or fog that no ticket covers yet → `/wayfinder` |
-| **No — blocked on #n** | Waiting on another map's output |
-| **No — deliberately deferred** | The map's own Notes peg it to a future event; leave it alone |
-
-A map's own Notes outrank your inference. "Ready for tickets" written on the map is the author's judgment; report it as theirs, and flag it only if the fog visibly contradicts it.
-
-**Done when:** every open map has one verdict and a one-line next move.
-
-### 6. Report the table, then what it adds up to
+### 4. Report the table, then what it adds up to
 
 Output the table below, then a short prose section. Refer to every map and ticket **by name**, linked — never a bare `#42`.
 
@@ -101,10 +72,10 @@ Follow it with **What that adds up to**: three or four short paragraphs, no bull
 
 ## Cost
 
-Reading every map body is the bulk of the work and it is the necessary cost — readiness isn't visible from titles or ticket counts. Do **not** read child ticket bodies; their state, labels, and assignee are enough. Zoom into one only when a map's Notes point at it as needing revision and you can't tell why.
+`/read-the-map` allows zooming into a ticket body; at one map that is cheap, and across ten it is the difference between a survey and an afternoon. **Spend it rarely** — only where a map's `Notes` point at a ticket as needing revision and you can't tell why. Everything else the checklist asks for is list-level, and list-level data comes in bulk.
 
 ## Where this sits in the flow
 
-Outside the flow, looking down at it. `/wayfinder` → `/decisions-to-specs` → `/specs-to-tickets` → `/implement` all operate on **one** map; **`/check-wayfinder-maps`** reads across all of them and tells you which one to enter, and by which door.
+Outside the flow, looking down at it. `/wayfinder` → `/decisions-to-specs` → `/specs-to-tickets` → `/implement` all operate on **one** map; **`/check-wayfinder-maps`** reads across all of them and tells you which one to enter, and by which door. Once you are on one, `/read-the-map` and `/whats-next` take over — the same checklist, one map deep.
 
 Run it when returning to an effort after time away, when several maps are live at once and it's unclear which is takeable, or before planning a stretch of work.
