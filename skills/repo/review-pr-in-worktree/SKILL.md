@@ -86,7 +86,10 @@ Three dots, not two: two-dot would fold in whatever the base branch has done sin
 Find the gating command; do not invent one. In order: the repo's `AGENTS_REPO.md` or `AGENTS.md`, its CI workflow, then its build file (`prepublishOnly`, a test script, the .NET or language-native equivalent). If nothing documents a gate, say so under **What I could not verify** and treat the PR as **unverified** rather than guessing at a command and reporting its output as meaningful.
 
 - Run it **in the review worktree**, never in the primary checkout.
-- Respect the repo's stated way of running its own suite. Where a suite needs exclusive access to something shared — containers, ports, a daemon, a database — a concurrent run in another session produces failures that belong to the collision, not the code. If the repo says to run such a suite serially or per test class, do that, and say so in the report.
+- **Run the whole gate in one call.** The default is the widest run the gate supports — the full suite, one invocation. A pass per test class turns a two-minute gate into twenty minutes of tool calls, and every one of them costs a round trip whether it finds anything or not.
+- **Split only when one call genuinely cannot do it**, and then split as coarsely as it allows. Two reasons qualify, and only these: the run outlasts the longest timeout the tool will take — raise it first, a slow gate is a long call, not many short ones — or the repo says this suite must not run all at once. Where the runner takes a repeatable filter (`-class`, `--filter`, a project list), pack as many into each call as it will hold — the limit is the length of a call, not the number of classes in it. Name the split and its reason in the report.
+- **Narrow runs are for re-checking, not for the first pass.** Once the gate has run and something failed, a single class or test is the right instrument for confirming a diagnosis, or for checking one thing you doubt. Going narrow before there is a failure is guessing where one might be, and it is how a gate ends up run twenty times and never run whole.
+- Respect the repo's stated way of running its own suite. Where a suite needs exclusive access to something shared — containers, ports, a daemon, a database — a concurrent run in another session produces failures that belong to the collision, not the code. A repo that says to run such a suite serially has named its own limit; that is the second of the two reasons to split, and it goes in the report.
 - **Report the output as it came.** A failing test is a finding, not a problem to fix and move past. Quote the failure.
 - **A green suite is not automatically a pass.** New behaviour with no new test is a finding of its own; so is a test that was changed in this PR to accommodate the code.
 
@@ -151,7 +154,7 @@ Round <n>, reviewed at `<head-sha>` <(previously `<sha>`), on rounds after the f
 <One line per acceptance criterion — delivered / missing / not verifiable — each pointing at the file that satisfies it. Then every place the code contradicts a spec or ADR, quoting the line it contradicts. Then every spec edit in the diff, and whether the ticket asked for it.>
 
 ### Test Coverage
-<The gate command and what it actually returned — failures quoted, not summarised. Then what the new behaviour's tests cover, what they leave uncovered, and any test this PR changed to fit the code.>
+<The gate command and what it actually returned — failures quoted, not summarised — plus how it was run if it had to be split across calls, and why. Then what the new behaviour's tests cover, what they leave uncovered, and any test this PR changed to fit the code.>
 
 ### Drift
 <The forms from step 7 that fired, one line each, each citing its authority. "None found" if none did.>
