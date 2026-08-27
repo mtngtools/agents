@@ -64,8 +64,8 @@ Find the gating command; do not invent one. In order: the repo's `AGENTS_REPO.md
 
 - Run it **in the review checkout**, never in the primary one.
 - **Run the whole gate in one call.** The default is the widest run the gate supports — the full suite, one invocation. A pass per test class turns a two-minute gate into twenty minutes of tool calls, and every one of them costs a round trip whether it finds anything or not.
-- **Split only when one call genuinely cannot do it**, and then split as coarsely as it allows. Two reasons qualify, and only these: the run outlasts the longest timeout the tool will take — raise it first, a slow gate is a long call, not many short ones — or the repo says this suite must not run all at once. Where the runner takes a repeatable filter (`-class`, `--filter`, a project list), pack as many into each call as it will hold — the limit is the length of a call, not the number of classes in it. Name the split and its reason in the report.
-- **Narrow runs are for re-checking, not for the first pass.** Once the gate has run and something failed, a single class or test is the right instrument for confirming a diagnosis, or for checking one thing you doubt. Going narrow before there is a failure is guessing where one might be, and it is how a gate ends up run twenty times and never run whole.
+- **Split only when one call genuinely cannot do it**, and then split as coarsely as it allows. Two reasons qualify, and only these: the run outlasts the longest timeout the tool will take — raise it first, a slow gate is a long call, not many short ones — or the repo says this suite must not run all at once. Where the runner takes a repeatable filter (`-class`, `--filter`, a project list), pack as many into each call as it will hold — the limit is the length of a call, not the number of classes in it. Name the split and its reason in the report. (A third case abandons the whole run rather than splitting it — see [the second exemption](#the-second-exemption-a-test-that-needs-a-container-does-not-gate-this-review).)
+- **Narrow runs are for re-checking, not for the first pass.** Once the gate has run and something failed, a single class or test is the right instrument for confirming a diagnosis, or for checking one thing you doubt. Going narrow before there is a failure is guessing where one might be, and it is how a gate ends up run twenty times and never run whole. The one exception is a filter that excludes container-backed tests, which is narrowing by policy rather than by guess.
 - Respect the repo's stated way of running its own suite. Where a suite needs exclusive access to something shared — containers, ports, a daemon, a database — a concurrent run in another session produces failures that belong to the collision, not the code. A repo that says to run such a suite serially has named its own limit; that is the second of the two reasons to split, and it goes in the report.
 - **Report the output as it came.** A failing test is a finding, not a problem to fix and move past. Quote the failure.
 - **A green suite is not automatically a pass.** New behaviour with no new test is a finding of its own; so is a test that was changed in this PR to accommodate the code.
@@ -90,6 +90,17 @@ Where every path is Markdown:
 - **The verdict is not blocked by the absent gate.** This is the one case where a PR with no passing suite behind it can still be `yes`.
 
 **Nothing else relaxes.** Prose is what this repo's specs are made of, so a Markdown-only PR is *more* exposed to the findings that matter here, not less: a spec backfilled to describe code built elsewhere, a doc that now asserts something untrue, a term that contradicts the glossary, a criterion the ticket asked for and the prose does not deliver. Steps 3 and 4 run in full, and every one of their findings still blocks.
+
+### The second exemption: a test that needs a container does not gate this review
+
+Some suites cannot run without a container runtime behind them — the RabbitMQ tests are the standing example, and anything else spun up through Testcontainers is the same case. **They are not required to pass for this PR to pass.** CI runs the full suite against every push; that is where those tests gate, and a local runtime that is absent, wedged, or already busy with another session says nothing about the code.
+
+- **Exclude them up front where you can.** Where the runner takes an exclusion (a trait, a category, a project filter), run the gate without the container-backed tests from the start and name the filter you used. This is the preferred shape of the run, not a fallback.
+- **Three minutes, then kill it.** Where you could not exclude them and the gate is still going at three minutes with containers as the reason — pulls, waits, startup timeouts, retries — **stop the run.** Do not wait it out, do not raise the timeout, do not start it again hoping for a warmer cache. Re-run the gate with the container-backed tests filtered out; that narrower run is sufficient evidence for this review. Say in **Test Coverage** that you killed the full run at the threshold and what you ran instead.
+- **This is the exception to "run the whole gate in one call."** Step 2's default assumes a gate that finishes. A container-bound suite is the case where the widest run is the wrong instrument, and the narrow one is not guessing — the excluded tests are already accounted for by CI.
+- **Report them, do not count them.** Name the failing or skipped tests in **Test Coverage**, say plainly that they are container-backed and left to CI, and quote enough of the output to show that is what happened. They are not a **Drift** finding, and they are never a bullet under the verdict.
+- **The exemption covers the runtime, not the code.** A test that cannot start its container is exempt. A test whose container starts and whose assertion then fails is a real failure of this PR, and it blocks — the container was only the harness. If you cannot tell which you are looking at, that is a line under **What I could not verify**, and it blocks.
+- **Check CI rather than guessing.** `gh pr checks <n>` is the evidence for the part of the suite you did not run; where it is red on a container-backed test, that is a finding again.
 
 ## 3. Read the true plan, and hold the code to it
 
@@ -150,7 +161,7 @@ Round <n>, reviewed at `<head-sha>` <(previously `<sha>`), on rounds after the f
 <One line per acceptance criterion — delivered / missing / not verifiable — each pointing at the file that satisfies it. Then every place the code contradicts a spec or ADR, quoting the line it contradicts. Then every spec edit in the diff, and whether the ticket asked for it.>
 
 ### Test Coverage
-<The gate command and what it actually returned — failures quoted, not summarised — plus how it was run if it had to be split across calls, and why. Then what the new behaviour's tests cover, what they leave uncovered, and any test this PR changed to fit the code. For a Markdown-only PR: the one line from step 2's exemption, and what CI reported.>
+<The gate command and what it actually returned — failures quoted, not summarised — plus how it was run if it had to be split across calls, and why. Then what the new behaviour's tests cover, what they leave uncovered, and any test this PR changed to fit the code. For a Markdown-only PR: the one line from step 2's exemption, and what CI reported. For container-backed tests not run or failing for want of a runtime: name them, say they are left to CI, and give what `gh pr checks` reported for them.>
 
 ### Drift
 <The forms from step 4 that fired, one line each, each citing its authority. "None found" if none did.>
@@ -171,7 +182,7 @@ A clean pass is the single word **`yes`**. No caveat appended, no "yes, but", no
 
 Anything else is **`no`**, followed by bullet points — one per reason, each naming what must change, where, and which authority demands it. If you catch yourself wanting to write "yes with notes", it is a **no**: move the notes into the bullets. A reservation big enough to qualify the verdict is big enough to block it; one that isn't belongs in **Additional Consideration**, where it costs the author nothing.
 
-**A PR whose gate could not be run cannot get a `yes`** — unverified is not the same as passing, and the bullet says so. **The single exception is the Markdown-only PR of step 2**, which has no gate to fail: there, the absent suite is not a bullet, and the verdict rests entirely on spec compliance and drift.
+**A PR whose gate could not be run cannot get a `yes`** — unverified is not the same as passing, and the bullet says so. **Step 2 names the two exceptions.** The Markdown-only PR has no gate to fail: there, the absent suite is not a bullet, and the verdict rests entirely on spec compliance and drift. Container-backed tests that could not run, or failed for want of a runtime, are likewise not a bullet — CI gates them, so a PR whose only red is theirs can still be `yes`.
 
 Throughout: refer to files as clickable paths with line numbers, and to issues and PRs by title and link, never a bare `#42`. Where the answer is `yes`, resist padding the sections above to look thorough — a review that manufactures findings costs more than it returns.
 
