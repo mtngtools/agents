@@ -37,9 +37,10 @@ Git, branching, commits, and PR workflows.
 | [pull-back-from-main](./repo/pull-back-from-main/SKILL.md) | Pull back from main, delete branch | `human-only` | branching, git |
 | [rebase-wip-with-issue](./repo/rebase-wip-with-issue/SKILL.md) | Rebase WIP commits with issue | `human-only` | git, rebase, issues, wip |
 | [review-pr-in-worktree](./repo/review-pr-in-worktree/SKILL.md) | Review a PR in its own worktree: committed diff, tests, plan, drift | `human-only` | prs, github, review, git, worktrees, specs |
+| [review-a-pr-and-report](./repo/review-a-pr-and-report/SKILL.md) | The review itself: committed diff, gate, spec, drift, fixed report | `skill-callable` | prs, github, review, specs, tests |
 | [squash-merge-and-clean-up](./repo/squash-merge-and-clean-up/SKILL.md) | Squash-merge the session's PR, remove its branches and worktree | `human-only` | prs, github, branching, git, worktrees |
 
-The split is ownership of state. Local, reversible work — staging a commit, cutting a branch, drafting a message — is `skill-callable`, so a commit flow can chain through `draft-commit-message` without stopping to ask. Anything that rewrites history or touches GitHub is `human-only`. `review-pr-in-worktree` is `human-only` for a different reason: it writes nothing at all, but it renders a judgment someone else acts on, and that is asked for, not volunteered.
+The split is ownership of state. Local, reversible work — staging a commit, cutting a branch, drafting a message — is `skill-callable`, so a commit flow can chain through `draft-commit-message` without stopping to ask. Anything that rewrites history or touches GitHub is `human-only`. `review-pr-in-worktree` is `human-only` for a different reason: it writes nothing at all, but it renders a judgment someone else acts on, and that is asked for, not volunteered. It keeps only the worktree — settling which PR, checking it out, tearing it down — and calls `review-a-pr-and-report` for the reviewing, which is `skill-callable` because it is the same judgment wherever the checkout came from. That name is generic enough to attract unprompted invocation, so its description holds the line the harness cannot: it names its caller and says not to self-start.
 
 ## Planning skills
 

@@ -15,7 +15,9 @@ metadata:
 
 Check a PR out into a worktree of its own and review it there: what it committed, whether its tests pass, whether it matches the plan it claims to implement, and where it has drifted from that plan. Report; do not repair.
 
-**This skill never writes.** No commits, no fixes, no pushes, no PR comments, no merge — even when the fix is one line and obvious. A review that edits its subject stops being a review. Findings go to the human, who decides what happens next. `/squash-merge-and-clean-up` merges; this skill only ever says whether it should.
+**This skill owns the worktree, not the judgment.** Settling which PR, checking it out, and tearing the checkout down again live here. The review itself — what to read, how to run the gate, what to hold the code to, and the fixed report that ends in `yes` or `no` — is `/review-a-pr-and-report`, called at step 4 and again for every later round.
+
+**Nothing in this flow writes.** No commits, no fixes, no pushes, no PR comments, no merge — even when the fix is one line and obvious. A review that edits its subject stops being a review. Findings go to the human, who decides what happens next. `/squash-merge-and-clean-up` merges; this skill only ever says whether it should.
 
 **A worktree because the review must not disturb anything.** Other sessions share the primary checkout, and reviewing means checking out someone else's head, running their tests, and leaving build output behind. All of that happens in a directory this skill creates and — with permission — removes.
 
@@ -38,10 +40,10 @@ If none of those settles it, or two of them disagree, **ask, immediately** — o
 Read the PR from the API first — it is cheap, and it tells you what the review has to cover:
 
 - `gh pr view <n> --json number,title,body,state,author,headRefName,baseRefName,headRefOid,files,commits,closingIssuesReferences`
-- `gh pr checks <n>` — a docs-only PR may report no checks; that is a pass, not a failure
+- `gh pr checks <n>` — a Markdown-only PR may report no checks; that is a pass, not a failure
 - `gh pr view <n> --json reviews,comments` — a point already made by a human is theirs, not a fresh finding
 
-Hold the **head SHA**. Everything below is a review of that commit, not of whatever the branch points at ten minutes from now.
+Hold the **head SHA**. Everything below is a review of that commit, not of whatever the branch points at ten minutes from now. This survey is also what step 4 is handed, so it is not repeated there.
 
 **Done when:** you know what the PR claims to do, which issue it closes, what CI thinks, and what has already been said.
 
@@ -52,7 +54,7 @@ git fetch origin pull/<n>/head
 git worktree add <worktree-path> --detach <head-sha>
 ```
 
-**Put it inside the repo, not beside it, and name it for the PR.** Moving a session into a directory outside the project is a thing most harnesses ask the human to approve separately from any tool permission — a prompt that has nothing to do with the review, and that no allowlist entry suppresses. A path inside the working directory avoids it entirely. The name matters at step 9: the worktree listing is shared with every other session on the machine, and a fixed, predictable path is what lets cleanup tell yours from theirs.
+**Put it inside the repo, not beside it, and name it for the PR.** Moving a session into a directory outside the project is a thing most harnesses ask the human to approve separately from any tool permission — a prompt that has nothing to do with the review, and that no allowlist entry suppresses. A path inside the working directory avoids it entirely. The name matters at step 5: the worktree listing is shared with every other session on the machine, and a fixed, predictable path is what lets cleanup tell yours from theirs.
 
 **If you are Claude Code** — use `.claude/worktrees/review-pr-<n>`, the harness's own worktree home, so nothing new has to be trusted. Enter it with `EnterWorktree` and its `path` argument, which requires the worktree to already appear in `git worktree list`, hence the order above.
 
@@ -64,128 +66,21 @@ Some harnesses restrict shell redirection inside a worktree. If a heredoc or `>`
 
 **Done when:** the session is in a clean worktree whose `HEAD` is the head SHA from step 2.
 
-### 4. Review what was committed — not the working tree
+### 4. Review and report — call `/review-a-pr-and-report`
 
-The subject of the review is the committed diff against the merge base:
+The worktree is ready, so hand the review to the skill that owns it. Give it what step 2 already established, so it does not go back to the API for any of it:
 
-```
-git merge-base origin/<base> <head-sha>
-git diff --stat <merge-base>...<head-sha>
-git diff <merge-base>...<head-sha>
-git log --oneline <merge-base>..<head-sha>
-```
+- the repo and the PR number
+- the **head SHA** it is judging, and the base ref
+- the worktree path — every command it runs belongs there, never in the primary checkout
+- the existing reviews and comments from step 2
+- the round: `1` here, and on later rounds the round number plus the previous round's head SHA
 
-Three dots, not two: two-dot would fold in whatever the base branch has done since, and blame the author for it.
+It reads the committed diff, runs the repo's gate — or records why there is none, a Markdown-only PR having no gate to run — holds the code to its spec and ticket, hunts the drift, and produces the fixed report ending in `yes` or `no`. Do not restate its verdict, soften it, or append your own; hand it to the human as it came.
 
-- **Read the changed files whole**, not only the hunks, wherever the change is more than cosmetic. A diff shows what moved; it hides what the file now says.
-- **Read the comments as claims about the code as it now stands** — every doc comment, inline note, `TODO`, and example snippet in a changed file asserts something. A comment this diff falsified is a finding: it outlives the rename, the extracted method, the removed branch, and the next reader believes it long after the code stopped matching. Include `TODO`s the PR itself completed and examples that would no longer compile.
-- **Read the commits as well as the diff** — messages against the repo's convention (`type(scope): subject (#issue)`), no merge commits where the repo squashes, no commit that undoes an earlier one in the same PR without saying why.
-- **Anything untracked in this worktree is a finding** — the checkout was clean, so a file that appears is build output that wants ignoring, or a scratch file that should never have been in the tree.
-- **Look for what should have changed and didn't** — a renamed concept the call sites still use by its old name, a new branch of behaviour with no error path, a config key added in one environment file and not its siblings.
+**Done when:** the report exists, with its last section reading either exactly `yes` or `no` with its bullets.
 
-**Done when:** you have read every changed file that matters and can say what the PR does in your own words, without quoting its description.
-
-### 5. Run the tests — the repo's own gate, in the worktree
-
-Find the gating command; do not invent one. In order: the repo's `AGENTS_REPO.md` or `AGENTS.md`, its CI workflow, then its build file (`prepublishOnly`, a test script, the .NET or language-native equivalent). If nothing documents a gate, say so under **What I could not verify** and treat the PR as **unverified** rather than guessing at a command and reporting its output as meaningful.
-
-- Run it **in the review worktree**, never in the primary checkout.
-- **Run the whole gate in one call.** The default is the widest run the gate supports — the full suite, one invocation. A pass per test class turns a two-minute gate into twenty minutes of tool calls, and every one of them costs a round trip whether it finds anything or not.
-- **Split only when one call genuinely cannot do it**, and then split as coarsely as it allows. Two reasons qualify, and only these: the run outlasts the longest timeout the tool will take — raise it first, a slow gate is a long call, not many short ones — or the repo says this suite must not run all at once. Where the runner takes a repeatable filter (`-class`, `--filter`, a project list), pack as many into each call as it will hold — the limit is the length of a call, not the number of classes in it. Name the split and its reason in the report.
-- **Narrow runs are for re-checking, not for the first pass.** Once the gate has run and something failed, a single class or test is the right instrument for confirming a diagnosis, or for checking one thing you doubt. Going narrow before there is a failure is guessing where one might be, and it is how a gate ends up run twenty times and never run whole.
-- Respect the repo's stated way of running its own suite. Where a suite needs exclusive access to something shared — containers, ports, a daemon, a database — a concurrent run in another session produces failures that belong to the collision, not the code. A repo that says to run such a suite serially has named its own limit; that is the second of the two reasons to split, and it goes in the report.
-- **Report the output as it came.** A failing test is a finding, not a problem to fix and move past. Quote the failure.
-- **A green suite is not automatically a pass.** New behaviour with no new test is a finding of its own; so is a test that was changed in this PR to accommodate the code.
-
-**Done when:** you can state, with output to back it, that the gate passes, fails with named failures, or could not be run and why.
-
-### 6. Read the true plan, and hold the code to it
-
-The PR description is the author's account of the work. It is not the plan. The plan lives upstream of it, and where they disagree the upstream wins:
-
-| Authority | What it settles |
-|---|---|
-| **Spec / ADR** in the repo | The rule. Highest authority; the code implements it, never the reverse |
-| **The ticket** the PR closes | This slice of it — scope and acceptance criteria |
-| **The PR description** | Intent only — evidence of what the author meant, not of what was agreed |
-| **Doc comments in the code** | A claim about that file, made by the same change under review — check it for truth, never treat it as a repo rule; the spec settles rules |
-
-Fetch the closing issue (`gh issue view <n>`, plus its parent map or epic if the tracker links one) and open the spec files the ticket names. Then walk the ticket's acceptance criteria one at a time and mark each **delivered**, **missing**, or **not verifiable from the diff** — one line each, pointing at the file that satisfies it.
-
-**If the PR edits a spec, separate that from the code changes and ask which moved first.** A spec edited to describe what was built is a decision being made silently in a build ticket. It may be the right call, but it needs the human's eyes, so it is always a finding unless the ticket explicitly asked for the spec change.
-
-**Done when:** every acceptance criterion has a verdict, and every spec edit in the diff is accounted for.
-
-### 7. Hunt the drift
-
-Drift is the gap between what was agreed and what landed. Walk these deliberately — most of them are invisible if you only read the diff against the description:
-
-| Form | The question | Where it shows |
-|---|---|---|
-| **Scope drift** | Does the diff do more, or less, than the ticket asked? | Files no criterion accounts for; criteria no file satisfies |
-| **Spec drift** | Does the code contradict a spec or ADR? | Behaviour, names, defaults, error handling |
-| **Backfilled spec** | Was the spec moved to match the code? | Spec edits in a build PR |
-| **Plan drift** | Different approach than the one that was settled, undeclared | An ADR chose X; the code does Y and says nothing |
-| **Test drift** | Were tests bent to fit the code? | Weakened assertions, skips, deletions, renames |
-| **Doc drift** | Does prose now assert something untrue? | README and AGENTS files; comments in the changed files, and comments elsewhere this change quietly falsified |
-| **Vocabulary drift** | Do new names match the domain language? | A new term for a concept the glossary already names |
-| **Placement drift** | Does a file sit where the repo's own taxonomy says it belongs? | A dependency pointing the wrong way across a layer |
-| **Base drift** | Is the review aimed at a moved target? | Merge base far behind `origin/<base>`; conflicts pending |
-| **Residue** | What was left behind? | Commented-out code, debug logging, stray TODOs, dead additions |
-
-**Stale comments hide in the files the PR never opened.** A rename, a changed default, a removed branch or an inverted flag falsifies prose the diff cannot show you. Grep the old name and the old behaviour's vocabulary across the tree, and check what the comments at the call sites still promise. Cite such a finding to the line in the diff that made it false, not to the untouched file's age — the comment was true until this PR, and it is this PR's to fix.
-
-**Every finding cites its authority.** Name the spec, ticket, ADR, or repo standard the code contradicts, and quote the line. Anything you cannot anchor that way is a **preference**, not a finding: it belongs under **Additional Consideration**, never under **Drift**. A review that mixes the two teaches the human to discount all of it.
-
-**Done when:** each form above has been considered and either produced a finding or been ruled out.
-
-### 8. Report — these sections, in this order, every time
-
-The report is **fixed**. Same headings, same order, every PR, so a human reading their fifth review of the week knows where each answer lives without hunting for it. A section with nothing to say says so in one line; it is never dropped, and nothing is added between the ones below — save the one re-review section step 9 defines.
-
-```markdown
-## PR #<n> — <title>
-
-Round <n>, reviewed at `<head-sha>` <(previously `<sha>`), on rounds after the first> against `<base>` (merge base `<sha>`) · Plan: <issue title (#n)> · Specs read: <files> · Gate: `<command>`
-
-### High-Level Overview
-<Two to four sentences: what this PR does and why, in your words. Not a paraphrase of its description — if the two disagree, this section is where that shows.>
-
-### More Detailed Summary
-<The change, file group by file group: what each does, what it replaces, how the pieces connect. Enough that the human need not open the diff to follow the rest of the report.>
-
-### Spec Compliance
-<One line per acceptance criterion — delivered / missing / not verifiable — each pointing at the file that satisfies it. Then every place the code contradicts a spec or ADR, quoting the line it contradicts. Then every spec edit in the diff, and whether the ticket asked for it.>
-
-### Test Coverage
-<The gate command and what it actually returned — failures quoted, not summarised — plus how it was run if it had to be split across calls, and why. Then what the new behaviour's tests cover, what they leave uncovered, and any test this PR changed to fit the code.>
-
-### Drift
-<The forms from step 7 that fired, one line each, each citing its authority. "None found" if none did.>
-
-### Additional Consideration
-<Worth the author's attention but backed by no spec, ticket, or standard. Preferences, explicitly labelled as such, and non-blocking by definition.>
-
-### What I could not verify
-<A gate that would not run, criteria invisible from the diff, files deliberately skipped and why. "Nothing — the review was complete" if that is true.>
-
-### Should this be merged
-<yes | no, plus bullets>
-```
-
-**The last section takes one of two shapes and nothing in between.**
-
-A clean pass is the single word **`yes`**. No caveat appended, no "yes, but", no praise. It is one word because it is unambiguous, and because a hedge attached to an approval makes the human do the reviewer's job of deciding whether the hedge matters.
-
-Anything else is **`no`**, followed by bullet points — one per reason, each naming what must change, where, and which authority demands it. If you catch yourself wanting to write "yes with notes", it is a **no**: move the notes into the bullets. A reservation big enough to qualify the verdict is big enough to block it; one that isn't belongs in **Additional Consideration**, where it costs the author nothing.
-
-**A PR whose gate could not be run cannot get a `yes`.** Unverified is not the same as passing, and the bullet says so.
-
-Throughout: refer to files as clickable paths with line numbers, and to issues and PRs by title and link, never a bare `#42`. Where the answer is `yes`, resist padding the sections above to look thorough — a review that manufactures findings costs more than it returns.
-
-**Done when:** every heading above is present and filled, and the last one reads either exactly `yes` or `no` with its bullets.
-
-### 9. Gate: review again, or clean up
+### 5. Gate: review again, or clean up
 
 A review that finds something usually gets answered — the author pushes a fix to the **same PR**, and the same worktree is the cheapest place to look at it. So the review does not end at the report; it parks there and asks what comes next. Ask the human one question, with these two options:
 
@@ -206,19 +101,13 @@ git fetch origin pull/<n>/head
 
 Read the new head SHA. **If it has not moved, say so and ask again** — re-reading the same commit produces a second opinion on nothing and reads as though something changed.
 
-If it has moved, `git checkout <new-head-sha>` in the worktree — still detached — and re-run steps 4 through 8, with three differences:
-
-- **Diff the rounds, not just the PR.** `git diff <previous-head>..<new-head>` is what the author actually did in response; the full `<merge-base>...<new-head>` is still what gets judged. Read both. A fix that also quietly changes something the last round approved is the thing this catches.
-- **Re-run the gate. Every time.** A pass from the previous round belongs to the previous commit and carries nothing forward.
-- **Account for every bullet.** Each reason from the last round's `no` gets a verdict: fixed, not fixed, or fixed in a way that broke something else.
-
-The report keeps its fixed sections, with **one** permitted addition on rounds after the first: a `### Since the last review` section immediately after the fact line, one line per prior bullet. The fact line names the round and the previous SHA. Then this gate again — rounds repeat until the human ends them.
+If it has moved, `git checkout <new-head-sha>` in the worktree — still detached — and call `/review-a-pr-and-report` again, this time naming the round number and the previous round's head SHA. Its **Rounds** section owns what changes between rounds: diffing round against round, re-running the gate every time, and giving every bullet from the last `no` a verdict. Then this gate again — rounds repeat until the human ends them.
 
 #### On "clean up"
 
 Remove what **this session** made for **this review**, and nothing else. Other sessions have worktrees and branches in the same listings; a `locked` entry or a directory this session did not create is someone's work in progress.
 
-1. **Leave the worktree before removing it** — move your working directory back to the primary checkout, without deleting anything as part of leaving. A directory cannot be removed from inside itself, and "leave" must not be the same act as "delete": step 2 is where deletion is decided. **If you are Claude Code**, that is `ExitWorktree` with `action: "keep"` — which will not remove a worktree entered by path anyway.
+1. **Leave the worktree before removing it** — move your working directory back to the primary checkout, without deleting anything as part of leaving. A directory cannot be removed from inside itself, and "leave" must not be the same act as "delete": item 2 below is where deletion is decided. **If you are Claude Code**, that is `ExitWorktree` with `action: "keep"` — which will not remove a worktree entered by path anyway.
 2. `git worktree remove <worktree-path>`, then `git worktree prune`.
 3. Any scratch, log, or report file this review wrote outside the worktree.
 4. Anything the gate left running — containers, a daemon, a stray port — that this session started. Test suites are the usual source, and they do not always clean up after themselves.
@@ -227,7 +116,7 @@ Remove what **this session** made for **this review**, and nothing else. Other s
 
 **Done when:** the human has ended the rounds and either the worktree is gone with its residue, or it is standing on purpose and they know where it is.
 
-### 10. Close by confirming what happened to the PR
+### 6. Close by confirming what happened to the PR
 
 The last thing to establish is whether the thing you reviewed actually landed — usually it was merged elsewhere, by the human or by another session running `/squash-merge-and-clean-up`, and this session would otherwise never learn the outcome of its own review.
 
@@ -243,10 +132,8 @@ Report one of:
 
 Check once and report. **Do not poll, wait, or schedule a re-check** — an open PR is a complete, correct ending for this skill.
 
-## Cost
-
-Reading the changed files whole and reading the ticket and specs is the bulk of the work, and it is the necessary cost — drift is exactly what a diff-only pass cannot see. What to skip: unchanged files that nothing in the diff touches, the full history of the base branch, and any file already covered by a human reviewer's comment from step 2.
-
 ## Where this sits in the flow
 
 `/create-pr-for-branch` opens it, **`/review-pr-in-worktree`** judges it — as many rounds as the author needs — and `/squash-merge-and-clean-up` lands it. Each is a separate door a human opens, because each answers to a different person: the author, the reviewer, the maintainer. The merge usually happens in another session entirely, which is why this skill ends by asking the tracker what became of the PR rather than assuming its own report was the last word.
+
+Inside this one, `/review-a-pr-and-report` is the reviewing itself, split out because it is the same judgment wherever the checkout came from. This skill is what makes that checkout safe and takes it away again.
