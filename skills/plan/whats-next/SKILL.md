@@ -46,16 +46,29 @@ One block per move, in the [shape below](#prompt-shape). Nothing after the block
 
 ## Prompt shape
 
+The door `/read-the-map` named decides the shape, and there are two.
+
+**A decision ticket on the map.** No skill of its own, so it rides in on `/wayfinder`:
+
 ```
-/wayfinder <map#> <next thing> in repo <owner/name>
+/wayfinder <map#> take #<n> — <title> in repo <owner/name>
 ```
 
-`<next thing>` is the door `/read-the-map` named — `take #<n> — <title>`, `/decisions-to-specs`, `/specs-to-tickets`, `/prototype #<n>`, `/implement #<n>`. Keep the whole prompt to a line where it can be — the next session reads the map for itself, so a prompt that explains the work is padding.
+**A human-invoked skill.** The skill comes first and `/wayfinder` doesn't appear — the skill takes the map or the ticket itself:
+
+```
+/decisions-to-specs <map#> in repo <owner/name>
+/specs-to-tickets <map#> in repo <owner/name>
+/prototype #<n> in repo <owner/name>
+/implement #<n> in repo <owner/name>
+```
+
+Keep the whole prompt to a line where it can be — the next session reads the map for itself, so a prompt that explains the work is padding.
 
 **If the move writes to the repo** — `/decisions-to-specs`, `/implement`, `/prototype` — end the prompt with the worktree reminder, so it travels with the paste:
 
 ```
-/wayfinder 157 /decisions-to-specs in repo mtngtools/mtng-dotnet-mono
+/decisions-to-specs 157 in repo mtngtools/mtng-dotnet-mono
 Work in a worktree.
 ```
 
@@ -72,7 +85,7 @@ One block, no label needed. More than one, each gets a **one-line label above it
 
 **Quick — clears the last decision**
 ```
-/wayfinder 157 /decisions-to-specs in repo mtngtools/mtng-dotnet-mono
+/decisions-to-specs 157 in repo mtngtools/mtng-dotnet-mono
 Work in a worktree.
 ```
 
