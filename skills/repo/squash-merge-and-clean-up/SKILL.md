@@ -46,7 +46,9 @@ Then ask with `AskUserQuestion`, one question, this wording:
 
 > Execute the squash merge plan just listed?
 
-Options are **Yes, run it** and **No, stop here**. No sub-choices, and **nothing from the plan restated inside the question or its options** — the list above is the thing being confirmed, and a second, shorter copy of it in the question is what makes the two disagree. Proceed only on yes.
+Options are **Yes, run it**, **No, stop here**, and **Don't see the plan. Output it again.** No sub-choices, and **nothing from the plan restated inside the question or its options** — the list above is the thing being confirmed, and a second, shorter copy of it in the question is what makes the two disagree.
+
+On **Don't see the plan**, the plan never reached the human: print the full `PLAN:` list again as ordinary output in a fresh message, then ask the same question again. Proceed only on yes.
 
 ## 3. Leave the worktree first
 
