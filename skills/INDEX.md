@@ -53,6 +53,7 @@ The wayfinder pipeline — decisions become specs, specs become tickets — plus
 | [read-the-map](./plan/read-the-map/SKILL.md) | Read one map — verdict and next door; owns the checklist the survey follows | `skill-callable` | planning, wayfinder, github, maps |
 | [are-decisions-from-this-session-saved](./plan/are-decisions-from-this-session-saved/SKILL.md) | Ask what planning would be lost if the session ended; record each system decision or forget it with approval | `skill-callable` | planning, wayfinder, specs, tickets, sessions |
 | [whats-next](./plan/whats-next/SKILL.md) | Hand back a short, copyable prompt for the next session on the current map | `skill-callable` | planning, wayfinder, sessions, prompts |
+| [re-ask-questions](./plan/re-ask-questions/SKILL.md) | Re-ask open questions one at a time — overview, pros/cons table, clear recommendation | `skill-callable` | planning, questions, decisions |
 | [plan-mtng-tools-vue](./plan/plan-mtng-tools-vue/SKILL.md) | Plan Vue component/composable spec | `skill-callable` | planning, vue, frontend, specs |
 | [decisions-to-specs](./plan/decisions-to-specs/SKILL.md) | Settle a map's decisions into repo spec files and ADRs, written in a worktree of its own | `human-only` | planning, wayfinder, specs, adrs, worktrees |
 | [specs-to-tickets](./plan/specs-to-tickets/SKILL.md) | Slice a map's settled specs into implementation tickets | `human-only` | planning, wayfinder, specs, tickets |
