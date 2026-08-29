@@ -71,8 +71,11 @@ Cross-cutting operations.
 | [50-concise](./general/50-concise/SKILL.md) | Cut text to ~50% | `skill-callable` | writing, documentation, reduction |
 | [25-concise](./general/25-concise/SKILL.md) | Cut text to ~25% | `skill-callable` | writing, documentation, reduction |
 | [10-concise](./general/10-concise/SKILL.md) | Cut text to ~10% — bites hardest | `skill-callable` | writing, documentation, reduction |
+| [pre-pr-naming-approval](./general/pre-pr-naming-approval/SKILL.md) | Borrow naming approval for 12 hours, marked in the tree, settled on the human's return | `human-only` | naming, specs, commits, prs, sessions |
 
 The numbered variants share one [reduction method](./general/concise-copy/reduce.md); the percentage is a ceiling, never a floor on meaning.
+
+`pre-pr-naming-approval` is `human-only` for the same reason as `commit-local-main`: it suspends a rule — the repo's naming authority — rather than performing a step, and the human typing its name *is* the authorization it hands out. A skill chaining into it would be manufacturing the human's approval on their behalf.
 
 ## Frontend skills
 
