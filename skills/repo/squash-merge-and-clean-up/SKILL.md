@@ -22,10 +22,12 @@ Land the PR this session opened and clear what this session created: leave the w
 
 Gather, and hold for the plan:
 
-- `gh pr view <n> --json number,title,state,mergeable,mergeStateStatus,headRefName,baseRefName`
+- `gh pr view <n> --json number,title,body,state,mergeable,mergeStateStatus,headRefName,baseRefName,closingIssuesReferences`
 - `gh pr checks <n>` — a docs-only PR may report no checks, which is a pass, not a failure
 - `git worktree list` — note which entries this session created; `locked` marks another session's
 - `git branch -vv` — the `+` prefix marks a branch checked out in some worktree
+
+**Amend the PR body before you plan, not after.** The merge is what closes the linked issues, so a missing keyword means they outlive it and someone closes them by hand later. If this PR is meant to close issues and `closingIssuesReferences` is empty — or misses one — add `Closes #{issue}`, one line per issue, with `gh pr edit <n> --body`, keeping the body that is already there and appending. Take the issue numbers from the branch name, the commits, or the body's own prose; **do not guess a number**, and do not link an issue this branch does not actually close. If nothing here closes an issue, that is a normal PR — change nothing. Re-read the body after editing and say in the plan which issues the merge will close.
 
 ## 2. Gate one: print the plan, then ask
 
@@ -36,11 +38,13 @@ Output the plan for steps 3 to 5 as a numbered list under a `PLAN:` heading, nam
 ```markdown
 PLAN:
 1. Exit the worktree at `<path>`, returning to the primary checkout
-2. Squash-merge <PR title> (#<n>) into `<base>` as `<commit subject>`
+2. Squash-merge <PR title> (#<n>) into `<base>` as `<commit subject>`, closing #<issue>
 3. Confirm from the API that it merged, and that the branch's content landed
 4. Remove the worktree at `<path>`
 5. Delete `<branch>` locally and on origin
 ```
+
+The closing clause on line 2 names every issue the body links, and is dropped entirely when it links none.
 
 Then ask with `AskUserQuestion`, one question, this wording:
 

@@ -16,6 +16,8 @@ Check if package has `prepublishOnly` script. If so, run first.
 
 If that passes or you've been instructed to ignore prepublishOnly, create a pull request for the current branch using `gh`.
 
+If the branch is meant to close issues, put `Closes #{issue}` in the PR body — one line per issue.
+
 Provide both URL and markdown link to the PR.
 
 
