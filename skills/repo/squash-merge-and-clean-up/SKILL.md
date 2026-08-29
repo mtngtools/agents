@@ -29,7 +29,7 @@ Gather, and hold for the plan:
 
 ## 2. Gate one: print the plan, then ask
 
-**The plan goes in the message; the question only points at it.** `AskUserQuestion` renders its question as one plain text field with no list formatting, so a multi-step plan inlined there arrives as an unreadable paragraph — exactly when the human most needs to read it carefully. Print the plan as ordinary output first, where bullets render, then keep the question to a single line.
+**The plan travels by two routes, because each alone fails.** Text printed just before a tool call may never render — the harness can swallow it, so the question arrives with no plan above it. And the question field itself renders as one plain paragraph with no list formatting, so a plan inlined there arrives unreadable — exactly when the human most needs to read it carefully. So: print the plan as ordinary output, where it lands in the transcript, **and** carry the same plan as each option's `preview`, which the question UI renders beside the choices. Whichever route the harness honors, the plan is on screen when the question is.
 
 Output the plan for steps 3 to 5 as a numbered list under a `PLAN:` heading, naming the **actual** PR number, branch name, and worktree path — never a placeholder:
 
@@ -44,11 +44,11 @@ PLAN:
 
 Then ask with `AskUserQuestion`, one question, this wording:
 
-> Execute the squash merge plan just listed?
+> Execute the squash merge plan shown in the preview?
 
-Options are **Yes, run it**, **No, stop here**, and **Don't see the plan. Output it again.** No sub-choices, and **nothing from the plan restated inside the question or its options** — the list above is the thing being confirmed, and a second, shorter copy of it in the question is what makes the two disagree.
+Options are **Yes, run it**, **No, stop here**, and **Don't see the plan. Output it again.** Give **every** option the full `PLAN:` list as its `preview`, **copied verbatim from the output above — never retyped, shortened, or summarized**: one text, two routes, so the copies cannot disagree. Beyond the previews, nothing from the plan goes in the question text, the option labels, or the option descriptions — a second, shorter copy is what makes the two disagree.
 
-On **Don't see the plan**, the plan never reached the human: print the full `PLAN:` list again as ordinary output in a fresh message, then ask the same question again. Proceed only on yes.
+On **Don't see the plan**, neither route rendered: print the full `PLAN:` list again and **end the turn there**, with the plan as the final message and no tool call after it — the one spot the harness always renders. Ask the same question again only after the human responds. Proceed only on yes.
 
 ## 3. Leave the worktree first
 
@@ -87,7 +87,7 @@ Explicit, in order, each with its precondition:
 
 Everything above touched only this session's own state. This step moves the checkout **every concurrent session shares**, so it is asked separately even after a yes at gate one.
 
-Same shape as gate one: state first, in the message, then a one-line question. Print what the checkout looks like right now — the branch it is on, whether it is clean, how far behind `origin/<base>`, and anything uncommitted that the move would have to work around.
+Same shape as gate one, including both routes: the plan printed as ordinary output **and** carried verbatim as every option's `preview`. Print what the checkout looks like right now — the branch it is on, whether it is clean, how far behind `origin/<base>`, and anything uncommitted that the move would have to work around.
 
 **Submodules: stale is not dirty.** In a repo with submodules, an ` M <submodule>` in `git status` carries two different meanings, and the plan must say which. `git submodule status` splits them: a `+` prefix means the checkout sits at a different commit than the branch records — a **stale pointer**, left behind because moving a branch never moves the submodule checkouts — while modified or untracked files inside (`git -C <submodule> status`) mean real work. A stale pointer is the checkout being behind, so syncing it belongs in this step's plan. Real work inside a submodule belongs to another session or the human: name it, leave it, and leave that submodule out of the sync.
 
@@ -102,8 +102,8 @@ The sync line appears only when the repo has submodules, and it is what makes th
 
 Then ask, one question:
 
-> Bring the primary checkout current as just described?
+> Bring the primary checkout current as shown in the preview?
 
-Options are **Yes, run it** and **No, leave it**. On yes, `git merge --ff-only origin/<base>` — only when the checkout is clean (stale submodule pointers count as clean) and `0` ahead — then the submodule sync from the plan. A **no** is a clean finish, not a failure.
+Options are **Yes, run it** and **No, leave it**, each carrying the full `PLAN:` list as its `preview`. On yes, `git merge --ff-only origin/<base>` — only when the checkout is clean (stale submodule pointers count as clean) and `0` ahead — then the submodule sync from the plan. A **no** is a clean finish, not a failure.
 
 Close by reporting what was removed and anything left standing. An untracked file you did not write, or a `locked` worktree, belongs to another session or the human: name it and leave it.
