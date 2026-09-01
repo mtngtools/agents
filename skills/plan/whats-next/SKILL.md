@@ -52,7 +52,7 @@ One block per move, in the [shape below](#prompt-shape) — and if the move is a
 
 Below the what's-next block, the rest of the map: a heading that names the map, every ticket in one table, and a paste-ready prompt for everything else that's takeable right now. Format for all three lives in [The board](#the-board).
 
-**Done when:** the heading carries the map's number and its title, every child and backlog ticket from step 2 appears in the table once, and every ready one outside the what's-next picks has its own block — or you've said the frontier holds nothing else.
+**Done when:** the heading carries the map's number as a link to its issue plus its title, every child and backlog ticket from step 2 appears in the table once, and every ready one outside the what's-next picks has its own block — or you've said the frontier holds nothing else.
 
 ## Prompt shape
 
@@ -79,7 +79,7 @@ Keep the whole prompt to a line where it can be — the next session reads the m
 
 ```
 /decisions-to-specs 157 in repo mtngtools/mtng-dotnet-mono
-Work in a worktree branched from a freshly fetched origin/main.
+Work in a worktree.
 ```
 
 A move that only touches the tracker (`take`, `/specs-to-tickets`) gets no reminder — there's nothing to isolate.
@@ -92,21 +92,14 @@ Every build ticket hands back these two lines, both of them, whether it appears 
 
 ```
 /implement #<n> in repo <owner/name>
-Work in a worktree branched from a freshly fetched origin/main.
+Work in a worktree.
 ```
 
 **Never `/wayfinder <map#> take #<n>` for a build ticket.** `take` is the door for decisions — grilling, research, charting — and aiming it at a build ticket sends the next session off to re-decide work whose decisions are already settled and specced. Build backlog means the verb is `/implement`, and there is no second option.
 
-**Never drop the worktree line.** `/implement` commits to the current branch and makes no worktree of its own, so a prompt without that line lands the work in whatever the primary checkout is sitting on — and several sessions share that checkout, so what it is sitting on is nobody's chosen base.
+**Never drop the worktree line.** It is one line and it survives a paste into a session that never loads the skill.
 
-**Branch from `origin/main`, freshly fetched — not the local `main`, and never the current `HEAD`.** The local `main` is as old as the last pull, and another session may have left the primary checkout on its own branch entirely; both silently make someone else's work the base of yours, which surfaces as a PR diff full of commits the ticket never touched. Fetching first is part of the line, not an optimization.
-
-**The one exception is stacked work** — a ticket whose base is an open PR rather than `main`. `/implement` looks for this itself and asks the human before branching, so you do not have to go hunting; but when the map already makes it plain — the ticket is blocked by an open PR — name that base in the line and say what it is stacked on, so the next session isn't rediscovering it:
-
-```
-/implement #365 in repo mtngtools/mtng-dotnet-mono
-Work in a worktree branched from origin/<base-branch> — stacked on #362, not yet merged.
-```
+**Which base that worktree branches from is `/implement`'s to settle, not this prompt's.** It fetches, looks for overlapping worktrees and open PRs, and asks the human before it cuts anything — including whether the work should stack on an unmerged PR. Naming a base in the prompt second-guesses a check that hasn't run yet, so the line stays exactly as short as it is above.
 
 ## Labels
 
@@ -120,7 +113,7 @@ One block, no label needed. More than one, each gets a **one-line label above it
 **Quick — clears the last decision**
 ```
 /decisions-to-specs 157 in repo mtngtools/mtng-dotnet-mono
-Work in a worktree branched from a freshly fetched origin/main.
+Work in a worktree.
 ```
 
 Labels are for choosing between blocks. They never carry instructions the pasted prompt needs — anything the next session must know goes inside the block.
@@ -129,13 +122,15 @@ Labels are for choosing between blocks. They never carry instructions the pasted
 
 The heading, the table, and the ready-now prompts, built from the tickets and backlog `/read-the-map` already gathered in step 2 — no second tracker pass.
 
-**The heading carries the map's number, then its title.** Never the bare word "Board", and never the title on its own — several sessions run at once, each ending in one of these, and a board you can't place is unplaceable once it scrolls:
+**The heading carries the map's number as a link to its issue, then its title.** Never the bare word "Board", never the title on its own, and never a bare `#157` — several sessions run at once, each ending in one of these, and a board you can't place, or can't open, is dead text once it scrolls:
 
 ```markdown
-## Board: #157 — presentation timing
+## Board: [#157](https://github.com/mtngtools/mtng-dotnet-mono/issues/157) — presentation timing
 ```
 
-**The number is the part that identifies the map**, and it is the part that gets dropped. A title alone reads fine and still costs the human a search to act on: titles get reworded on the tracker, near-duplicates run side by side across maps, and every prompt in the blocks below takes the number, not the title. `## Board: presentation timing` is the same failure as `## Board` — write `#157` first, every time.
+**The number is the part that identifies the map**, and it is the part that gets dropped. A title alone reads fine and still costs the human a search to act on: titles get reworded on the tracker, near-duplicates run side by side across maps, and every prompt in the blocks below takes the number, not the title. `## Board: presentation timing` is the same failure as `## Board` — write the number first, every time.
+
+**Link it.** `/read-the-map` already fetched the map, so its URL costs nothing here, and the heading is the one place the human goes to open the map itself — the ticket table below links its rows for the same reason. A number they have to paste into a search is a link you didn't write.
 
 Both parts come from the tracker exactly as it has them. If the title is long, the whole title still goes in — a truncated name is the same problem as no name.
 
@@ -161,7 +156,7 @@ Each block gets a one-line bold label naming the ticket — not a reason, just e
 **#171 — frame clock adapter**
 ```
 /implement #171 in repo mtngtools/mtng-dotnet-mono
-Work in a worktree branched from a freshly fetched origin/main.
+Work in a worktree.
 ```
 
 Skip a ticket already pasted in step 4 — one block per ticket across the whole reply, never two. No ready ticket outside the what's-next picks means no blocks here; say so in a line rather than leaving the section silently empty.
