@@ -21,6 +21,8 @@ Apply the [concise-copy rules](./SKILL.md) — remove filler, lead with the acti
 
 Order of sacrifice: filler → phrasing → examples → structure. Meaning is never on the list.
 
+**Approval discussion is off the list too.** A passage recording who approved what, or what was considered and rejected, is not compressed to hit a target — see [concise-copy](./SKILL.md#approval-discussion-is-a-removal-question-not-a-trim). Ask about it if the human is at the keyboard; otherwise leave it whole and list it in your output. A tight target is not a reason to shrink a record until it says less.
+
 ## Done when
 
 Every distinct point from the source is present in the output, **and** the output is at or below the target — or, where meaning blocked the target, at the smallest faithful length, with the actual percentage reported to the user.

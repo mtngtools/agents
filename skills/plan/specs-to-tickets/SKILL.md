@@ -17,6 +17,8 @@ Downstream of `/decisions-to-specs`. That skill settled a wayfinder map's decisi
 
 This is the boundary where planning becomes building: the decision issues and the specs are behind you; from here it's tracer-bullet tickets → `/implement`.
 
+**Approvals go on the tracker.** The scope confirmed at step 2 and the granularity settled at step 3 are the human's calls, and both get lost the moment this session ends. Follow the `approval-policy` skill: record them where it says — the map for what the run decided, the ticket for what shapes one slice — never as a note in a spec file.
+
 ## Process
 
 ### 1. Load the map and its settled specs

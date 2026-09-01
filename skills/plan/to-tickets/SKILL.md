@@ -18,6 +18,8 @@ The issue tracker and triage label vocabulary should have been provided to you. 
 
 Adapted from Matt Pocock's `/to-tickets`; the slicing method below is his.
 
+**Approvals go on the tracker.** The granularity chosen at step 3, and every merge or split the human asks for at step 5, are decisions — follow the `approval-policy` skill for recording them. A ticket body says what to build; if the human's reasoning for a boundary needs keeping, it goes in a comment on the ticket or the parent, never inside the spec being sliced.
+
 ## Process
 
 ### 1. Gather context

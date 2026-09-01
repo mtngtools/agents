@@ -21,6 +21,8 @@ Read GitHub for the decisions; write the repo for the specs. The two surfaces st
 
 **Settling a decision supersedes its ticket.** The issue is a snapshot of one conversation; from there the decision lives in the spec — and only the spec moves as later decisions, review, and implementation refine it. A decision ticket read months later is therefore likely stale, so step 8 stamps each one with a **superseded** banner pointing at its spec. The issues stay closed as the rationale trail; the specs are what `/specs-to-tickets` slices into implementation tickets.
 
+**Approvals go on the tracker, not into the specs.** Where the human settles something while this skill runs — a gated name, a spec's home, a decision to drop one — follow the `approval-policy` skill for where that gets written. The spec carries the rule it produced; who approved it, when, and what it beat belong on the decision ticket or the map. An ADR's considered-alternatives section is the one place in the tree that holds the alternative, and it holds it as a decision record, never as an account of the conversation.
+
 ## Process
 
 ### 1. Load the map and its decisions

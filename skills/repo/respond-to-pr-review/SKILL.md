@@ -19,7 +19,7 @@ The other side of `/review-pr-in-worktree`. That skill produced a report and sto
 
 **Every item ends in a disposition the human chose.** Fixed, or discussed to an outcome, or declined with a reason. A finding you disagree with is a **discuss**, never a quiet skip: the reviewer is another session with its own read of the specs, it can be wrong, and settling that is a conversation rather than a decision you make alone.
 
-**Where the outcome of a discussion lives is the tracker, not the tree.** See [Recording what the discussion settled](#recording-what-the-discussion-settled) — it is the half of this skill that gets forgotten.
+**Where the outcome of a discussion lives is the tracker, not the tree** — the `approval-policy` skill owns that, and [step 6](#6-record-what-the-discussion-settled) is where this flow applies it. It is the half that gets forgotten.
 
 ## Process
 
@@ -57,7 +57,7 @@ Give each item a number, one line of what it claims, where it points, and the au
 Walk the list in order — blocking items first, non-blocking after. **One question per item**, with these options, and do not batch several items into one question:
 
 - **Fix it** — the finding stands. Make the change now, in this checkout.
-- **Discuss it** — the finding is contested, unclear, or bigger than the PR. Talk it through with the human until there is an outcome, then record it per [the section below](#recording-what-the-discussion-settled). "Discuss" is not a deferral; it ends in an answer.
+- **Discuss it** — the finding is contested, unclear, or bigger than the PR. Talk it through with the human until there is an outcome, then record it per `approval-policy`. "Discuss" is not a deferral; it ends in an answer.
 - **Decline it** — the finding is understood and not being acted on. The human says why, and that reason is recorded on the PR, not dropped.
 - **Split it out** — the item is real but belongs in its own ticket. File it, link it, and say so in the reply; the PR is not the place to grow scope.
 
@@ -87,22 +87,17 @@ Then post it, and say what the new head SHA is so the review's next round has a 
 
 **Done when:** the reply is posted with the human's approval, and the new head SHA is named.
 
-## Recording what the discussion settled
+### 6. Record what the discussion settled
 
-**A decision reached in this conversation and written nowhere is a decision that gets made again next week.** Two rules, and they pull in opposite directions on purpose.
+**Follow the `approval-policy` skill.** It owns where an approval goes, what has to be written, and why none of the discussion belongs in a committed file — this skill just makes sure it happens before the response ends.
 
-**Approvals go on the tracker.** If the human approved something during this response — a gated name, a scope call, a deliberate deviation from a spec, a finding declined — and that approval is not already written on the issue or in the PR body, **write it there before this skill ends**. Update whichever is the right home:
+Three things this flow adds to it:
 
-- **The PR body** — for anything about this change: a name it fixes, a deviation it makes, a finding declined with the human's reason.
-- **The issue** — for anything that outlives this PR: a scope change, a decision the ticket's own text now contradicts, a criterion agreed to be dropped.
+- **Every disposition from step 3 is an approval**, including the declines. A finding waved off with a reason is exactly the thing that gets lost, because nothing lands in the tree to say it was ever decided.
+- **A marker left by `/pre-pr-naming-approval` comes out of the tree here.** If the human settles a borrowed name during the response, delete its marker in the same commit as the fix, and record their answer per the policy.
+- **Where the PR reply is the right home, write it into the step 5 draft** rather than posting a second comment saying the same thing.
 
-Name **who approved it, on what date, and what the alternative was** — a passive "this was approved" hides the one thing a reader needs. If the repo has its own naming authority or issue-tracker doc saying where approvals are recorded, that wins over this list.
-
-**The discussion itself never goes in the repo.** Not as a comment in the code, not as a rationale paragraph in a spec, not as a notes file, not as a "we considered X" section added to a doc because it came up here. The tree holds **decisions** — the name that won, the spec text as it now reads. The tracker holds **who decided it and why not the alternative**. Anything that reads like a transcript of this session belongs in the PR comment or the issue, and nowhere that gets committed.
-
-The one thing that does come *out* of the tree: a marker left by `/pre-pr-naming-approval`. If the human settles a borrowed name here, delete its marker in the same commit as the fix, and record their answer on the PR.
-
-**Done when:** every approval given in this session is written on the PR or the issue, and nothing about the discussion has been committed to a file.
+**Done when:** every approval given in this session is recorded where `approval-policy` puts it, and nothing about the discussion has been committed to a file.
 
 ## Where this sits in the flow
 

@@ -83,9 +83,12 @@ Cross-cutting operations.
 | [50-concise](./general/50-concise/SKILL.md) | Cut text to ~50% | `skill-callable` | writing, documentation, reduction |
 | [25-concise](./general/25-concise/SKILL.md) | Cut text to ~25% | `skill-callable` | writing, documentation, reduction |
 | [10-concise](./general/10-concise/SKILL.md) | Cut text to ~10% — bites hardest | `skill-callable` | writing, documentation, reduction |
+| [approval-policy](./general/approval-policy/SKILL.md) | Where an approval gets recorded and what it must say — tracker holds who decided, tree never holds the discussion | `model-discoverable` | approvals, decisions, specs, tickets, prs, naming |
 | [pre-pr-naming-approval](./general/pre-pr-naming-approval/SKILL.md) | Borrow naming approval for 12 hours, marked in the tree, settled on the human's return | `human-only` | naming, specs, commits, prs, sessions |
 
 The numbered variants share one [reduction method](./general/concise-copy/reduce.md); the percentage is a ceiling, never a floor on meaning.
+
+`approval-policy` is where the other skills send an approval once it is given. `pre-pr-naming-approval` is its opposite number: one lends the human's answer for twelve hours when they are away, the other says where the answer goes once it is real.
 
 `pre-pr-naming-approval` is `human-only` for the same reason as `commit-local-main`: it suspends a rule — the repo's naming authority — rather than performing a step, and the human typing its name *is* the authorization it hands out. A skill chaining into it would be manufacturing the human's approval on their behalf.
 
@@ -103,6 +106,6 @@ Its planning counterpart, [plan-mtng-tools-vue](./plan/plan-mtng-tools-vue/SKILL
 
 Reference skills in output as `/skill-name` (e.g., `/commit-with-issue`). If not installed in your system, pull from [`mtngtools/agents`](https://github.com/mtngtools/agents) `skills/` folder.
 
-No skill here is `model-discoverable` yet — every one of them is something a human asks for. The category exists for convention skills that a model *should* pick up on its own when it recognises the work, the way `mtng-tools-vue` applies whenever a Vue SFC is being written.
+`approval-policy` is the repo's first `model-discoverable` skill, and it is the shape the category is for: a convention that applies whenever the work reaches it, not an operation someone asks for. A human settling something mid-task is not going to stop and type a skill name, and the recording is worthless if it only happens when they remember to — so the model reaches for it on its own, the way `mtng-tools-vue` applies whenever a Vue SFC is being written. `/decisions-to-specs`, `/specs-to-tickets`, `/to-tickets` and `/respond-to-pr-review` each say to follow it outright, because each one ends in decisions a human made out loud.
 
 **Referencing another skill:** name it — "invoke the `draft-commit-message` skill" — rather than linking to its `SKILL.md`. A link invites an agent to read the file straight through, past the category it declares; naming the skill makes the reference an invocation, which the category governs. Linking to a non-skill reference file, like [reduce.md](./general/concise-copy/reduce.md), is fine.
