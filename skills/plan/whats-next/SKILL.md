@@ -52,7 +52,7 @@ One block per move, in the [shape below](#prompt-shape) — and if the move is a
 
 Below the what's-next block, the rest of the map: a heading that names the map, every ticket in one table, and a paste-ready prompt for everything else that's takeable right now. Format for all three lives in [The board](#the-board).
 
-**Done when:** the heading names the map, every child and backlog ticket from step 2 appears in the table once, and every ready one outside the what's-next picks has its own block — or you've said the frontier holds nothing else.
+**Done when:** the heading carries the map's number and its title, every child and backlog ticket from step 2 appears in the table once, and every ready one outside the what's-next picks has its own block — or you've said the frontier holds nothing else.
 
 ## Prompt shape
 
@@ -129,13 +129,15 @@ Labels are for choosing between blocks. They never carry instructions the pasted
 
 The heading, the table, and the ready-now prompts, built from the tickets and backlog `/read-the-map` already gathered in step 2 — no second tracker pass.
 
-**The heading.** Never the bare word "Board" — several sessions run at once, each ending in one of these, and an unnamed board is unplaceable once it scrolls. Name the map in the heading itself:
+**The heading carries the map's number, then its title.** Never the bare word "Board", and never the title on its own — several sessions run at once, each ending in one of these, and a board you can't place is unplaceable once it scrolls:
 
 ```markdown
 ## Board: #157 — presentation timing
 ```
 
-The map's number and its title, exactly as the tracker has them. If the title is long, the whole title still goes in — a truncated name is the same problem as no name.
+**The number is the part that identifies the map**, and it is the part that gets dropped. A title alone reads fine and still costs the human a search to act on: titles get reworded on the tracker, near-duplicates run side by side across maps, and every prompt in the blocks below takes the number, not the title. `## Board: presentation timing` is the same failure as `## Board` — write `#157` first, every time.
+
+Both parts come from the tracker exactly as it has them. If the title is long, the whole title still goes in — a truncated name is the same problem as no name.
 
 **The ticket table.** Every child ticket, open and closed, plus the build backlog — not just the frontier, so the human sees the whole map without opening the tracker.
 
