@@ -44,9 +44,9 @@ If it comes back **Done** — everything closed, sliced, and merged — that is 
 
 ### 4. Hand over the prompt
 
-One block per move, in the [shape below](#prompt-shape). Nothing after the blocks except a single line if something genuinely can't be said inside one.
+One block per move, in the [shape below](#prompt-shape) — and if the move is a build ticket, [that rule](#a-build-ticket-is-implement-in-a-worktree-always) rather than your own judgment. Nothing after the blocks except a single line if something genuinely can't be said inside one.
 
-**Done when:** the human can copy a block and paste it into a fresh session unchanged.
+**Done when:** the human can copy a block and paste it into a fresh session unchanged — and every build ticket among them says `/implement` and carries its worktree line.
 
 ### 5. Lay out the whole board
 
@@ -56,9 +56,9 @@ Below the what's-next block, the rest of the map: a heading that names the map, 
 
 ## Prompt shape
 
-The door `/read-the-map` named decides the shape, and there are two.
+The door `/read-the-map` named decides the shape. **If that door is a build ticket, skip to [the rule below](#a-build-ticket-is-implement-in-a-worktree-always) — it is the whole answer for those.** For everything else there are two shapes.
 
-**A decision ticket on the map.** No skill of its own, so it rides in on `/wayfinder`:
+**A decision ticket on the map.** A `wayfinder:<type>` child. No skill of its own, so it rides in on `/wayfinder`:
 
 ```
 /wayfinder <map#> take #<n> — <title> in repo <owner/name>
@@ -79,10 +79,34 @@ Keep the whole prompt to a line where it can be — the next session reads the m
 
 ```
 /decisions-to-specs 157 in repo mtngtools/mtng-dotnet-mono
-Work in a worktree.
+Work in a worktree branched from a freshly fetched origin/main.
 ```
 
 A move that only touches the tracker (`take`, `/specs-to-tickets`) gets no reminder — there's nothing to isolate.
+
+### A build ticket is `/implement`, in a worktree, always
+
+**A build ticket is any open issue on the map that isn't a `wayfinder:<type>` child** — the backlog `/specs-to-tickets` sliced out of the settled specs, whatever other labels it carries. `/read-the-map` gathers exactly that set at checklist item 3. If a ticket came from there, this section decides its prompt and the two shapes above do not.
+
+Every build ticket hands back these two lines, both of them, whether it appears in the step 4 picks or in the board's ready-now blocks:
+
+```
+/implement #<n> in repo <owner/name>
+Work in a worktree branched from a freshly fetched origin/main.
+```
+
+**Never `/wayfinder <map#> take #<n>` for a build ticket.** `take` is the door for decisions — grilling, research, charting — and aiming it at a build ticket sends the next session off to re-decide work whose decisions are already settled and specced. Build backlog means the verb is `/implement`, and there is no second option.
+
+**Never drop the worktree line.** `/implement` commits to the current branch and makes no worktree of its own, so a prompt without that line lands the work in whatever the primary checkout is sitting on — and several sessions share that checkout, so what it is sitting on is nobody's chosen base.
+
+**Branch from `origin/main`, freshly fetched — not the local `main`, and never the current `HEAD`.** The local `main` is as old as the last pull, and another session may have left the primary checkout on its own branch entirely; both silently make someone else's work the base of yours, which surfaces as a PR diff full of commits the ticket never touched. Fetching first is part of the line, not an optimization.
+
+**The one exception is stacked work** — a ticket whose base is an open PR rather than `main`. `/implement` looks for this itself and asks the human before branching, so you do not have to go hunting; but when the map already makes it plain — the ticket is blocked by an open PR — name that base in the line and say what it is stacked on, so the next session isn't rediscovering it:
+
+```
+/implement #365 in repo mtngtools/mtng-dotnet-mono
+Work in a worktree branched from origin/<base-branch> — stacked on #362, not yet merged.
+```
 
 ## Labels
 
@@ -96,7 +120,7 @@ One block, no label needed. More than one, each gets a **one-line label above it
 **Quick — clears the last decision**
 ```
 /decisions-to-specs 157 in repo mtngtools/mtng-dotnet-mono
-Work in a worktree.
+Work in a worktree branched from a freshly fetched origin/main.
 ```
 
 Labels are for choosing between blocks. They never carry instructions the pasted prompt needs — anything the next session must know goes inside the block.
@@ -123,13 +147,19 @@ The map's number and its title, exactly as the tracker has them. If the title is
 | [165](url) | grill: frame boundary rule | wayfinder:grilling | open, unclaimed | — |
 ```
 
-**Ready-now prompts.** One [prompt-shape](#prompt-shape) block for every ticket that's open, unblocked, unclaimed, and either `wayfinder:grilling` or from the build backlog — the takeable work outside the curated picks in step 4. A grilling ticket rides in on `/wayfinder <map#> take #<n>`; a build ticket rides in on `/implement #<n>`, worktree reminder included since it writes to the repo.
+**Ready-now prompts.** One [prompt-shape](#prompt-shape) block for every ticket that's open, unblocked, unclaimed, and either `wayfinder:grilling` or from the build backlog — the takeable work outside the curated picks in step 4. A grilling ticket rides in on `/wayfinder <map#> take #<n>`; a build ticket takes the two-line `/implement` block from [the rule above](#a-build-ticket-is-implement-in-a-worktree-always), worktree line included — the rule is the same here as in step 4.
 
 Each block gets a one-line bold label naming the ticket — not a reason, just enough to tell blocks apart once stacked:
 
 **#165 — grill: frame boundary rule**
 ```
 /wayfinder 157 take #165 — grill: frame boundary rule in repo mtngtools/mtng-dotnet-mono
+```
+
+**#171 — frame clock adapter**
+```
+/implement #171 in repo mtngtools/mtng-dotnet-mono
+Work in a worktree branched from a freshly fetched origin/main.
 ```
 
 Skip a ticket already pasted in step 4 — one block per ticket across the whole reply, never two. No ready ticket outside the what's-next picks means no blocks here; say so in a line rather than leaving the section silently empty.

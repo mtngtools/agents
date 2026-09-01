@@ -57,8 +57,19 @@ The wayfinder pipeline — decisions become specs, specs become tickets — plus
 | [plan-mtng-tools-vue](./plan/plan-mtng-tools-vue/SKILL.md) | Plan Vue component/composable spec | `skill-callable` | planning, vue, frontend, specs |
 | [decisions-to-specs](./plan/decisions-to-specs/SKILL.md) | Settle a map's decisions into repo spec files and ADRs, written in a worktree of its own | `human-only` | planning, wayfinder, specs, adrs, worktrees |
 | [specs-to-tickets](./plan/specs-to-tickets/SKILL.md) | Slice a map's settled specs into implementation tickets | `human-only` | planning, wayfinder, specs, tickets |
+| [to-tickets](./plan/to-tickets/SKILL.md) | Slice one spec or plan into tracer-bullet tickets with blocking edges | `skill-callable` | planning, tickets, tracker, slicing |
 
-**Pipeline order:** `/wayfinder` → `/decisions-to-specs` → `/specs-to-tickets` → `/implement`. Each operates on one map; `/check-wayfinder-maps` reads across all of them and tells you which one to enter, and by which door. `/are-decisions-from-this-session-saved` sits at the other end of a session, checking that what it decided about the system — not about how it was worked — reached a surface at all. `/whats-next` closes the same seam from the other side, handing over the prompt that starts the following session on the same map, off a `/read-the-map` reading. `/read-the-map` defines what reading a map means; `/check-wayfinder-maps` runs that same checklist across every map, in bulk. The two middle steps write to the repo and the tracker, so each is a door you open yourself. So is the survey — it writes nothing, but a sweep of every map on a repo is asked for, not volunteered. `/read-the-map` is the callable read: one map, and what `/whats-next` chains through.
+**Pipeline order:** `/wayfinder` → `/decisions-to-specs` → `/specs-to-tickets` → `/to-tickets` (per spec) → [`/implement`](./build/implement/SKILL.md), the last of which is listed under Build. Each operates on one map; `/check-wayfinder-maps` reads across all of them and tells you which one to enter, and by which door. `/are-decisions-from-this-session-saved` sits at the other end of a session, checking that what it decided about the system — not about how it was worked — reached a surface at all. `/whats-next` closes the same seam from the other side, handing over the prompt that starts the following session on the same map, off a `/read-the-map` reading. `/read-the-map` defines what reading a map means; `/check-wayfinder-maps` runs that same checklist across every map, in bulk. The two middle steps write to the repo and the tracker, so each is a door you open yourself. So is the survey — it writes nothing, but a sweep of every map on a repo is asked for, not volunteered. `/read-the-map` is the callable read: one map, and what `/whats-next` chains through. `/to-tickets` is the other callable one, and for the same reason as `review-a-pr-and-report`: `/specs-to-tickets` must be able to chain into it per spec without stopping, so `human-only` would break the very step that calls it. Its description holds the line the harness cannot — it names its caller and says not to self-start, because publishing tickets to a shared tracker is asked for, never volunteered.
+
+## Build skills
+
+Turning settled tickets into code.
+
+| Name | Description | Invocation | Applies to |
+|------|-------------|-----------|-----------|
+| [implement](./build/implement/SKILL.md) | Build a settled ticket in a worktree of its own, off a base chosen on purpose | `human-only` | building, tickets, worktrees, git, tests |
+
+`implement` is `human-only` for the reason the whole category is: it writes code, cuts a branch, and picks the base everything after it inherits. A skill chaining into it would be choosing that base on the human's behalf. Its framework-specific counterpart, [build-mtng-tools-vue](./front-end/build-mtng-tools-vue/SKILL.md), is listed under Frontend; the two differ in what they know about the stack, not in what they do with the tree.
 
 ## General skills
 

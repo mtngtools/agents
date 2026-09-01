@@ -35,11 +35,15 @@ Present the spec files to the user. Default set = every `new` and `updated` spec
 
 ### 3. Slice each spec with `/to-tickets`
 
-For each approved spec, run **`/to-tickets <spec-path>`**, one spec at a time. Let it do its own job — vertical tracer-bullet slices, blocking edges, published to the tracker (GitHub). Don't re-implement its logic here; this skill only routes the right specs into it.
+**First, settle the granularity once for the whole run.** `/to-tickets` asks at its own step 3 — follow the slice boundaries, or target minimal tickets — and asking that per spec, five specs deep, is how this step becomes unusable. Put the question to the human here, once, then pass the answer into every call so it doesn't re-ask.
+
+For each approved spec, run **`/to-tickets <spec-path>`**, one spec at a time, naming the settled granularity in the call. Let it do the rest of its own job — vertical tracer-bullet slices, blocking edges, published to the tracker (GitHub). Don't re-implement its logic here; this skill only routes the right specs into it.
+
+`/to-tickets` is `skill-callable` precisely so this step can chain into it without stopping. Chain into it; do not paraphrase its method inline.
 
 Keep the issue numbers it creates, per spec and in dependency order — the next step consumes them.
 
-**Done when:** every approved spec has produced its tickets on the tracker.
+**Done when:** every approved spec has produced its tickets on the tracker, all sliced to the one granularity the human chose.
 
 ### 4. Link every ticket to the map as a sub-issue
 
