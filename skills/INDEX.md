@@ -69,8 +69,16 @@ Turning settled tickets into code.
 | Name | Description | Invocation | Applies to |
 |------|-------------|-----------|-----------|
 | [implement](./build/implement/SKILL.md) | Build a settled ticket in a worktree of its own, off a base chosen on purpose | `human-only` | building, tickets, worktrees, git, tests |
+| [subagent-implement](./build/subagent-implement/SKILL.md) | Build several independent tickets at once — one subagent per ticket, one worktree each, one base | `human-only` | building, tickets, subagents, worktrees, parallel |
+| [subagent-review](./build/subagent-review/SKILL.md) | Review committed code with one subagent per dimension, no PR required, findings verified before they reach you | `human-only` | review, subagents, git, specs, drift |
+| [implement-unattended](./build/implement-unattended/SKILL.md) | Build with the human away: both grants on, work fanned out, reviewed, handed back with every borrowed call tabled | `human-only` | building, subagents, approvals, naming, prs |
+| [implement-unattended-no-subagents](./build/implement-unattended-no-subagents/SKILL.md) | The same mode, serially, by this session alone | `human-only` | building, approvals, naming, worktrees, prs |
 
 `implement` is `human-only` for the reason the whole category is: it writes code, cuts a branch, and picks the base everything after it inherits. A skill chaining into it would be choosing that base on the human's behalf. Its framework-specific counterpart, [build-mtng-tools-vue](./front-end/build-mtng-tools-vue/SKILL.md), is listed under Frontend; the two differ in what they know about the stack, not in what they do with the tree.
+
+**The other four are `/implement` with one axis moved.** `subagent-implement` moves *who builds* — several tickets at once, one agent each — and buys nothing unless the tickets are genuinely independent, which is the parent's job to establish before anything is created. `subagent-review` moves *who reads it afterwards*, and exists for the case `/review-pr-in-worktree` cannot serve: committed code with no PR to read. The two `implement-unattended` modes move *whether the human is reachable*, and so carry the grants from General on top; they differ from each other only in whether the building is fanned out, which is why they share one [working unattended](./build/implement-unattended/unattended.md) reference. The two subagent skills likewise share one [dispatch](./build/subagent-implement/dispatch.md) reference — isolation, the shell hazard, the brief, the prohibitions, and the rule that a subagent's report is a claim to be checked rather than a result to be repeated.
+
+All four are `human-only`, and the two unattended ones twice over: fanning out multiplies whatever the base decision got wrong, and handing out authority is the act `commit-local-main` and the grant skills are `human-only` for. A skill chaining into either would be manufacturing the human's approval *and* choosing how many agents to spend on it.
 
 ## General skills
 
@@ -84,13 +92,16 @@ Cross-cutting operations.
 | [25-concise](./general/25-concise/SKILL.md) | Cut text to ~25% | `skill-callable` | writing, documentation, reduction |
 | [10-concise](./general/10-concise/SKILL.md) | Cut text to ~10% — bites hardest | `skill-callable` | writing, documentation, reduction |
 | [approval-policy](./general/approval-policy/SKILL.md) | Where an approval gets recorded and what it must say — tracker holds who decided, tree never holds the discussion | `model-discoverable` | approvals, decisions, specs, tickets, prs, naming |
-| [pre-pr-naming-approval](./general/pre-pr-naming-approval/SKILL.md) | Borrow naming approval for 12 hours, marked in the tree, settled on the human's return | `human-only` | naming, specs, commits, prs, sessions |
+| [grant-naming-authority](./general/grant-naming-authority/SKILL.md) | Choose gated names and keep going — marked in the tree, tabled on the PR, approved by a human before merge | `human-only` | naming, specs, commits, prs, approvals |
+| [grant-decision-authority](./general/grant-decision-authority/SKILL.md) | The same loan over any call a human would normally make, within bounds the skill enumerates | `human-only` | decisions, approvals, specs, tickets, prs |
 
 The numbered variants share one [reduction method](./general/concise-copy/reduce.md); the percentage is a ceiling, never a floor on meaning.
 
-`approval-policy` is where the other skills send an approval once it is given. `pre-pr-naming-approval` is its opposite number: one lends the human's answer for twelve hours when they are away, the other says where the answer goes once it is real.
+`approval-policy` is where the other skills send an approval once it is given. The two grants are its opposite number: they lend the human's answer while they are away, and it says where the answer goes once it is real.
 
-`pre-pr-naming-approval` is `human-only` for the same reason as `commit-local-main`: it suspends a rule — the repo's naming authority — rather than performing a step, and the human typing its name *is* the authorization it hands out. A skill chaining into it would be manufacturing the human's approval on their behalf.
+**The grants are one mechanism at two scopes**, so they share one [borrowed-authority ledger](./general/grant-decision-authority/ledger.md) — the verbatim `TEMPORARY AGENT` markers, the `grep -rn` that enumerates every open loan, the PR table generated from that grep, the note telling reviewing agents what to check, the merge gate, and the one-question-at-a-time settle-up. Each skill only says what may be borrowed: `grant-naming-authority` reaches gated names, `grant-decision-authority` reaches those plus the ordinary judgment calls around them, and its **What may be borrowed** section — in bounds, out of bounds, and "when unsure, out of bounds" — is the substance of the pair. The tree is the ledger of record: it is what survives a session that dies mid-loan, and what lets a session that was never there rebuild the table correctly.
+
+Both are `human-only` for the same reason as `commit-local-main`: each suspends a rule rather than performing a step, and the human typing its name *is* the authorization it hands out. A skill chaining into either would be manufacturing the human's approval on their behalf. The [`implement-unattended`](./build/implement-unattended/SKILL.md) modes under Build carry both grants at once — and being invoked by a human is what satisfies these two skills' gate paragraphs when they do.
 
 ## Frontend skills
 

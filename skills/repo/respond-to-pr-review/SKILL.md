@@ -116,7 +116,7 @@ Four things this flow adds to it:
 
 - **Every disposition from step 3 is an approval**, including the declines. A finding waved off with a reason is exactly the thing that gets lost, because nothing lands in the tree to say it was ever decided.
 - **A fix taken under the exemption is not an approval** — nothing was decided, so there is nothing to record beyond the reply listing it as fixed.
-- **A marker left by `/pre-pr-naming-approval` comes out of the tree here.** If the human settles a borrowed name during the response, delete its marker in the same commit as the fix, and record their answer per the policy.
+- **`TEMPORARY AGENT` markers come out of the tree here.** A PR opened under `/grant-naming-authority`, `/grant-decision-authority`, or either `implement-unattended` mode leads its body with a table of calls no human has approved, and this is where they get answered. One row at a time: change what the human decided differently — everywhere, not just at the marker — delete that row's marker in the same commit as the fix, and record their answer per the policy. **A row the human did not reach still blocks the merge:** leave its marker standing, say which rows are still open, and do not read silence on a row as a yes.
 - **Where the PR reply is the right home, write it into the step 5 draft** rather than posting a second comment saying the same thing.
 
 **Done when:** every approval given in this session is recorded where `approval-policy` puts it, and nothing about the discussion has been committed to a file.

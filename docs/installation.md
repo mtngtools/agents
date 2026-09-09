@@ -14,9 +14,10 @@ This installs all skills from the repository. Skills are then available by name 
 
 ### Available skills
 
-- **repo/** — git, branching, commits, PRs (13 skills)
-- **plan/** — the wayfinder pipeline (4 skills)
-- **general/** — content refinement and reduction (5 skills)
+- **repo/** — git, branching, commits, PRs (16 skills)
+- **plan/** — the wayfinder pipeline (9 skills)
+- **build/** — turning settled tickets into code, alone or fanned out (5 skills)
+- **general/** — content refinement, and the approval and authority policies (8 skills)
 - **front-end/** — Vue building (1 skill)
 
 See [skills/INDEX.md](../skills/INDEX.md) for descriptions, tags, and each skill's invocation category.
