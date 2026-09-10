@@ -40,6 +40,16 @@ A call that lands out of bounds does not stop the session. It stops **that call*
 
 **A parked call that blocks the whole ticket ends the ticket, not the session.** Say so plainly, move to the next thing you can make progress on, and put the ticket in the handback as blocked with the reason.
 
+## One round, one PR
+
+However many tickets a session is handed, it hands back **one pull request**. Whatever branches it builds along the way are internal to the session; the PR is the whole of what the human is asked to read, and it carries one ledger table, one reviewer note, one parked list, and a `Closes #n` line per ticket that landed.
+
+**The reason is the reader.** Somebody who was not here has to judge a round they did not watch. Split across PRs, they have to reassemble it before they can judge any of it — which table is complete, which gate result covered what, whether the branches even agree with each other, which of them they are allowed to merge first. One PR answers all of that once, and its single gate result is the only one that ever ran over the work as it will actually land.
+
+**More than one PR is a decision made under the grant, not a default.** It wants a reason the human would accept — work that cannot pass the gate together, or a unit that had to be left out of the round — and the reason goes in every PR body and in the handback. That there were several tickets is not a reason; that is the ordinary case this expects.
+
+A ticket that could not be brought into the round is **unfinished**, not a second PR. Name it in the handback with what stopped it.
+
 ## When to stop
 
 Unattended sessions fail by grinding, not by quitting. Stop and write the handback when any of these is true:
@@ -55,7 +65,7 @@ Unattended sessions fail by grinding, not by quitting. Stop and write the handba
 
 The last thing the session does, written for someone who was not here and will read it cold. In this order:
 
-1. **What got done** — per ticket: the branch, the base, criteria met, and the gate result you actually saw.
+1. **What got done** — the one PR, its branch and base, and the gate result you actually saw over it. Then, beneath that, a line per ticket: whether the PR carries it, and which criteria it met.
 2. **What you borrowed** — the ledger's table, generated from the grep, every row with its alternative and reason. Say plainly that none of it is approved.
 3. **What you parked** — each question, what you would have chosen, and what it blocks.
 4. **What you could not finish** — blocked tickets, with the reason.
@@ -68,4 +78,4 @@ The same content goes on the PR, per the ledger, so it survives the conversation
 
 No merge. No push to `main`. No release, tag, or publish. No closing a ticket, no dropping an acceptance criterion, no relaxing a gate. No opening a PR against another repo.
 
-Opening **this** work's PR is fine and is the point — that is where the table lands and where the human answers it.
+Opening **this** round's one PR is fine and is the point — that is where the table lands and where the human answers it. A second PR for the same round is a call to be justified, not a convenience.
