@@ -96,6 +96,8 @@ Directly under the table, verbatim, so a reviewing agent reaches the right concl
 
 The human is back, or has answered on the PR. Rebuild the case list from the grep, not from memory.
 
+Run as its own session, this is the `settle-borrowed-authority` skill — it adds finding the PR, a pace question, and the parked calls around what follows. Inside a review response it is `respond-to-pr-review`'s recording step. Either way, the mechanics below are the mechanics.
+
 **One case, one question**, with `AskUserQuestion` where your harness has it. Options are the borrowed call — marked as what is in the tree now — the alternative you weighed, and an option to hear more before deciding. Ask about the next case only after this one is answered: a batch of these gets one answer that covers none of them.
 
 Where the human has already answered rows on the PR, those rows are settled; ask only about what they did not reach.

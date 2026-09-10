@@ -1,0 +1,83 @@
+---
+name: settle-borrowed-authority
+description: Walk the human through every call borrowed under a grant — case by case or all at once, their choice — then record the approvals, take the markers out, and leave the PR mergeable.
+argument-hint: "The PR (number or URL) — omit when this session already knows it"
+disable-model-invocation: true
+metadata:
+  type: command
+  invocation: human-only
+  applies-to: [approvals, naming, decisions, prs, git, sessions]
+---
+
+# settle-borrowed-authority
+
+> **human-only.** Start this only when a human asks for it by name. Every case below ends in a human answer, and a session running this without one in the room would be approving its own loans — the exact thing the markers exist to prevent.
+
+The close-out of the grant skills. `grant-naming-authority`, `grant-decision-authority`, and both `implement-unattended` modes leave loans standing — markers in the tree, a table on the PR, parked calls beneath it. This skill is the human back at the keyboard, settling them: every open call answered, recorded, and its marker removed, until nothing blocks the merge but the human's own decision to merge.
+
+**How a loan is held and settled is the [borrowed-authority ledger](../grant-decision-authority/ledger.md).** Read it first. This skill adds the session around its settle-up: finding the PR, the pace question, the parked calls, and reflecting the answers everywhere they need to land. It works the same from the session that built the PR — which already knows it — or cold, handed nothing but a PR number.
+
+## Process
+
+### 1. Find the PR and rebuild the cases
+
+Three inputs, in whatever order they arrive:
+
+- **The PR.** From the argument if one was given; otherwise the PR this session opened or has been working on. Neither → ask. `gh pr view <n> --json number,title,body,state,headRefName,headRefOid,comments` gets the table, the parked list, and any answers already given on it.
+- **A checkout of the PR branch.** The branch's own worktree where this session built it there; otherwise make one, the way the `implement` skill's step 2 does — never the primary checkout, which other sessions share.
+- **The case list, rebuilt from the tree, never from memory.** `grep -rn "TEMPORARY AGENT" .` over the head commit is the marked loans. The PR body's parked list is the rest — invisible to the grep, because nothing was written for them.
+
+Cross-check grep against table before asking anything:
+
+| Mismatch | What it means |
+|---|---|
+| Marker with no row | A borrowed call that never reached the PR — add its row from the marker's own detail line, and say so |
+| Row with no marker | Settled in an earlier round, or never marked at all — the PR's commits and comments say which |
+| Row already answered on the PR | Settled. It carries into step 4's record, not into the questions |
+
+Number the cases — kind, the call, the alternative, the site — and show the human the list, settled rows marked settled, parked calls numbered at the end. This list is what makes step 2's blanket option an informed answer rather than a blind one.
+
+**Done when:** the human has seen one numbered list holding every open marker and every parked call, with every mismatch stated on it.
+
+### 2. Ask the pace
+
+One `AskUserQuestion`, before any case:
+
+- **Case by case** — each open case explained, then answered, one at a time. The default, and the ledger's own shape; the right answer whenever any call is subtle, any mismatch turned up, or the human has been away long enough to lose the thread.
+- **Approve all as borrowed** — every marked call accepted exactly as it stands in the tree. Offer it only when the cross-check was clean. The ledger's warning about batching is about *you* batching questions; this is the human, having read the list from step 1, choosing not to be walked through it — theirs to choose.
+- The harness adds **Other** on its own. "Approve all except #3" and "the review round already answered those" both land there — take them at their word, and fall back to case by case for whatever they carve out.
+
+**Approve-all reaches the marked loans only. Parked calls are always case by case** — a parked call has no chosen answer to accept: it was parked because it was never safe to make alone, and a blanket yes over questions the human has not heard is the overreach the parking existed to prevent.
+
+**Done when:** the human has chosen the pace, and you can say exactly which cases get their own question.
+
+### 3. Settle the cases
+
+**Case by case:** the ledger's settle-up, unchanged — one case, one question, in list order, the next only after this one is answered. Present the case first, short enough to hold in one glance: what was chosen, the real alternative weighed, why, and where it lands. Then the question, with the ledger's options: **keep the borrowed call**, named as what is in the tree now; **switch to the alternative**; **hear more before deciding**. "Hear more" gets the fuller story — call sites, the spec passage it touches, what each choice costs downstream — and then the same question again.
+
+**Approve all:** no questions for the marked loans; every row's answer is its borrowed call. Say it back in one line — "all N rows approved as borrowed" — so step 4's record stands on an act the human performed, not an inference.
+
+**Parked calls, always one at a time:** the question is the parked question itself, with what you would have chosen, the other reading you saw, and hear more. A parked call the human **defers** stays parked — it keeps its place in the PR body, and it keeps blocking whatever it blocks.
+
+Apply each answer before asking the next case, per the ledger: change what the answer changed — everywhere, not just at the marker — remove that case's marker and detail line, and note who answered, the date, and the alternative for step 4's record.
+
+**Done when:** every case has a human answer or an explicit deferral, and the tree holds markers only for the deferrals.
+
+### 4. Reflect it everywhere it needs to land
+
+Four homes, in this order:
+
+- **The tree.** Markers out — deferred ones stay — differing answers applied everywhere, and the repo's gate green over the branch: an approval reflected on a red gate is not reflected. New commits on the PR branch, never a rewrite of the head a review already judged, pushed.
+- **The PR body.** Replace the table with the approvals it produced, per the `approval-policy` skill — who approved, the absolute date, what, and the alternative, one line per case. Deferred cases keep their rows under a heading that says they still block the merge; answered parked calls move from the parked list into the approvals.
+- **The reviewer note.** It stays while any row still stands; it comes out with the last one.
+- **Wherever the repo's own authority routes an approval.** A naming authority that records approvals in a resolution comment or a spec outranks the PR-body default — `approval-policy` says how to find out.
+
+**Done when:** `grep -rn "TEMPORARY AGENT" .` over the pushed head returns only the deferrals — or nothing — every answered case has its approval recorded in exactly one home, and the leave-no-trace rule holds: the passages the markers left read as if the loan never happened.
+
+### 5. Close
+
+Name each case and its outcome — kept, switched, deferred — and say plainly whether the merge is now open. The merge itself stays the human's, through `/squash-merge-and-clean-up`.
+
+## Where this sits in the flow
+
+The grant skills and both `implement-unattended` modes open the loans; `/review-pr-in-worktree` flags their markers; `/respond-to-pr-review` settles them when the answers arrive inside a review response. **This is the settle-up as its own act** — no review round in hand, just a PR blocked on its table and a human ready to answer it — from the session that built it or from one that has only its number.

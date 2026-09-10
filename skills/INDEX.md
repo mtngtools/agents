@@ -96,6 +96,7 @@ Cross-cutting operations.
 | [approval-policy](./approval-policy/SKILL.md) | Where an approval gets recorded and what it must say — tracker holds who decided, tree never holds the discussion | `model-discoverable` | approvals, decisions, specs, tickets, prs, naming |
 | [grant-naming-authority](./grant-naming-authority/SKILL.md) | Choose gated names and keep going — marked in the tree, tabled on the PR, approved by a human before merge | `human-only` | naming, specs, commits, prs, approvals |
 | [grant-decision-authority](./grant-decision-authority/SKILL.md) | The same loan over any call a human would normally make, within bounds the skill enumerates | `human-only` | decisions, approvals, specs, tickets, prs |
+| [settle-borrowed-authority](./settle-borrowed-authority/SKILL.md) | Settle a PR's borrowed calls with the human — case by case or all at once — record approvals, take markers out | `human-only` | approvals, naming, decisions, prs, sessions |
 
 The numbered variants share one [reduction method](./concise-copy/reduce.md); the percentage is a ceiling, never a floor on meaning.
 
@@ -104,6 +105,8 @@ The numbered variants share one [reduction method](./concise-copy/reduce.md); th
 **The grants are one mechanism at two scopes**, so they share one [borrowed-authority ledger](./grant-decision-authority/ledger.md) — the verbatim `TEMPORARY AGENT` markers, the `grep -rn` that enumerates every open loan, the PR table generated from that grep, the note telling reviewing agents what to check, the merge gate, and the one-question-at-a-time settle-up. Each skill only says what may be borrowed: `grant-naming-authority` reaches gated names, `grant-decision-authority` reaches those plus the ordinary judgment calls around them, and its **What may be borrowed** section — in bounds, out of bounds, and "when unsure, out of bounds" — is the substance of the pair. The tree is the ledger of record: it is what survives a session that dies mid-loan, and what lets a session that was never there rebuild the table correctly.
 
 Both are `human-only` for the same reason as `commit-local-main`: each suspends a rule rather than performing a step, and the human typing its name *is* the authorization it hands out. A skill chaining into either would be manufacturing the human's approval on their behalf. The [`implement-unattended`](./implement-unattended/SKILL.md) modes under Build carry both grants at once — and being invoked by a human is what satisfies these two skills' gate paragraphs when they do.
+
+`settle-borrowed-authority` is the pair's close-out: the human back, answering the ledger's table — case by case or all at once, their choice — with each approval recorded per `approval-policy` and each marker removed. It is `human-only` for the plainest reason of the three: every case it processes ends in a human answer, and without one in the room it would be approving the agent's own loans. `respond-to-pr-review` settles the same markers when the answers arrive inside a review response; this is the settle-up as its own act, invoked from the session that opened the PR or handed nothing but its number.
 
 ## Frontend skills
 
