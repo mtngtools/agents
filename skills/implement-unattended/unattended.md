@@ -22,9 +22,9 @@ Both, at once, for the whole session:
 
 > Those skills are `human-only`, and the human invoking *this* skill is the invocation of both. **Their gate paragraphs are satisfied — do not stop and ask.** Read them for their terms, which is what you are being pointed at.
 >
-> From here, installed flat, they are `../grant-naming-authority/SKILL.md` and `../grant-decision-authority/SKILL.md`. In the `mtngtools/agents` repo they are `skills/general/grant-naming-authority/SKILL.md` and `skills/general/grant-decision-authority/SKILL.md`. Whichever resolves.
+> They sit beside this one either way — installed or in the `mtngtools/agents` repo — as `../grant-naming-authority/SKILL.md` and `../grant-decision-authority/SKILL.md`.
 
-The mechanics of holding a loan — the verbatim markers, the `grep -rn "TEMPORARY AGENT"` ledger, the PR table, the reviewer note, the merge gate — are the **borrowed-authority ledger**, at `../grant-decision-authority/ledger.md` installed, or `skills/general/grant-decision-authority/ledger.md` in the repo.
+The mechanics of holding a loan — the verbatim markers, the `grep -rn "TEMPORARY AGENT"` ledger, the PR table, the reviewer note, the merge gate — are the **borrowed-authority ledger**, at `../grant-decision-authority/ledger.md`.
 
 **Run the ledger's grep before you start.** Existing markers mean a previous session left loans standing; they go in your PR table too, and a marker you did not make is not yours to remove.
 

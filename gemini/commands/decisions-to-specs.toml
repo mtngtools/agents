@@ -2,7 +2,7 @@ description = "Settle a wayfinder map's decisions into durable spec files in the
 prompt = """
 This skill is human-only. Run it only because a human just asked for it by name. If you reached it any other way, stop and ask for explicit confirmation before running any step.
 
-Read and follow the skill at `skills/plan/decisions-to-specs/SKILL.md` in the mtngtools/agents repo (installed locally under `~/.agents/skills/decisions-to-specs/SKILL.md`). Follow its instructions exactly.
+Read and follow the skill at `skills/decisions-to-specs/SKILL.md` in the mtngtools/agents repo (installed locally under `~/.agents/skills/decisions-to-specs/SKILL.md`). Follow its instructions exactly.
 
 Arguments, if any: {{args}}
 """

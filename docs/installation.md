@@ -14,11 +14,13 @@ This installs all skills from the repository. Skills are then available by name 
 
 ### Available skills
 
-- **repo/** — git, branching, commits, PRs (16 skills)
-- **plan/** — the wayfinder pipeline (9 skills)
-- **build/** — turning settled tickets into code, alone or fanned out (5 skills)
-- **general/** — content refinement, and the approval and authority policies (8 skills)
-- **front-end/** — Vue building (1 skill)
+Every skill is its own directory at the root of `skills/` — the categories below are how the index groups them, not where they live.
+
+- **Repository** — git, branching, commits, PRs (16 skills)
+- **Planning** — the wayfinder pipeline (9 skills)
+- **Build** — turning settled tickets into code, alone or fanned out (5 skills)
+- **General** — content refinement, and the approval and authority policies (8 skills)
+- **Frontend** — Vue building (1 skill)
 
 See [skills/INDEX.md](../skills/INDEX.md) for descriptions, tags, and each skill's invocation category.
 
@@ -118,7 +120,7 @@ Follow [AGENTS_ORGANIZATION.md](https://github.com/mtngtools/agents/blob/main/AG
 
 **Load when doing git work:**
 - [Git and GitHub](https://github.com/mtngtools/agents/blob/main/rules/git-and-github.md)
-- Use skills like [`/commit-with-issue`](https://github.com/mtngtools/agents/blob/main/skills/repo/commit-with-issue/SKILL.md)
+- Use skills like [`/commit-with-issue`](https://github.com/mtngtools/agents/blob/main/skills/commit-with-issue/SKILL.md)
 ```
 
 2. Agents read AGENTS_REPO.md and know which rules/skills to load based on the session context.
