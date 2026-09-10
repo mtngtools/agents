@@ -78,7 +78,19 @@ The worktree is ready, so hand the review to the skill that owns it. Give it wha
 
 It reads the committed diff, runs the repo's gate — or records why there is none, a Markdown-only PR having no gate to run — holds the code to its spec and ticket, hunts the drift, and produces the fixed report ending in `yes` or `no`. Do not restate its verdict, soften it, or append your own; hand it to the human as it came.
 
-**Done when:** the report exists, with its last section reading either exactly `yes` or `no` with its bullets.
+**Then hand over the verdict a second time, as a block built for carrying.** The merge usually happens in another session entirely, and the human is the courier between the two. So after the report — every round — emit its **Should this be merged** section again, alone, in one fenced code block the human can copy whole and paste into that other session. Give it enough identity to stand without this session's context, and change nothing else about it:
+
+```
+PR #<n> — <title> (<owner>/<repo>)
+Round <r>, reviewed at <head-sha>
+
+Should this be merged: <yes | no>
+<the bullets, verbatim, when the answer is no>
+```
+
+This block is the one sanctioned repeat: a verbatim copy for transport, never a second opinion.
+
+**Done when:** the report exists with its last section reading either exactly `yes` or `no` with its bullets, and the verdict block sits beneath it, ready to paste.
 
 ### 5. Gate: review again, or clean up
 
