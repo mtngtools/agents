@@ -1,6 +1,6 @@
 ---
 name: approval-policy
-description: Where a human's approval gets recorded and what gets written — use whenever a human approves, declines, or decides something in conversation: a name, a scope call, a deviation from a spec, a finding waved off. The tracker holds who decided and why; the tree never holds the discussion.
+description: "Where a human's approval gets recorded and what gets written — use whenever a human approves, declines, or decides something in conversation: a name, a scope call, a deviation from a spec, a finding waved off. The tracker holds who decided and why; the tree never holds the discussion."
 metadata:
   type: skill
   invocation: model-discoverable
