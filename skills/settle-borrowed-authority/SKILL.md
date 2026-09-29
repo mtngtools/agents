@@ -53,7 +53,7 @@ If the cross-check flagged a naming row, leave it out of the pass and ask it on 
 
 ### 3. Settle everything else in small related groups
 
-**Group the cases first.** Walk the remaining decision cases in list order and gather small groups of related ones: cases at the same site, on the same concern, or calls that only make sense together, such as a retry policy and its bound. A group holds at most four cases, since one `AskUserQuestion` holds four questions. A case with nothing related to it stands alone. Parked calls form groups of their own. When one case's answer would change another's premise, ask the case it depends on in an earlier group.
+**Group the cases first.** Walk the remaining decision cases in list order and gather small groups of related ones: cases at the same site, on the same concern, or calls that only make sense together, such as a retry policy and its bound. A group holds at most four cases, since one `AskUserQuestion` holds four questions. A case with nothing related to it stands alone. Parked calls form groups of their own. When one case's answer would change another's premise, ask the case it depends on in an earlier group. Leave any case the cross-check flagged out of every group, and ask it on its own.
 
 **Present every case in the group in full, numbered as in the list.** Grouping shortens the asking, never the presenting. For each case, in this order:
 
@@ -63,17 +63,25 @@ If the cross-check flagged a naming row, leave it out of the pass and ask it on 
 
 **Lay the group out so each case stands apart.** Put a horizontal rule (`---`) between cases, and start each case with its number and a short title in bold. Set its example off as its own quote block, with a blank line before and after it, so it reads as the example and not as more of the summary.
 
-**Then ask the group in one `AskUserQuestion`, with one question per case.** Each question has these options: **keep the borrowed call**, named as what is in the tree now; **switch to the alternative**; **explain further with another example (if possible)**. Every case gets its own answer. The ledger warns against one answer standing for several cases, and a question per case prevents that.
+**Then ask about the whole group first.** Use one `AskUserQuestion` with these options:
+
+- **Approve all as borrowed:** every case in the group is accepted as it stands in the tree. Say it back in one line, for example "#5–#7 approved as borrowed".
+- **Case by case:** go on to the per-case questions below.
+- The harness adds **Other** on its own. Answers like "all but #7" or "#6 switches" land there. Take them at their word, and ask any case they carve out on its own.
+
+The human has just seen every case in full, including each throw verdict and example, so an approve-all here is an informed answer. A group of one skips this question and goes straight to its case question.
+
+**Case by case is one `AskUserQuestion` with one question per case.** Each question has these options: **keep the borrowed call**, named as what is in the tree now; **switch to the alternative**; **explain further with another example (if possible)**; and the harness's **Other**. Every case gets its own answer. The ledger warns against one answer standing for several cases, and a question per case prevents that.
 
 "Explain further" gives that case's fuller story (call sites, the spec passage it touches, what each choice costs downstream) and a second, different situation. If there is no second situation that tells the two apart, say so rather than repeat the first. Then ask that case's question again. The group's other answers stand.
 
 **The human can still approve the rest at once.** If they ask to approve the remaining decision rows as borrowed, whether up front or in a case's **Other**, do it only when the cross-check was clean and only after showing every remaining code case's throw verdict in one list. The approve-all stands once the human has seen that list. Then say it back in one line. That's the human choosing not to be walked through the calls, which is theirs to choose. The ledger's warning about batching is about *you* grouping questions.
 
-**Parked calls, in groups of their own,** asked the same way: every call presented in full, then one question per call. Each question is the parked question itself. For each call, give what you would have chosen, the other reading you saw, and an example of each in the same situation, and offer **explain further with another example (if possible)** as an option. A parked call about code gets a throw answer too: for each option, `can-this-throw`'s verdict as far as the code in the tree can show it. Mark it as a forecast, since nothing was written. A parked call the human **defers** stays parked — it keeps its place in the PR body, and it keeps blocking whatever it blocks. No approve-all reaches a parked call: it has no chosen answer to accept, since it was parked because it was never safe to make alone.
+**Parked calls, in groups of their own:** every call is presented in full, then asked straight away as one question per call, with no approve-all question first. Each question is the parked question itself. For each call, give what you would have chosen, the other reading you saw, and an example of each in the same situation, and offer **explain further with another example (if possible)** as an option. A parked call about code gets a throw answer too: for each option, `can-this-throw`'s verdict as far as the code in the tree can show it. Mark it as a forecast, since nothing was written. A parked call the human **defers** stays parked — it keeps its place in the PR body, and it keeps blocking whatever it blocks. No approve-all reaches a parked call: it has no chosen answer to accept, since it was parked because it was never safe to make alone.
 
 Apply a group's answers before presenting the next group, per the ledger: change what the answer changed — everywhere, not just at the marker — remove that case's marker and detail line, and note who answered, the date, and the alternative for step 4's record.
 
-**Done when:** every case has a human answer or an explicit deferral, every non-naming case was asked as its own question with an example in front of it, every code case was answered with its throw verdict in view, and the tree holds markers only for the deferrals.
+**Done when:** every case has a human answer or an explicit deferral, every non-naming case was presented with an example in front of it and answered, either with its group or on its own, every code case was answered with its throw verdict in view, and the tree holds markers only for the deferrals.
 
 ### 4. Reflect it everywhere it needs to land
 
