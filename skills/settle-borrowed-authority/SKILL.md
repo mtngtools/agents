@@ -1,6 +1,6 @@
 ---
 name: settle-borrowed-authority
-description: Walk the human through every call borrowed under a grant — case by case or all at once, their choice — then record the approvals, take the markers out, and leave the PR mergeable.
+description: Walk the human through every call borrowed under a grant — the names in one pass, every other call case by case — then record the approvals, take the markers out, and leave the PR mergeable.
 argument-hint: "The PR (number or URL) — omit when this session already knows it"
 disable-model-invocation: true
 metadata:
@@ -15,7 +15,7 @@ metadata:
 
 The close-out of the grant skills. `grant-naming-authority`, `grant-decision-authority`, and both `implement-unattended` modes leave loans standing — markers in the tree, a table on the PR, parked calls beneath it. This skill is the human back at the keyboard, settling them: every open call answered, recorded, and its marker removed, until nothing blocks the merge but the human's own decision to merge.
 
-**How a loan is held and settled is the [borrowed-authority ledger](../grant-decision-authority/ledger.md).** Read it first. This skill adds the session around its settle-up: finding the PR, the pace question, the parked calls, and reflecting the answers everywhere they need to land. It works the same from the session that built the PR — which already knows it — or cold, handed nothing but a PR number.
+**How a loan is held and settled is the [borrowed-authority ledger](../grant-decision-authority/ledger.md).** Read it first. This skill adds the session around its settle-up: finding the PR, the naming pass, the parked calls, and reflecting the answers everywhere they need to land. It works the same from the session that built the PR — which already knows it — or cold, handed nothing but a PR number.
 
 ## Process
 
@@ -35,29 +35,29 @@ Cross-check grep against table before asking anything:
 | Row with no marker | Settled in an earlier round, or never marked at all — the PR's commits and comments say which |
 | Row already answered on the PR | Settled. It carries into step 4's record, not into the questions |
 
-Number the cases — kind, the call, the alternative, the site — and show the human the list, settled rows marked settled, parked calls numbered at the end. This list is what makes step 2's blanket option an informed answer rather than a blind one.
+Number the cases — kind, the call, the alternative, the site — and show the human the list, settled rows marked settled, parked calls numbered at the end. This list is what makes step 2's single pass an informed answer rather than a blind one.
 
 **Done when:** the human has seen one numbered list holding every open marker and every parked call, with every mismatch stated on it.
 
-### 2. Ask the pace
+### 2. Settle the names in one pass
 
-One `AskUserQuestion`, before any case:
+**Names are settled together by default.** A set of names is judged partly as a set: whether they read as one vocabulary is half of whether each one is right. Show every open naming row in one table, with #, the name, the alternative weighed, why this one, and the site. Then ask one `AskUserQuestion`:
 
-- **Case by case** — each open case explained, then answered, one at a time. The default, and the ledger's own shape; the right answer whenever any call is subtle, any mismatch turned up, or the human has been away long enough to lose the thread.
-- **Approve all as borrowed** — every marked call accepted exactly as it stands in the tree. Offer it only when the cross-check was clean. The ledger's warning about batching is about *you* batching questions; this is the human, having read the list from step 1, choosing not to be walked through it — theirs to choose.
-- The harness adds **Other** on its own. "Approve all except #3" and "the review round already answered those" both land there — take them at their word, and fall back to case by case for whatever they carve out.
+- **Approve all names as borrowed:** every naming row is accepted exactly as it stands in the tree.
+- **One by one:** each naming row gets its own question, the way decisions do in step 3.
+- The harness adds **Other** on its own. Answers like "all but #3" and "#2 should be `FooClock`" land there. Take them at their word: apply a replacement the human stated as that row's answer, and ask any row they carved out as its own question.
 
-**Approve-all reaches the marked loans only. Parked calls are always case by case** — a parked call has no chosen answer to accept: it was parked because it was never safe to make alone, and a blanket yes over questions the human has not heard is the overreach the parking existed to prevent.
+If the cross-check flagged a naming row, leave it out of the pass and ask it on its own afterwards. After an approve-all, say it back in one line, for example "all N names approved as borrowed", so step 4's record rests on something the human did, not on an inference. With no open naming rows, skip this step.
 
-**Done when:** the human has chosen the pace, and you can say exactly which cases get their own question.
+**Done when:** every naming row has a human answer, either from the pass or from its own question.
 
-### 3. Settle the cases
+### 3. Settle everything else case by case
 
-**Case by case:** the ledger's settle-up, unchanged — one case, one question, in list order, the next only after this one is answered. Present the case first, short enough to hold in one glance: what was chosen, the real alternative weighed, why, and where it lands. Then the question, with the ledger's options: **keep the borrowed call**, named as what is in the tree now; **switch to the alternative**; **hear more before deciding**. "Hear more" gets the fuller story — call sites, the spec passage it touches, what each choice costs downstream — and then the same question again.
+**Decisions, one at a time:** this is the ledger's settle-up, unchanged. One case, one question, in list order, and the next only after this one is answered. Present the case first, short enough to hold in one glance: what was chosen, the real alternative weighed, why, and where it lands. Then ask the question with the ledger's options: **keep the borrowed call**, named as what is in the tree now; **switch to the alternative**; **hear more before deciding**. "Hear more" gets the fuller story (call sites, the spec passage it touches, what each choice costs downstream), followed by the same question again.
 
-**Approve all:** no questions for the marked loans; every row's answer is its borrowed call. Say it back in one line — "all N rows approved as borrowed" — so step 4's record stands on an act the human performed, not an inference.
+**The human can still approve the rest at once.** If they ask to approve the remaining decision rows as borrowed, whether up front or in a case's **Other**, do it when the cross-check was clean, and say it back in one line. That's the human choosing not to be walked through the calls, which is theirs to choose. The ledger's warning about batching is about *you* grouping questions.
 
-**Parked calls, always one at a time:** the question is the parked question itself, with what you would have chosen, the other reading you saw, and hear more. A parked call the human **defers** stays parked — it keeps its place in the PR body, and it keeps blocking whatever it blocks.
+**Parked calls, always one at a time:** the question is the parked question itself, with what you would have chosen, the other reading you saw, and hear more. A parked call the human **defers** stays parked — it keeps its place in the PR body, and it keeps blocking whatever it blocks. No approve-all reaches a parked call: it has no chosen answer to accept, since it was parked because it was never safe to make alone.
 
 Apply each answer before asking the next case, per the ledger: change what the answer changed — everywhere, not just at the marker — remove that case's marker and detail line, and note who answered, the date, and the alternative for step 4's record.
 
