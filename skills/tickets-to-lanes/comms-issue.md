@@ -43,9 +43,11 @@ Each lane runs under `<fan-out skill>`'s *in a lane* section. You push at the ha
 
 **Messages and this issue.** Post here everything another lane needs, and send a message too so a waiting lane wakes. Messages can be missed, so re-read this issue's comments before you wait and before you finish.
 
+**Lifeguard.** A lifeguard session may watch these lanes. It checks in with a `LIFEGUARD on duty` comment and never touches your work. If it messages you, post a one-line status here.
+
 ## What goes on the map, not here
 
-This issue is for coordination only: check-ins, handoffs, stuck and done. Everything else goes where it would go if you were working alone:
+This issue is for coordination only: check-ins, handoffs, stuck, done and the lifeguard's alerts. Everything else goes where it would go if you were working alone:
 - new fog or a map-level finding: a comment on #<map>;
 - a ticket-level finding: a comment on that ticket;
 - borrowed and parked calls: your PR.
