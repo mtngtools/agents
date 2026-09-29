@@ -1,6 +1,6 @@
 ---
 name: settle-borrowed-authority
-description: Walk the human through every call borrowed under a grant — the names in one pass, every other call case by case — then record the approvals, take the markers out, and leave the PR mergeable.
+description: Walk the human through every call borrowed under a grant — the names in one pass, every other call in small related groups — then record the approvals, take the markers out, and leave the PR mergeable.
 argument-hint: "The PR (number or URL) — omit when this session already knows it"
 disable-model-invocation: true
 metadata:
@@ -44,30 +44,36 @@ Number the cases — kind, the call, the alternative, the site — and show the 
 **Names are settled together by default.** A set of names is judged partly as a set: whether they read as one vocabulary is half of whether each one is right. Show every open naming row in one table, with #, the name, the alternative weighed, why this one, and the site. Then ask one `AskUserQuestion`:
 
 - **Approve all names as borrowed:** every naming row is accepted exactly as it stands in the tree.
-- **One by one:** each naming row gets its own question, the way decisions do in step 3.
+- **One by one:** each naming row gets its own question.
 - The harness adds **Other** on its own. Answers like "all but #3" and "#2 should be `FooClock`" land there. Take them at their word: apply a replacement the human stated as that row's answer, and ask any row they carved out as its own question.
 
 If the cross-check flagged a naming row, leave it out of the pass and ask it on its own afterwards. After an approve-all, say it back in one line, for example "all N names approved as borrowed", so step 4's record rests on something the human did, not on an inference. With no open naming rows, skip this step.
 
 **Done when:** every naming row has a human answer, either from the pass or from its own question.
 
-### 3. Settle everything else case by case
+### 3. Settle everything else in small related groups
 
-**Decisions, one at a time:** this is the ledger's settle-up, with an example added to every case. One case, one question, in list order, and the next only after this one is answered. Present the case first, short enough to hold in one glance: what was chosen, the real alternative weighed, why, and where it lands.
+**Group the cases first.** Walk the remaining decision cases in list order and gather small groups of related ones: cases at the same site, on the same concern, or calls that only make sense together, such as a retry policy and its bound. A group holds at most four cases, since one `AskUserQuestion` holds four questions. A case with nothing related to it stands alone. Parked calls form groups of their own. When one case's answer would change another's premise, ask the case it depends on in an earlier group.
 
-**Then give an example before asking.** Pick one concrete situation (an input, an event, a caller) and say what happens in it under the borrowed call and what happens under the alternative. Choose a situation where the two differ; one where they behave the same shows nothing.
+**Present every case in the group in full, numbered as in the list.** Grouping shortens the asking, never the presenting. For each case, in this order:
 
-Then ask the question with these options: **keep the borrowed call**, named as what is in the tree now; **switch to the alternative**; **explain further with another example (if possible)**. "Explain further" gives the fuller story (call sites, the spec passage it touches, what each choice costs downstream) and a second, different situation. If there is no second situation that tells the two apart, say so rather than repeat the first. Then ask the same question again.
+1. **Its throw verdict, if the call is code.** Ask no code case without it; this covers every decision case except those that change only names or only prose. Invoke the `can-this-throw` skill over the case's site and the code its call produced, and open the case with its verdict line and its paths. If the verdict is (b) or (c), say so plainly.
+2. **The case,** short enough to take in at a glance: what was chosen, the real alternative weighed, why, and where it lands.
+3. **An example.** Pick one concrete situation (an input, an event, a caller) and say what happens in it under the borrowed call and what happens under the alternative. Choose a situation where the two differ; one where they behave the same shows nothing.
 
-**Every code case carries its throw verdict.** Ask no case whose call is code without it; this covers every decision case except those that change only names or only prose. Before presenting the case, invoke the `can-this-throw` skill over the case's site and the code its call produced, and open the case with its verdict line and its paths. If the verdict is (b) or (c), say so plainly before the options.
+**Lay the group out so each case stands apart.** Put a horizontal rule (`---`) between cases, and start each case with its number and a short title in bold. Set its example off as its own quote block, with a blank line before and after it, so it reads as the example and not as more of the summary.
+
+**Then ask the group in one `AskUserQuestion`, with one question per case.** Each question has these options: **keep the borrowed call**, named as what is in the tree now; **switch to the alternative**; **explain further with another example (if possible)**. Every case gets its own answer. The ledger warns against one answer standing for several cases, and a question per case prevents that.
+
+"Explain further" gives that case's fuller story (call sites, the spec passage it touches, what each choice costs downstream) and a second, different situation. If there is no second situation that tells the two apart, say so rather than repeat the first. Then ask that case's question again. The group's other answers stand.
 
 **The human can still approve the rest at once.** If they ask to approve the remaining decision rows as borrowed, whether up front or in a case's **Other**, do it only when the cross-check was clean and only after showing every remaining code case's throw verdict in one list. The approve-all stands once the human has seen that list. Then say it back in one line. That's the human choosing not to be walked through the calls, which is theirs to choose. The ledger's warning about batching is about *you* grouping questions.
 
-**Parked calls, always one at a time:** the question is the parked question itself. Give what you would have chosen, the other reading you saw, and an example of each in the same situation, then offer **explain further with another example (if possible)** as an option. A parked call the human **defers** stays parked — it keeps its place in the PR body, and it keeps blocking whatever it blocks. No approve-all reaches a parked call: it has no chosen answer to accept, since it was parked because it was never safe to make alone. A parked call about code gets a throw answer too: for each option, `can-this-throw`'s verdict as far as the code in the tree can show it. Mark it as a forecast, since nothing was written.
+**Parked calls, in groups of their own,** asked the same way: every call presented in full, then one question per call. Each question is the parked question itself. For each call, give what you would have chosen, the other reading you saw, and an example of each in the same situation, and offer **explain further with another example (if possible)** as an option. A parked call about code gets a throw answer too: for each option, `can-this-throw`'s verdict as far as the code in the tree can show it. Mark it as a forecast, since nothing was written. A parked call the human **defers** stays parked — it keeps its place in the PR body, and it keeps blocking whatever it blocks. No approve-all reaches a parked call: it has no chosen answer to accept, since it was parked because it was never safe to make alone.
 
-Apply each answer before asking the next case, per the ledger: change what the answer changed — everywhere, not just at the marker — remove that case's marker and detail line, and note who answered, the date, and the alternative for step 4's record.
+Apply a group's answers before presenting the next group, per the ledger: change what the answer changed — everywhere, not just at the marker — remove that case's marker and detail line, and note who answered, the date, and the alternative for step 4's record.
 
-**Done when:** every case has a human answer or an explicit deferral, every non-naming case was asked with an example in front of it, every code case was answered with its throw verdict in view, and the tree holds markers only for the deferrals.
+**Done when:** every case has a human answer or an explicit deferral, every non-naming case was asked as its own question with an example in front of it, every code case was answered with its throw verdict in view, and the tree holds markers only for the deferrals.
 
 ### 4. Reflect it everywhere it needs to land
 

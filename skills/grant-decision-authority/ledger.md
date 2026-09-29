@@ -98,7 +98,7 @@ The human is back, or has answered on the PR. Rebuild the case list from the gre
 
 Run as its own session, this is the `settle-borrowed-authority` skill — it adds finding the PR, a single pass over the names, and the parked calls around what follows. Inside a review response it is `respond-to-pr-review`'s recording step. Either way, the mechanics below are the mechanics.
 
-**One case, one question**, with `AskUserQuestion` where your harness has it. Options are the borrowed call — marked as what is in the tree now — the alternative you weighed, and an option to hear more before deciding. Ask about the next case only after this one is answered: a batch you put together gets one answer that covers none of them. The one exception is naming. `settle-borrowed-authority` shows every open name in one table and asks one question, because a vocabulary is judged as a set and every row stays in view while it is answered.
+**One case, one question**, with `AskUserQuestion` where your harness has it. Options are the borrowed call — marked as what is in the tree now — the alternative you weighed, and an option to hear more before deciding. Ask about the next case only after this one is answered: a batch you put together gets one answer that covers none of them. `settle-borrowed-authority` makes two exceptions. It shows every open name in one table and asks one question, because a vocabulary is judged as a set and every row stays in view while it is answered. It also asks a small group of related cases in one prompt, with one question per case, so every case still gets its own answer.
 
 Where the human has already answered rows on the PR, those rows are settled; ask only about what they did not reach.
 

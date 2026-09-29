@@ -110,7 +110,7 @@ Cross-cutting operations.
 | [grant-naming-authority](./grant-naming-authority/SKILL.md) | Choose gated names and keep going — marked in the tree, tabled on the PR, approved by a human before merge | `human-only` | naming, specs, commits, prs, approvals |
 | [grant-decision-authority](./grant-decision-authority/SKILL.md) | The same loan over any call a human would normally make, within bounds the skill enumerates | `human-only` | decisions, approvals, specs, tickets, prs |
 | [can-this-throw](./can-this-throw/SKILL.md) | Trace every throw to its catch or to where it fails the app; one verdict — (a) caught with continuance, (b) can fail the app, (c) other | `model-discoverable` | code, exceptions, review, decisions, approvals |
-| [settle-borrowed-authority](./settle-borrowed-authority/SKILL.md) | Settle a PR's borrowed calls with the human — names in one pass, the rest case by case — record approvals, take markers out | `human-only` | approvals, naming, decisions, prs, sessions |
+| [settle-borrowed-authority](./settle-borrowed-authority/SKILL.md) | Settle a PR's borrowed calls with the human — names in one pass, the rest in small related groups — record approvals, take markers out | `human-only` | approvals, naming, decisions, prs, sessions |
 
 The numbered variants share one [reduction method](./concise-copy/reduce.md); the percentage is a ceiling, never a floor on meaning.
 
@@ -122,7 +122,7 @@ Both are `human-only` for the same reason as `commit-local-main`: each suspends 
 
 `can-this-throw` answers the question a human otherwise asks of every code decision: can this throw in a way nothing catches? It traces every throw source through every call site to a catch and its continuance, or to the boundary where it fails the app, and gives one verdict. It is `model-discoverable` for the same reason as `approval-policy`: it applies whenever a code decision reaches a human, and the answer is worth nothing if it arrives only when someone remembers to ask. `settle-borrowed-authority` won't ask a code case without it.
 
-`settle-borrowed-authority` is the pair's close-out: the human back, answering the ledger's table — the names in one pass, the other calls case by case — with each approval recorded per `approval-policy` and each marker removed. It is `human-only` for the plainest reason of the three: every case it processes ends in a human answer, and without one in the room it would be approving the agent's own loans. `respond-to-pr-review` settles the same markers when the answers arrive inside a review response; this is the settle-up as its own act, invoked from the session that opened the PR or handed nothing but its number.
+`settle-borrowed-authority` is the pair's close-out: the human back, answering the ledger's table — the names in one pass, the other calls in small related groups, one question per call — with each approval recorded per `approval-policy` and each marker removed. It is `human-only` for the plainest reason of the three: every case it processes ends in a human answer, and without one in the room it would be approving the agent's own loans. `respond-to-pr-review` settles the same markers when the answers arrive inside a review response; this is the settle-up as its own act, invoked from the session that opened the PR or handed nothing but its number.
 
 ## Frontend skills
 
