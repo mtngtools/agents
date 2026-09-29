@@ -53,7 +53,7 @@ Both are `subagent-implement`'s steps 1 and 2, unchanged, and neither relaxes be
 - **Independence:** blocking edges, file overlap, and ordering nobody wrote down. Say per ticket: parallel, serial behind #n, or out of this round.
 - **The base:** a freshly fetched `origin/main` unless an open PR overlaps the set. **That overlap is normally a question for the human, and they are not here** — so it is a decision made under the grant: pick, mark it, and put it in the table as a row. Do not stack on an open PR without saying so.
 
-**One base for the whole fan-out** — and the base of the integration branch every ticket lands on in step 4. Different bases per ticket means there is nothing to integrate them onto.
+**One base for the whole fan-out** — and the base of the integration branch every ticket lands on in step 4. Different bases per ticket means there is nothing to integrate them onto. In a lane, that base also takes each handoff the lane merges in: see [in a lane](./unattended.md#in-a-lane).
 
 **Done when:** the parallel set is named, every exclusion has a reason, and the base is settled in one line.
 
@@ -107,7 +107,7 @@ The body leads with the ledger's table — generated from one grep over the inte
 
 The handback shape is in `unattended.md`: what got done, what you borrowed, what you parked, what you could not finish, what you dropped, and the one thing you would ask if you could ask one thing.
 
-Then stop. **Do not wait, poll, or schedule a re-check** — the human is away, and an unattended session that ends is working correctly.
+Then stop. **Do not wait, poll, or schedule a re-check** — the human is away, and an unattended session that ends is working correctly. A lane's handoff waits come before this step, never after it: see [in a lane](./unattended.md#in-a-lane).
 
 ## Where this sits in the flow
 

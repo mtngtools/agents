@@ -50,6 +50,18 @@ However many tickets a session is handed, it hands back **one pull request**. Wh
 
 A ticket that could not be brought into the round is **unfinished**, not a second PR. Name it in the handback with what stopped it.
 
+## In a lane
+
+A prompt written by `/tickets-to-lanes` makes this session one **lane** of several building the same map at once. The prompt names your lane and the map's `agent:communication` issue. That issue is the lanes' shared plan: which tickets are yours, the **handoffs** you give and take, and the protocol for both. Read it before you settle the base, and treat its tables as the round's scope.
+
+A lane takes three steps an unattended session otherwise never takes:
+
+- **Push at each handoff you give.** When your handoff's tickets are integrated and the gate is green, push your integration branch before your PR, so the receiving lane can build on it.
+- **Wait on each handoff you take, and on nothing else.** Build every ticket that doesn't wait first. A sibling that goes silent past the issue's limit is a handback, not a longer wait.
+- **Stack each handoff you take.** Your base is `origin/main` plus every handoff you merged into your integration branch, and each merge is a stacking row in your PR's table. Branch the tickets that waited off the integration branch after that merge.
+
+Everything else holds: only your lane's tickets, one PR, nothing merged.
+
 ## When to stop
 
 Unattended sessions fail by grinding, not by quitting. Stop and write the handback when any of these is true:
@@ -59,7 +71,7 @@ Unattended sessions fail by grinding, not by quitting. Stop and write the handba
 - **Everything left is parked.** There is no more independent work; continuing means reaching into what you parked.
 - **You reached something out of bounds that you cannot route around** — a false premise in the ticket, a spec the work contradicts, a gate you would have to disable. These are handbacks, and they are the most valuable thing an unattended session produces.
 
-**Do not wait, poll, or schedule a re-check.** The human is away; there is nothing to wait for.
+**Do not wait, poll, or schedule a re-check.** The human is away; there is nothing to wait for. The one exception is a lane waiting on a handoff it takes: see [in a lane](#in-a-lane).
 
 ## The handback
 

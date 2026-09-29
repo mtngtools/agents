@@ -51,7 +51,7 @@ gh pr list --state open
 git worktree add .claude/worktrees/<round> -b <branch> <base>
 ```
 
-A freshly fetched `origin/main` is the default — never local `main`, never the current `HEAD`. Inside the repo, not beside it.
+A freshly fetched `origin/main` is the default — never local `main`, never the current `HEAD`. Inside the repo, not beside it. In a lane, the branch also takes each handoff the lane merges in: see [in a lane](../implement-unattended/unattended.md#in-a-lane).
 
 **One worktree and one branch for the whole round**, whether that round is one ticket or five. Name both for the round rather than for a single ticket — a branch called after ticket #12 that also carries #13 and #14 misreads at a glance, and the PR it opens misreads with it.
 
@@ -98,7 +98,7 @@ The body leads on the ledger's table, generated from one grep over the branch, w
 
 The handback shape is in `unattended.md`: what got done, what you borrowed, what you parked, what you could not finish, what you dropped, and the one thing you would ask if you could ask one thing.
 
-Then stop. **Do not wait, poll, or schedule a re-check.**
+Then stop. **Do not wait, poll, or schedule a re-check.** A lane's handoff waits come before this step, never after it: see [in a lane](../implement-unattended/unattended.md#in-a-lane).
 
 ## Where this sits in the flow
 
