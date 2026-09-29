@@ -80,7 +80,7 @@ Give these in order and nothing else:
 1. The issue's link, confirmed as a labelled sub-issue of the map.
 2. One line on the count: why it fits, or what the human chose over what.
 3. The merge order.
-4. `Written for: the <N> fresh sessions you'll paste these into.`
+4. `Written for: the fresh sessions you'll paste these into — <N> lanes, <N> reviewers, one lifeguard.`
 5. One block per lane, under a bold label `Lane <n> — <area> (<k> tickets)`:
 
 ```
@@ -93,16 +93,22 @@ Hands off: #x to Lane <m> as soon as it is in and green (H<k>).
 
 For a lane that waits on no one, write `Waits: nobody.`. For the tail, write `Hands off: nothing. You are last, and your PR merges after the others.`
 
-6. One more block, under **Lifeguard — watches the lanes**, for a separate session that runs `lifeguard-in-lanes` until every lane's PR has merged:
+6. One block per lane, under **Reviewer <n> — for Lane <n>**, for a separate session that waits for that lane's PR and reviews it:
+
+```
+/review-pr-in-lane Lane <n> of #<issue> in repo <owner/name>
+```
+
+7. One more block, under **Lifeguard — watches the lanes**, for a separate session that runs `lifeguard-in-lanes` until every lane's PR has merged:
 
 ```
 /loop 15m /lifeguard-in-lanes #<issue> in repo <owner/name>
 ```
 
-7. One line: close the issue once every lane is done, because map reads count any open non-wayfinder child as build backlog.
+8. One line: close the issue once every lane is done, because map reads count any open non-wayfinder child as build backlog.
 
-**Done when:** every lane has a block the human can paste unchanged, every ticket in the pool appears in exactly one block, and the lifeguard block names the issue.
+**Done when:** every lane has a lane block and a reviewer block the human can paste unchanged, every ticket in the pool appears in exactly one lane block, and the lifeguard block names the issue.
 
 ## Where this sits in the flow
 
-After `/specs-to-tickets` has sliced the map. `/whats-next` hands over one session's prompt; this skill hands over N at once for the same map. Each lane then runs the fan-out skill and ends at its own PR, while `/lifeguard-in-lanes` watches from the issue. `/review-pr-in-worktree` and `/squash-merge-and-clean-up` take those PRs in the merge order the issue names.
+After `/specs-to-tickets` has sliced the map. `/whats-next` hands over one session's prompt; this skill hands over N at once for the same map. Each lane then runs the fan-out skill and ends at its own PR, which its `/review-pr-in-lane` session reviews as soon as it opens, while `/lifeguard-in-lanes` watches from the issue. `/squash-merge-and-clean-up` lands the PRs in the merge order the issue names.

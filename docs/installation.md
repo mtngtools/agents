@@ -18,7 +18,7 @@ Every skill is its own directory at the root of `skills/` — the categories bel
 
 - **Repository** — git, branching, commits, PRs (16 skills)
 - **Planning** — the wayfinder pipeline (9 skills)
-- **Build** — turning settled tickets into code, alone or fanned out (7 skills)
+- **Build** — turning settled tickets into code, alone or fanned out (9 skills)
 - **General** — content refinement, and the approval and authority policies (8 skills)
 - **Frontend** — Vue building (1 skill)
 

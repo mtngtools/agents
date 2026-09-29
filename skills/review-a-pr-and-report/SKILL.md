@@ -1,6 +1,6 @@
 ---
 name: review-a-pr-and-report
-description: Read a PR's committed diff, run the repo's gate, hold it to its spec and ticket, and report the drift in a fixed shape ending in yes or no. Called by /review-pr-in-worktree; do not reach for it on your own initiative.
+description: Read a PR's committed diff, run the repo's gate, hold it to its spec and ticket, and report the drift in a fixed shape ending in yes or no. Called by /review-pr-in-worktree and /review-pr-in-lane; do not reach for it on your own initiative.
 argument-hint: "The repo, the PR number, and the head SHA — plus the round number and previous SHA on a re-review"
 metadata:
   type: command
@@ -12,7 +12,7 @@ metadata:
 
 The method of a PR review and the fixed shape of its report. Read what the PR committed, run the repo's own gate against it, hold it to the spec and the ticket that are its true plan, name every form of drift, and answer whether it should be merged.
 
-**Not model-discoverable in practice.** A human may name it, and `/review-pr-in-worktree` calls it. Do not invoke it because a diff happens to be in front of you — an unasked-for review is noise, and a review run outside a prepared checkout reviews the wrong thing.
+**Not model-discoverable in practice.** A human may name it, and the worktree review that `/review-pr-in-worktree` and `/review-pr-in-lane` share calls it. Do not invoke it because a diff happens to be in front of you — an unasked-for review is noise, and a review run outside a prepared checkout reviews the wrong thing.
 
 **This skill never writes.** No commits, no fixes, no pushes, no PR comments, no merge — even when the fix is one line and obvious. A review that edits its subject stops being a review. Findings go to the human, who decides what happens next.
 

@@ -62,7 +62,7 @@ When one lane's trouble strands another (a `STUCK` waiting on a lane that's offl
 
 ### 4. Report
 
-This session's output is for a human glancing at it, so keep it small. At a **milestone**, or whenever the human asks for a summary, print the [detailed summary](./detailed-summary.md) instead, reading that file only then. Otherwise, print the **lane table** when any lane's verdict or handoffs changed this tick, and on every fourth tick:
+This session's output is for a human glancing at it, so keep it small. At a **milestone**, or whenever the human asks for a summary, print the [detailed summary](../summarize-lanes/detailed-summary.md) instead, reading that file only then. Otherwise, print the **lane table** when any lane's verdict or handoffs changed this tick, and on every fourth tick:
 
 | Lane | State | Handoffs | Last post |
 |---|---|---|---|

@@ -30,7 +30,7 @@ Build only your own lane's tickets. A ticket in another lane is taken, even if i
 
 Each lane runs under `<fan-out skill>`'s *in a lane* section. You push at the handoffs you give, wait on the handoffs you take and on nothing else, and stack those onto your integration branch. The steps below show how.
 
-**Check in.** First, run `ListAgents`. Its first line gives your session's name. Then comment here: `CHECK-IN Lane <n> — session <name>`. The other lanes' check-ins give you the names to message.
+**Check in.** First, run `ListAgents`. Its first line gives your session's name. Then comment here: `CHECK-IN Lane <n> — session <name>`. The other lanes' check-ins give you the names to message. Each lane's PR reviewer checks in here too, as `CHECK-IN Reviewer <n> — session <name>`.
 
 **Hand off.** Push your integration branch with an explicit refspec (`git push origin round/<map>-<area>:round/<map>-<area>`). Then comment here, and `SendMessage` each receiving lane, the same line:
 `HANDOFF H<k> — Lane <n>: #x #y on round/<map>-<area> @ <sha>, <gate> green`
@@ -39,7 +39,7 @@ Each lane runs under `<fan-out skill>`'s *in a lane* section. You push at the ha
 
 **Wait.** Watch this issue with `Monitor`, polling its comments every 5 minutes for your handoff line. When a sibling's message arrives, read it with `ReadNotifications`. If the lane you wait on has posted nothing here for 90 minutes and `ListAgents` shows it offline or missing, do three things: comment `STUCK Lane <n> — waiting on H<k>`, message the other lanes, and hand back what you have.
 
-**Finish.** Open one PR for your lane against `main`, normally rather than as a draft. Its body lists every lane it stacks on, with the SHA, and the merge order below. Then comment `DONE Lane <n> — PR #<pr>` and message every lane that waits on you.
+**Finish.** Open one PR for your lane against `main`, normally rather than as a draft. Its body lists every lane it stacks on, with the SHA, and the merge order below. Then comment `DONE Lane <n> — PR #<pr>`, message every lane that waits on you, and message your reviewer, named in its check-in, to start: `PR #<pr> is open`. The review is for <Human>, and your lane's work ends at `DONE`.
 
 **Messages and this issue.** Post here everything another lane needs, and send a message too so a waiting lane wakes. Messages can be missed, so re-read this issue's comments before you wait and before you finish.
 
