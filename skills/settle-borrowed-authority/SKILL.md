@@ -55,13 +55,15 @@ If the cross-check flagged a naming row, leave it out of the pass and ask it on 
 
 **Decisions, one at a time:** this is the ledger's settle-up, unchanged. One case, one question, in list order, and the next only after this one is answered. Present the case first, short enough to hold in one glance: what was chosen, the real alternative weighed, why, and where it lands. Then ask the question with the ledger's options: **keep the borrowed call**, named as what is in the tree now; **switch to the alternative**; **hear more before deciding**. "Hear more" gets the fuller story (call sites, the spec passage it touches, what each choice costs downstream), followed by the same question again.
 
-**The human can still approve the rest at once.** If they ask to approve the remaining decision rows as borrowed, whether up front or in a case's **Other**, do it when the cross-check was clean, and say it back in one line. That's the human choosing not to be walked through the calls, which is theirs to choose. The ledger's warning about batching is about *you* grouping questions.
+**Every code case carries its throw verdict.** Ask no case whose call is code without it; this covers every decision case except those that change only names or only prose. Before presenting the case, invoke the `can-this-throw` skill over the case's site and the code its call produced, and open the case with its verdict line and its paths. If the verdict is (b) or (c), say so plainly before the options.
 
-**Parked calls, always one at a time:** the question is the parked question itself, with what you would have chosen, the other reading you saw, and hear more. A parked call the human **defers** stays parked — it keeps its place in the PR body, and it keeps blocking whatever it blocks. No approve-all reaches a parked call: it has no chosen answer to accept, since it was parked because it was never safe to make alone.
+**The human can still approve the rest at once.** If they ask to approve the remaining decision rows as borrowed, whether up front or in a case's **Other**, do it only when the cross-check was clean and only after showing every remaining code case's throw verdict in one list. The approve-all stands once the human has seen that list. Then say it back in one line. That's the human choosing not to be walked through the calls, which is theirs to choose. The ledger's warning about batching is about *you* grouping questions.
+
+**Parked calls, always one at a time:** the question is the parked question itself, with what you would have chosen, the other reading you saw, and hear more. A parked call the human **defers** stays parked — it keeps its place in the PR body, and it keeps blocking whatever it blocks. No approve-all reaches a parked call: it has no chosen answer to accept, since it was parked because it was never safe to make alone. A parked call about code gets a throw answer too: for each option, `can-this-throw`'s verdict as far as the code in the tree can show it. Mark it as a forecast, since nothing was written.
 
 Apply each answer before asking the next case, per the ledger: change what the answer changed — everywhere, not just at the marker — remove that case's marker and detail line, and note who answered, the date, and the alternative for step 4's record.
 
-**Done when:** every case has a human answer or an explicit deferral, and the tree holds markers only for the deferrals.
+**Done when:** every case has a human answer or an explicit deferral, every code case was answered with its throw verdict in view, and the tree holds markers only for the deferrals.
 
 ### 4. Reflect it everywhere it needs to land
 
