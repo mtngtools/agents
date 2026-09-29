@@ -29,7 +29,7 @@ Everything else belongs to the lanes or the human, including code, branches, PRs
 
 ### 1. Read the board
 
-- **The lanes' issue:** its body (lanes, handoffs, merge order) and every comment (`CHECK-IN`, `HANDOFF`, `STUCK`, `DONE`, `LIFEGUARD`).
+- **The lanes' issue:** its body (lanes, handoffs, merge order) and every comment (`CHECK-IN`, `CANDIDATE`, `HANDOFF`, `STUCK`, `DONE`, `LIFEGUARD`).
 - **The sessions:** run `ListAgents`. Its first line is your own name, and each lane's check-in names its session.
 - **The PRs:** for each lane that has posted `DONE`, run `gh pr view <pr> --repo <owner/name> --json state,mergedAt`. A lane's first `DONE` and a PR that has newly merged are both **milestones**.
 - **On duty:** if the issue has no on-duty line from your session yet, comment `LIFEGUARD on duty — session <name>, every <interval>`. The lanes learn who is messaging them from that line.

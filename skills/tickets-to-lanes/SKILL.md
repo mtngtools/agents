@@ -89,6 +89,7 @@ You are Lane <n> (<area>) of <N> sessions building map #<map>. Coordinate on #<i
 Integration branch: round/<map>-<area>. Work in worktrees.
 Waits: #t waits for Lane <m> to hand off #x (H<k>). Build #a → #b first.
 Hands off: #x to Lane <m> as soon as it is in and green (H<k>).
+Candidates: post a CANDIDATE line on #<issue> as each ticket is done (format in its protocol).
 ```
 
 For a lane that waits on no one, write `Waits: nobody.`. For the tail, write `Hands off: nothing. You are last, and your PR merges after the others.`

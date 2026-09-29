@@ -32,6 +32,10 @@ Each lane runs under `<fan-out skill>`'s *in a lane* section. You push at the ha
 
 **Check in.** First, run `ListAgents`. Its first line gives your session's name. Then comment here: `CHECK-IN Lane <n> — session <name>`. The other lanes' check-ins give you the names to message. Each lane's PR reviewer checks in here too, as `CHECK-IN Reviewer <n> — session <name>`.
 
+**Announce each closes candidate.** A ticket becomes a closes candidate once its work is on your integration branch with every acceptance criterion met and the gate green. In other words, it would get a `Closes` line if your PR opened now, assuming the review passes. Comment once per ticket:
+`CANDIDATE Lane <n>: #<ticket> @ <sha>`
+The SHA can be one you haven't pushed yet. The line announces the ticket as done; it doesn't claim the review passed or close anything.
+
 **Hand off.** Push your integration branch with an explicit refspec (`git push origin round/<map>-<area>:round/<map>-<area>`). Then comment here, and `SendMessage` each receiving lane, the same line:
 `HANDOFF H<k> — Lane <n>: #x #y on round/<map>-<area> @ <sha>, <gate> green`
 
@@ -47,7 +51,7 @@ Each lane runs under `<fan-out skill>`'s *in a lane* section. You push at the ha
 
 ## What goes on the map, not here
 
-This issue is for coordination only: check-ins, handoffs, stuck, done and the lifeguard's alerts. Everything else goes where it would go if you were working alone:
+This issue is for coordination only: check-ins, candidates, handoffs, stuck, done and the lifeguard's alerts. Everything else goes where it would go if you were working alone:
 - new fog or a map-level finding: a comment on #<map>;
 - a ticket-level finding: a comment on that ticket;
 - borrowed and parked calls: your PR.
