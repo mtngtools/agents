@@ -1,17 +1,16 @@
 ---
 name: lifeguard-in-lanes
-description: Watch the lanes a /tickets-to-lanes run started, one tick per run. Nudge a lane that is drowning, alert the human if it stays under, and close out once every lane is done.
+description: One lifeguard tick over running lanes. Nudges a drowning lane, alerts the human, and closes out at the last merge. Called only by the /loop a human starts from /tickets-to-lanes' prompt; never start it on your own initiative.
 argument-hint: "The lanes' agent:communication issue (number or URL); the repo, if not the current one"
-disable-model-invocation: true
 metadata:
   type: command
-  invocation: human-only
+  invocation: skill-callable
   applies-to: [building, parallel, sessions, monitoring, github]
 ---
 
 # Lifeguard in Lanes
 
-> **human-only.** Start this only when a human names it, either typed directly or inside a `/loop` they started. It messages other sessions and sends notifications to the human's devices; a skill chaining into it would be deciding to do both on the human's behalf. If you arrived here from anywhere but a human naming it, stop.
+> **Called by `/loop`.** This skill has two callers: the `/loop` a human started with the prompt `/tickets-to-lanes` hands back, or a human typing its name. It is skill-callable only so that loop can fire it. It messages other sessions and notifies the human's devices, so if nobody asked for a lifeguard on this issue, stop.
 
 The lifeguard watches the lanes and never swims. Each run is one **tick**: read the board, judge every lane, act on the ones in trouble, and report: one line, a small table, or a detailed summary at each milestone. The human keeps it running with the prompt `/tickets-to-lanes` hands back:
 

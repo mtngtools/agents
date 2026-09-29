@@ -77,7 +77,7 @@ Turning settled tickets into code.
 | [implement-unattended](./implement-unattended/SKILL.md) | Build with the human away: both grants on, work fanned out, integrated onto one branch, reviewed, handed back as one PR with every borrowed call tabled | `human-only` | building, subagents, approvals, naming, prs |
 | [implement-unattended-no-subagents](./implement-unattended-no-subagents/SKILL.md) | The same mode and the same one PR, serially, by this session alone | `human-only` | building, approvals, naming, worktrees, prs |
 | [tickets-to-lanes](./tickets-to-lanes/SKILL.md) | Split a map's build backlog into lanes, open the issue they coordinate on, hand back one unattended prompt per lane | `human-only` | building, wayfinder, parallel, sessions, prompts |
-| [lifeguard-in-lanes](./lifeguard-in-lanes/SKILL.md) | Watch running lanes one tick at a time: nudge a drowning lane, alert the human if it stays under | `human-only` | building, parallel, sessions, monitoring, github |
+| [lifeguard-in-lanes](./lifeguard-in-lanes/SKILL.md) | Watch running lanes one tick at a time: nudge a drowning lane, alert the human if it stays under | `skill-callable` | building, parallel, sessions, monitoring, github |
 
 `implement` is `human-only` for the reason the whole category is: it writes code, cuts a branch, and picks the base everything after it inherits. A skill chaining into it would be choosing that base on the human's behalf. Its framework-specific counterpart, [build-mtng-tools-vue](./build-mtng-tools-vue/SKILL.md), is listed under Frontend; the two differ in what they know about the stack, not in what they do with the tree.
 
@@ -87,7 +87,7 @@ All four are `human-only`, and the two unattended ones twice over: fanning out m
 
 `tickets-to-lanes` is the same fan-out one level up: several unattended sessions over one map instead of several subagents inside one session. It starts none of them. It splits the backlog so that lanes share as few files and blockers as possible, opens the `agent:communication` issue where they hand work to each other, and gives the human one prompt per lane to paste. It is `human-only` for the unattended modes' reason, and for one of its own. The handoffs it writes are what the unattended modes' shared [in a lane](./implement-unattended/unattended.md#in-a-lane) section acts on: pushing before the PR, waiting on a sibling, and stacking on a sibling's unmerged branch. A skill chaining into it would be handing those out itself.
 
-`lifeguard-in-lanes` runs beside the lanes, one tick per `/loop` firing, and never builds. Its writes are exactly three: a message to a lane, a `LIFEGUARD` comment on the lanes' issue, and a notification to the human. It is `human-only` because messaging other sessions and notifying the human's devices is something the human starts, never a skill.
+`lifeguard-in-lanes` runs beside the lanes, one tick per `/loop` firing, and never builds. Its writes are exactly three: a message to a lane, a `LIFEGUARD` comment on the lanes' issue, and a notification to the human. A human still starts it, but it is `skill-callable` because the human starts it through `/loop`. Each loop firing reaches the model, which starts the skill through the Skill tool, and that tool refuses any `human-only` skill, so a `human-only` lifeguard never gets past its first tick. Its description holds the line the harness cannot: it names the loop as its caller and says never to start it unprompted.
 
 ## General skills
 
