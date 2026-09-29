@@ -30,9 +30,9 @@ Everything else belongs to the lanes or the human, including code, branches, PRs
 ### 1. Read the board
 
 - **The lanes' issue:** its body (lanes, handoffs, merge order) and every comment (`CHECK-IN`, `CANDIDATE`, `HANDOFF`, `STUCK`, `DONE`, `LIFEGUARD`).
-- **The sessions:** run `ListAgents`. Its first line is your own name, and each lane's check-in names its session.
+- **The sessions:** run `ListAgents`. Its first line is your own name and ref. Each lane's check-in names its session and ref, so match rows on both: two sessions can share a name. Message a lane through the row you just matched, and add `[<ref>]` to the name when two rows share it.
 - **The PRs:** for each lane that has posted `DONE`, run `gh pr view <pr> --repo <owner/name> --json state,mergedAt`. A lane's first `DONE` and a PR that has newly merged are both **milestones**.
-- **On duty:** if the issue has no on-duty line from your session yet, comment `LIFEGUARD on duty — session <name>, every <interval>`. The lanes learn who is messaging them from that line.
+- **On duty:** if the issue has no on-duty line from your session yet, comment `LIFEGUARD on duty — session <name> [<ref>], every <interval>`. The lanes learn who is messaging them from that line.
 
 **Done when:** for every lane you have its session, that session's status, its last post, and the handoffs it still owes or still waits on.
 

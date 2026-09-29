@@ -30,7 +30,9 @@ Build only your own lane's tickets. A ticket in another lane is taken, even if i
 
 Each lane runs under `<fan-out skill>`'s *in a lane* section. You push at the handoffs you give, wait on the handoffs you take and on nothing else, and stack those onto your integration branch. The steps below show how.
 
-**Check in.** First, run `ListAgents`. Its first line gives your session's name. Then comment here: `CHECK-IN Lane <n> — session <name>`. The other lanes' check-ins give you the names to message. Each lane's PR reviewer checks in here too, as `CHECK-IN Reviewer <n> — session <name>`.
+**Check in.** First, run `ListAgents`. Its first line gives your session's name and its `[ref]`. Then comment here, copying both exactly: `CHECK-IN Lane <n> — session <name> [<ref>]`. Each lane's PR reviewer checks in here too, as `CHECK-IN Reviewer <n> — session <name> [<ref>]`. Two sessions can share a name, and the ref is what tells them apart.
+
+**Message a session** by looking it up, never by name alone. Run `ListAgents`, find the row whose name *and* ref match that session's check-in, and send to that row. If two rows share the name, send to `<name> [<ref>]`. A ref resolves only when you've just read it from a listing, so run the lookup before every send.
 
 **Announce each closes candidate.** A ticket becomes a closes candidate once its work is on your integration branch with every acceptance criterion met and the gate green. In other words, it would get a `Closes` line if your PR opened now, assuming the review passes. Comment once per ticket:
 `CANDIDATE Lane <n>: #<ticket> @ <sha>`
@@ -47,7 +49,7 @@ The SHA can be one you haven't pushed yet. The line announces the ticket as done
 
 **Messages and this issue.** Post here everything another lane needs, and send a message too so a waiting lane wakes. Messages can be missed, so re-read this issue's comments before you wait and before you finish.
 
-**Lifeguard.** A lifeguard session may watch these lanes. It checks in with a `LIFEGUARD on duty` comment and never touches your work. If it messages you, post a one-line status here.
+**Lifeguard.** A lifeguard session may watch these lanes. It checks in with a `LIFEGUARD on duty — session <name> [<ref>]` comment and never touches your work. If it messages you, post a one-line status here.
 
 ## What goes on the map, not here
 

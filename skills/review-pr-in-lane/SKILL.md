@@ -27,19 +27,26 @@ Take the lane number, the issue and the repo from the argument. Read the issue's
 
 ### 2. Check in
 
-Run `ListAgents`; its first line gives your session's name. Then comment on the issue: `CHECK-IN Reviewer <n> — session <name>`. Your lane reads this line to know whom to tell when its PR opens.
+Run `ListAgents`; its first line gives your session's name and `[ref]`. Then comment on the issue, copying both exactly: `CHECK-IN Reviewer <n> — session <name> [<ref>]`. Your lane reads this line to know whom to tell when its PR opens. The ref is how it tells you apart from another session with the same name.
 
 **Done when:** your check-in is on the issue.
 
-### 3. Wait for the PR
+### 3. Wait for the PR, then for the lanes it stacks on
 
-The PR is ready at whichever comes first:
+The PR exists at whichever comes first:
 - the lane's message naming its PR;
 - the issue's `DONE Lane <n> — PR #<pr>` comment.
 
-If the lane has already posted `DONE`, skip the wait. Otherwise watch the issue with `Monitor`, polling its comments every 5 minutes for the `DONE` line, and read the lane's message with `ReadNotifications` when it arrives. Waiting is this skill's purpose: a lane builds for hours, and its silence is no reason to stop.
+If the lane has already posted `DONE`, skip this wait. Otherwise watch the issue with `Monitor`, polling its comments every 5 minutes for the `DONE` line, and read the lane's message with `ReadNotifications` when it arrives. Waiting is this skill's purpose: a lane builds for hours, and its silence is no reason to stop.
 
-**Done when:** you hold one PR number, and `gh pr view <pr> --repo <owner/name> --json headRefName` names your lane's integration branch.
+**A PR that is stacked isn't reviewable yet.** A lane that took a handoff carries the giving lane's unmerged work. Until that work reaches `main`, the PR's diff shows other lanes' code as its own, and the review would judge it as drift. From the issue's handoffs table, list every lane yours took a handoff from, and every lane those took from. The PR becomes reviewable once, for each of those lanes:
+
+- its PR has merged (`gh pr view <pr> --repo <owner/name> --json state,mergeCommit`), and
+- your lane's PR head contains that merge commit: `gh api repos/<owner>/<name>/compare/<merge-commit>...<head-sha> --jq .status` answers `ahead` or `identical`. It won't until someone merges `origin/main` into your lane's branch. That merge is the human's call, never yours.
+
+A lane that took no handoff has nothing to wait for here. While you wait, print one line naming what you're waiting on, and print it again only when that changes. For example: `Waiting: Lane 2's PR #712 to merge, then origin/main into round/653-stack.` If a lane yours stacks on closes its PR unmerged, say so and ask the human.
+
+**Done when:** you hold one PR whose head is on your lane's integration branch and contains the merge commit of every lane it stacks on.
 
 ### 4. Review it in a worktree
 
