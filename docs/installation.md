@@ -17,8 +17,8 @@ This installs all skills from the repository. Skills are then available by name 
 Every skill is its own directory at the root of `skills/` — the categories below are how the index groups them, not where they live.
 
 - **Repository** — git, branching, commits, PRs (16 skills)
-- **Planning** — the wayfinder pipeline (9 skills)
-- **Build** — turning settled tickets into code, alone or fanned out (9 skills)
+- **Planning** — the wayfinder pipeline (10 skills)
+- **Build** — turning settled tickets into code, alone or fanned out (10 skills)
 - **General** — content refinement, and the approval and authority policies (9 skills)
 - **Frontend** — Vue building (1 skill)
 
