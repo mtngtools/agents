@@ -1,5 +1,5 @@
 ---
-name: wayfinder-pipeline
+name: describe-wayfinder-pipeline
 description: "The wayfinder pipeline: the long route from a loose idea to merged code, stage by stage, and the test that picks it or /quick-change. Use when sizing a change, choosing which skill starts a piece of work, or explaining how a map becomes a PR."
 metadata:
   type: skill

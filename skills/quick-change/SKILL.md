@@ -13,7 +13,7 @@ metadata:
 
 > **human-only.** Start this only when a human asks for it by name. If you arrived here from another skill, stop and get explicit confirmation before running any step.
 
-The short route to the long route's ending: an issue, a branch off `origin/main` in a worktree of its own, spec and tests in line with the code, and a PR. It skips the map, the decision tickets and the slicing, and earns that only while the change stays **quick**: small and already decided. The long route lives in the `wayfinder-pipeline` skill.
+The short route to the long route's ending: an issue, a branch off `origin/main` in a worktree of its own, spec and tests in line with the code, and a PR. It skips the map, the decision tickets and the slicing, and earns that only while the change stays **quick**: small and already decided. The long route lives in the `describe-wayfinder-pipeline` skill.
 
 **Every repo change happens inside the worktree step 4 creates.** Steps 1–3 only read the tree and write to the tracker. Other sessions share the primary checkout, so an edit made there lands in their build, or on a branch swapped out from under you. An edit that seems to want making sooner (a quick experiment to size the change, a fix spotted while reading) waits for the worktree.
 
@@ -21,7 +21,7 @@ The short route to the long route's ending: an issue, a branch off `origin/main`
 
 ### 1. Size it
 
-Invoke `wayfinder-pipeline` and apply its **Which route** test. Read the code and spec the change lands in first; the test sizes the change, not the request's wording.
+Invoke `describe-wayfinder-pipeline` and apply its **Which route** test. Read the code and spec the change lands in first; the test sizes the change, not the request's wording.
 
 - **Quick:** say so in one line, naming why, and go on.
 - **Long:** stop. Name the signal that tripped and the door the pipeline gives, as a line the human can type. Then ask one question: take the long route, or go quick anyway. A "go quick" is theirs to give, and it goes on the issue in step 3.
@@ -104,8 +104,8 @@ For a PR, open it against the base. Its body says what changed, which specs move
 
 ## Leaving for the long route
 
-**Fog** can show up after step 1: a decision that grows a second one, a new ADR, scope spilling into another assembly. When it does, stop building. Write what you found on the issue, leave the worktree and branch where they are, and put step 1's question again with the door `wayfinder-pipeline` gives, usually `/wayfinder #<issue>`.
+**Fog** can show up after step 1: a decision that grows a second one, a new ADR, scope spilling into another assembly. When it does, stop building. Write what you found on the issue, leave the worktree and branch where they are, and put step 1's question again with the door `describe-wayfinder-pipeline` gives, usually `/wayfinder #<issue>`.
 
 ## Where this sits
 
-`/quick-change` is the short route; `wayfinder-pipeline` explains the long one. Both end in a PR that `/review-pr-in-worktree` reads and `/squash-merge-and-clean-up` lands.
+`/quick-change` is the short route; `describe-wayfinder-pipeline` explains the long one. Both end in a PR that `/review-pr-in-worktree` reads and `/squash-merge-and-clean-up` lands.
