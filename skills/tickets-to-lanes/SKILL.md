@@ -82,12 +82,17 @@ Give these in order and nothing else:
 3. The merge order.
 4. `Written for: the fresh sessions you'll paste these into — <N> lanes, <N> reviewers, one lifeguard.`
 
-Every prompt begins with a short rename, on its own first line: `/rename implement-lane-<n>-on-<map>` for a lane, `/rename review-lane-<n>-on-<map>` for a reviewer, and `/rename lifeguard-on-<map>` for the lifeguard.
+Every session gets a rename, and the rename is its own copyable block, pasted and sent before the prompt. A `/rename` on the first line of a longer paste is not run as a command, so never put it inside a prompt block: `/rename implement-lane-<n>-on-<map>` for a lane, `/rename review-lane-<n>-on-<map>` for a reviewer, and `/rename lifeguard-on-<map>` for the lifeguard.
 
-5. One block per lane, under a bold label `Lane <n> — <area> (<k> tickets)`:
+5. Two blocks per lane, under a bold label `Lane <n> — <area> (<k> tickets)`. First the rename, alone:
 
 ```
 /rename implement-lane-<n>-on-<map>
+```
+
+Then the prompt:
+
+```
 /implement-unattended #a #b #c in repo <owner/name>
 You are Lane <n> (<area>) of <N> sessions building map #<map>. Coordinate on #<issue>: read it first and follow it.
 Integration branch: round/<map>-<area>. Work in worktrees.
@@ -98,23 +103,33 @@ Candidates: post a CANDIDATE line on #<issue> as each ticket is done (format in 
 
 For a lane that waits on no one, write `Waits: nobody.`. For the tail, write `Hands off: nothing. You are last, and your PR merges after the others.`
 
-6. One block per lane, under **Reviewer <n> — for Lane <n>**, for a separate session that waits for that lane's PR and reviews it:
+6. Two blocks per lane, under **Reviewer <n> — for Lane <n>**, for a separate session that waits for that lane's PR and reviews it. The rename, alone:
 
 ```
 /rename review-lane-<n>-on-<map>
+```
+
+Then the prompt:
+
+```
 /review-pr-in-lane Lane <n> of #<issue> in repo <owner/name>
 ```
 
-7. One more block, under **Lifeguard — watches the lanes**, for a separate session that runs `lifeguard-in-lanes` until every lane's PR has merged:
+7. Two more blocks, under **Lifeguard — watches the lanes**, for a separate session that runs `lifeguard-in-lanes` until every lane's PR has merged. The rename, alone:
 
 ```
 /rename lifeguard-on-<map>
+```
+
+Then the prompt:
+
+```
 /loop 15m /lifeguard-in-lanes #<issue> in repo <owner/name>
 ```
 
 8. One line: close the issue once every lane is done, because map reads count any open non-wayfinder child as build backlog.
 
-**Done when:** every lane has a lane block and a reviewer block the human can paste unchanged, every block begins with its `/rename` line, every ticket in the pool appears in exactly one lane block, and the lifeguard block names the issue.
+**Done when:** every lane has a lane block and a reviewer block the human can paste unchanged, every prompt block is preceded by its own `/rename` block holding nothing else, every ticket in the pool appears in exactly one lane block, and the lifeguard block names the issue.
 
 ## Where this sits in the flow
 
